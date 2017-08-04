@@ -5,7 +5,8 @@ nRows = info.Rows;
 nCols = info.Columns;
 nPlanes = info.SamplesPerPixel;
 inicio = 1;
-fin = 40; 
+fin = 23;
+caca;
 nFrames = fin-inicio; % Aqui el número de imágenes a ver
 
 X = repmat(int16(0), [nRows, nCols, nFrames]);
