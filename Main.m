@@ -34,7 +34,7 @@ while Var
     if length(Classes) < 10
         Var = 0;
     else
-        uiwait(msgbox('Seleccione otro Sujeto, con más Cortes','Success','modal'));
+        uiwait(msgbox('Seleccione otro Sujeto, con mï¿½s Cortes','Success','modal'));
         continue
     end
 end
@@ -52,7 +52,7 @@ for k = 1:length(Classes)
     pos = find([foto.class] == Classes(k));
     Selected_im = pos(round(length(pos)/2));
     subplot(size_plot(2),size_plot(1),k); imshow(foto(Selected_im).data,[]);
-    title(['Corte Nº ' num2str(k) foto(Selected_im ).corte])
+    title(['Corte Nï¿½ ' num2str(k) foto(Selected_im ).corte])
 end
 
 % Seleccionar la clase
@@ -92,7 +92,7 @@ plot_MRI(V_kmeans1); title('Kmeans');
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 %Arreglemos la Mascara
-answer = inputdlg('¿Que cluster usar (1 o 2)?');
+answer = inputdlg('ï¿½Que cluster usar (1 o 2)?');
 answer = str2double(answer{1,1});
 Mask1 = logical(V_kmeans1==answer);
 Se1 = strel('disk',5);
@@ -226,7 +226,7 @@ if strcmpi(reply, 'Ponerle')
     save([nombre '.mat'],'V_final_BW', 'V_final', 'filename')
     
 elseif strcmpi(reply, 'Auto')
-    rodillas(:,:,contador) = V_final_BW;% como se pone que también se guarde en esa posicion V_final;
+    rodillas(:,:,contador) = V_final_BW;% como se pone que tambiï¿½n se guarde en esa posicion V_final;
     save(['fisis_'  filename],'V_final_BW', 'V_final', 'filename')
 end
 
@@ -246,10 +246,10 @@ end
 %Distribucion espacial de la fisis promedio
 
 fisis_prom = [];
-for i=1:size(rodillas);
+for i=1:size(rodillas)
     fisis_prom = fisis_prom + rodillas(:,:,i);
     %Vamos a tener que rellenar con 0 en algunos casos porque no todas las RM son del
-    %mismo tamaño
+    %mismo tamaï¿½o
 end
 
 rodillas = rodillas./max(rodillas(:));
