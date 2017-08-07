@@ -17,7 +17,7 @@ if ~hasIPT
 end
 
 %Rodillas
-rodillas = [];
+rodillas = {};
 seguir = 1;
 contador = 1;
 
@@ -55,6 +55,7 @@ for k = 1:length(Classes)
     title(['Corte N� ' num2str(k) foto(Selected_im ).corte])
 end
 
+
 % Seleccionar la clase
 Selected_Class = inputdlg('Select Class to use');
 close all
@@ -67,13 +68,18 @@ V_preFilt = zeros([size(foto(1).data) numel(foto)]);
 
 %Prefiltrado
 se = strel('disk',3);
+
 for k=1:numel(foto)
     V(:,:,k) =  im2single(foto(k).data);
     Im = imadjust((V(:,:,k))); 
     Im = Im + imtophat(Im,se) - imbothat(Im,se);
 	V_preFilt(:,:,k) =  medfilt2(adapthisteq(Im),[3 3]);
 end  
-  
+ 
+info = dicominfo(V(:,:,1));
+
+
+
 f1 = figure;
 plot_MRI(V); title('Volumen RAW');
 
@@ -99,6 +105,7 @@ Se1 = strel('disk',5);
 Se2 = strel('disk',1);
 Mask1 = imerode(Mask1,Se2);
 Mask1 = imclose(Mask1,Se1);
+
 %Mask1 = im(Mask1,Se2);
 plot_MRI(Mask1); title('Mascara');
 
@@ -211,11 +218,30 @@ reply = questdlg(message, 'Physis', 'V_final_BW', 'V_final','No');
         
 if strcmpi(reply, 'V_final_BW')
     volumeViewer(V_final_BW)
+    isosurface(V_final_BW)
     suave = interp3(V_final_BW);
 elseif strcmpi(reply, 'V_final')
     volumeViewer(V_final)
+    isosurface(V_final)
     suave = interp3(V_final);
 end
+
+
+% Falta la info del DICOM para poder plotearlo con las proporciones
+% correctas
+
+%AspectRatio
+% ax = gca;
+% dxdy = info.PixelSpacing;
+% c = ax.DataAspectRatio;
+% dz = info.SliceThickness;
+% ax.DataAspectRatio= [dz,dz,dxdy(1)];
+
+l = camlight('headlight');
+axis tight
+colormap white
+grid on;
+
 
 %Guardar rodilla
 message = sprintf('Quiere ponerle el nombre o automatico');
@@ -223,11 +249,17 @@ reply = questdlg(message, 'Guardar', 'Ponerle', 'Auto','No');
 
 if strcmpi(reply, 'Ponerle')
     nombre = inputdlg('Select Class to use');
-    save([nombre '.mat'],'V_final_BW', 'V_final', 'filename')
+    save([nombre '.mat'],'V_final_BW', 'V_final', 'filename','info')
     
 elseif strcmpi(reply, 'Auto')
+<<<<<<< HEAD
     rodillas(:,:,contador) = V_final_BW;% como se pone que tambi�n se guarde en esa posicion V_final;
     save(['fisis_'  filename],'V_final_BW', 'V_final', 'filename')
+=======
+    rodillas{contador,1} = V_final_BW;
+    rodillas{contador,2} = V_final;
+    save(['fisis_'  filename],{'V_final_BW', 'V_final', 'filename','info'})
+>>>>>>> fcc704b0ac088e6a50e28b134966151184ac9d24
 end
 
 save(['Todas_las_fisis' '.mat'],'rodillas')
@@ -240,16 +272,80 @@ if strcmpi(reply, 'No')
     seguir = 0;
 end
 contador = contador + 1;
+
 end
 
 
+%%
 %Distribucion espacial de la fisis promedio
 
+<<<<<<< HEAD
 fisis_prom = [];
 for i=1:size(rodillas)
     fisis_prom = fisis_prom + rodillas(:,:,i);
     %Vamos a tener que rellenar con 0 en algunos casos porque no todas las RM son del
     %mismo tama�o
+=======
+%Elegir 
+message = sprintf('Que quiere cargar?');
+reply = questdlg(message,'Fisis', 'Rodillas de workspace', 'Desde un/varios archivo(s)', 'No');
+
+if strcmpi(reply, 'Desde un/varios archivo(s)')
+[filename, pathname, filterindex] = uigetfile( ...
+{  '*.mat','MAT-files (*.mat)'; ...
+   '*.slx;*.mdl','Models (*.slx, *.mdl)'; ...
+   '*.*',  'All Files (*.*)'}, ...
+  'Seleccione las fisis a analizar', ...
+   'MultiSelect', 'on');
+
+rodillas = {};
+
+for i=1:size(filename,2)
+    i
+    load(filename{1,i})
+    rodillas{i,1} = V_final_BW;
+    rodillas{i,2} = V_final;
+end
+end
+
+
+
+%Resize
+mayor = 0;
+for i=1:size(rodillas,1)
+    tam = max(size(rodillas{i,1}));
+    if tam>mayor
+        mayor = tam
+    end
+end
+
+%cellsz = cellfun(@size,rodillas,'uni',false);
+%cellsz = cellfun(@max,cellsz,'uni',false);
+
+for i=1:size(rodillas,1)
+    rodillas{i,1} = imresize(rodillas{i,1},[mayor,mayor])
+    rodillas{i,2} = imresize(rodillas{i,2},[mayor,mayor])
+end
+
+message = sprintf('A que fisis le quiere ver la distribucion?');
+reply = questdlg(message, 'Fisis','V_final_BW', 'V_final','No');
+
+if strcmpi(reply, 'V_final_BW')
+    elegir = 1;
+elseif strcmpi(reply, 'V_final')
+    elegir = 2;    
+end
+
+fisis_prom = {mayor,mayor,1};
+
+%SUMAR LAS FISIS
+% Despues sigo con esto, o sigue tu
+for i=1:size(rodillas,1);
+    for e=1:size(rodillas{i,elegir},3)
+        rodillas{i,elegir}
+    fisis_prom = fisis_prom{ + rodillas{i,elegir};
+    end
+>>>>>>> fcc704b0ac088e6a50e28b134966151184ac9d24
 end
 
 rodillas = rodillas./max(rodillas(:));
