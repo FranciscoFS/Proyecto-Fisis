@@ -18,6 +18,9 @@ function [MRI] = save_MRI(DIM)
                 MRI(k).data = x;
                 MRI(k).corte = inf.SeriesDescription;
                 MRI(k).class = class;
+                MRI(k).PixelSpacing = inf.PixelSpacing;
+                MRI(k).SliceThickness = inf.SliceThickness;
+                
                 
                 class = class + 1;
           
