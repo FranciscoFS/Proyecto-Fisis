@@ -210,19 +210,48 @@ for k=1:size(V_filt,3)
 end
 
 
-%Plot 3D
+%%
 uiwait(msgbox('Ahora se mostrara en 3D la fisis.'));
-if exist ('info') == 1
-    isosurf(V_final_BW, V_final,info)
-else
-    isosurf(V_final_BW, V_final)
+   
+%Plot 3D
+message = sprintf('Plot?');
+reply = questdlg(message, 'Physis', 'V_final_BW', 'V_final','No');
+        
+if strcmpi(reply, 'V_final_BW')
+    volumeViewer(V_final_BW)
+    isosurface(V_final_BW)
+    suave = interp3(V_final_BW);
+elseif strcmpi(reply, 'V_final')
+    volumeViewer(V_final)
+    isosurface(V_final)
+    suave = interp3(V_final);
 end
+
 
 % Falta la info del DICOM para poder plotearlo con las proporciones correctas
 
+if exist info == 0
+    dxdy = inputdlg('Ingrese dxdy');
+    dxdy = str2double(dxdy{1});
+    dxdy = inputdlg('Ingrese dz');
+    dxdy = str2double(dxdy{1});
+
+
+%AspectRatio
+% ax = gca;
+% dxdy = info.PixelSpacing;
+% c = ax.DataAspectRatio;
+% dz = info.SliceThickness;
+% ax.DataAspectRatio= [dz,dz,dxdy(1)];
+
+l = camlight('headlight');
+axis tight
+colormap white
+grid on;
+
 
 %Guardar rodilla
-message = sprintf('Quiere ponerle el nombre o  que se haga automatico?');
+message = sprintf('Quiere ponerle el nombre o automatico');
 reply = questdlg(message, 'Guardar', 'Ponerle', 'Auto','No');
 
 if strcmpi(reply, 'Ponerle')
@@ -248,10 +277,75 @@ contador = contador + 1;
 
 end
 
-message = sprintf('Quiere ver la distribucion de las fisis');
-reply = questdlg(message, 'Physis', 'Yes', 'No','No');
-if strcmpi(reply, 'Yes')
-    Distribucion_fisis(rodillas);
+
+%%
+%Distribucion espacial de la fisis promedio
+
+%Elegir 
+message = sprintf('Que quiere cargar?');
+reply = questdlg(message,'Fisis', 'Rodillas de workspace', 'Desde un/varios archivo(s)', 'No');
+
+if strcmpi(reply, 'Desde un/varios archivo(s)')
+[filename, pathname, filterindex] = uigetfile( ...
+{  '*.mat','MAT-files (*.mat)'; ...
+   '*.slx;*.mdl','Models (*.slx, *.mdl)'; ...
+   '*.*',  'All Files (*.*)'}, ...
+  'Seleccione las fisis a analizar', ...
+   'MultiSelect', 'on');
+
+rodillas = {};
+
+for i=1:size(filename,2)
+    load(filename{1,i})
+    rodillas{i,1} = V_final_BW;
+    rodillas{i,2} = V_final;
+end
 end
 
+
+
+%Resize
+mayor = 0;
+for i=1:size(rodillas,1)
+    tam = max(size(rodillas{i,1}));
+    if tam>mayor
+        mayor = tam
+    end
+end
+
+%cellsz = cellfun(@size,rodillas,'uni',false);
+%cellsz = cellfun(@max,cellsz,'uni',false);
+
+for i=1:size(rodillas,1)
+    rodillas{i,1} = imresize(rodillas{i,1},[mayor,mayor])
+    rodillas{i,2} = imresize(rodillas{i,2},[mayor,mayor])
+end
+
+message = sprintf('A que fisis le quiere ver la distribucion?');
+reply = questdlg(message, 'Fisis','V_final_BW', 'V_final','No');
+
+if strcmpi(reply, 'V_final_BW')
+    elegir = 1;
+elseif strcmpi(reply, 'V_final')
+    elegir = 2;    
+end
+
+fisis_prom = {mayor,mayor,1};
+
+%SUMAR LAS FISIS
+% Despues sigo con esto, o sigue tu
+
+
+% for i=1:size(rodillas,1);
+%     for e=1:size(rodillas{i,elegir},3)
+%         rodillas{i,elegir}
+%     fisis_prom = fisis_prom{ + rodillas{i,elegir};
+%     end
+% end
+% 
+% rodillas = rodillas./max(rodillas(:));
+% Indice = (rodillas(:) > 0);
+% [X,Y,Z] = meshgrid(size(rodillas,1),size(rodillas,2),size(rodillas,3));
+% scatter3(X(Indice),Y(Indice),Z(Indice),5,Disk_T(Indice));
+% daspect([1 1 1]);
 
