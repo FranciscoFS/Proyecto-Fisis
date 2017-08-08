@@ -34,7 +34,7 @@ while Var
     if length(Classes) < 10
         Var = 0;
     else
-        uiwait(msgbox('Seleccione otro Sujeto, con más Cortes','Success','modal'));
+        uiwait(msgbox('Seleccione otro Sujeto, con mï¿½s Cortes','Success','modal'));
         continue
     end
 end
@@ -52,7 +52,7 @@ for k = 1:length(Classes)
     pos = find([foto.class] == Classes(k));
     Selected_im = pos(round(length(pos)/2));
     subplot(size_plot(2),size_plot(1),k); imshow(foto(Selected_im).data,[]);
-    title(['Corte Nº ' num2str(k) foto(Selected_im ).corte])
+    title(['Corte Nï¿½ ' num2str(k) foto(Selected_im ).corte])
 end
 
 
@@ -98,7 +98,7 @@ plot_MRI(V_kmeans1); title('Kmeans');
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 %Arreglemos la Mascara
-answer = inputdlg('¿Que cluster usar (1 o 2)?');
+answer = inputdlg('ï¿½Que cluster usar (1 o 2)?');
 answer = str2double(answer{1,1});
 Mask1 = logical(V_kmeans1==answer);
 Se1 = strel('disk',5);
@@ -230,9 +230,14 @@ if strcmpi(reply, 'Ponerle')
     save([nombre '.mat'],'V_final_BW', 'V_final', 'filename','info')
     
 elseif strcmpi(reply, 'Auto')
+<<<<<<< HEAD
+    rodillas(:,:,contador) = V_final_BW;% como se pone que tambiï¿½n se guarde en esa posicion V_final;
+    save(['fisis_'  filename],'V_final_BW', 'V_final', 'filename')
+=======
     rodillas{contador,1} = V_final_BW;
     rodillas{contador,2} = V_final;
     save(['fisis_'  filename],{'V_final_BW', 'V_final', 'filename','info'})
+>>>>>>> fcc704b0ac088e6a50e28b134966151184ac9d24
 end
 
 save(['Todas_las_fisis' '.mat'],'rodillas')
@@ -248,10 +253,84 @@ contador = contador + 1;
 
 end
 
+<<<<<<< HEAD
 message = sprintf('Quiere ver la distribucion de las fisis');
 reply = questdlg(message, 'Physis', 'Yes', 'No','No');
 if strcmpi(reply, 'Yes')
     Distribucion_fisis(rodillas);
+=======
+
+%%
+%Distribucion espacial de la fisis promedio
+
+<<<<<<< HEAD
+fisis_prom = [];
+for i=1:size(rodillas)
+    fisis_prom = fisis_prom + rodillas(:,:,i);
+    %Vamos a tener que rellenar con 0 en algunos casos porque no todas las RM son del
+    %mismo tamaï¿½o
+=======
+%Elegir 
+message = sprintf('Que quiere cargar?');
+reply = questdlg(message,'Fisis', 'Rodillas de workspace', 'Desde un/varios archivo(s)', 'No');
+
+if strcmpi(reply, 'Desde un/varios archivo(s)')
+[filename, pathname, filterindex] = uigetfile( ...
+{  '*.mat','MAT-files (*.mat)'; ...
+   '*.slx;*.mdl','Models (*.slx, *.mdl)'; ...
+   '*.*',  'All Files (*.*)'}, ...
+  'Seleccione las fisis a analizar', ...
+   'MultiSelect', 'on');
+
+rodillas = {};
+
+for i=1:size(filename,2)
+    i
+    load(filename{1,i})
+    rodillas{i,1} = V_final_BW;
+    rodillas{i,2} = V_final;
+end
+end
+
+
+
+%Resize
+mayor = 0;
+for i=1:size(rodillas,1)
+    tam = max(size(rodillas{i,1}));
+    if tam>mayor
+        mayor = tam
+    end
+end
+
+%cellsz = cellfun(@size,rodillas,'uni',false);
+%cellsz = cellfun(@max,cellsz,'uni',false);
+
+for i=1:size(rodillas,1)
+    rodillas{i,1} = imresize(rodillas{i,1},[mayor,mayor])
+    rodillas{i,2} = imresize(rodillas{i,2},[mayor,mayor])
+end
+
+message = sprintf('A que fisis le quiere ver la distribucion?');
+reply = questdlg(message, 'Fisis','V_final_BW', 'V_final','No');
+
+if strcmpi(reply, 'V_final_BW')
+    elegir = 1;
+elseif strcmpi(reply, 'V_final')
+    elegir = 2;    
+end
+
+fisis_prom = {mayor,mayor,1};
+
+%SUMAR LAS FISIS
+% Despues sigo con esto, o sigue tu
+for i=1:size(rodillas,1);
+    for e=1:size(rodillas{i,elegir},3)
+        rodillas{i,elegir}
+    fisis_prom = fisis_prom{ + rodillas{i,elegir};
+    end
+>>>>>>> fcc704b0ac088e6a50e28b134966151184ac9d24
+>>>>>>> 2db1e807ce8919f7e1283566c1612e0593f70a55
 end
 
 
