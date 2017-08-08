@@ -98,7 +98,7 @@ plot_MRI(V_kmeans1); title('Kmeans');
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 %Arreglemos la Mascara
-answer = inputdlg('ï¿½Que cluster usar (1 o 2)?');
+answer = inputdlg('¿Que cluster usar (1 o 2)?');
 answer = str2double(answer{1,1});
 Mask1 = logical(V_kmeans1==answer);
 Se1 = strel('disk',5);
@@ -230,14 +230,12 @@ if strcmpi(reply, 'Ponerle')
     save([nombre '.mat'],'V_final_BW', 'V_final', 'filename','info')
     
 elseif strcmpi(reply, 'Auto')
-<<<<<<< HEAD
     rodillas(:,:,contador) = V_final_BW;% como se pone que tambiï¿½n se guarde en esa posicion V_final;
     save(['fisis_'  filename],'V_final_BW', 'V_final', 'filename')
-=======
     rodillas{contador,1} = V_final_BW;
     rodillas{contador,2} = V_final;
     save(['fisis_'  filename],{'V_final_BW', 'V_final', 'filename','info'})
->>>>>>> fcc704b0ac088e6a50e28b134966151184ac9d24
+
 end
 
 save(['Todas_las_fisis' '.mat'],'rodillas')
