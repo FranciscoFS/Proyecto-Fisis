@@ -26,8 +26,6 @@ while seguir
 
 Var = 1;
 
-uiwait(msgbox('Seleccione el paciente a analizar','Success','modal'));
-
 while Var
     [filename, pathname] = uigetfile({'*.mat';'*.m';'*.slx';'*.*'},'Seleccione el paciente a analizar');
     load(filename)
@@ -37,7 +35,7 @@ while Var
     if length(Classes) < 10
         Var = 0;
     else
-        uiwait(msgbox('Seleccione otro paciente, con mas Cortes','Success','modal'));
+        uiwait(msgbox('Seleccione otro Sujeto, con mas Cortes','Success','modal'));
         continue
     end
 end
@@ -78,6 +76,7 @@ for k=1:numel(foto)
     Im = Im + imtophat(Im,se) - imbothat(Im,se);
 	V_preFilt(:,:,k) =  medfilt2(adapthisteq(Im),[3 3]);
 end  
+ 
 
 
 f1 = figure;
@@ -254,6 +253,7 @@ if strcmpi(reply, 'No')
 end
 
 contador = contador + 1;
+
 end
 
 % message = sprintf('Quiere ver la distribucion de las fisis');
