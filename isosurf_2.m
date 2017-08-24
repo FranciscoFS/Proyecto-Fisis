@@ -27,9 +27,10 @@ else
     dxdy = str2double(dxdy);
     dz = inputdlg('Ingrese dz');
     dz = str2double(dz);
-    
-%Partch fisis
-%% Ej  
+end    
+%Patch fisis
+%% Ej
+%Ej dx = 0.4688 y dz = 3
 dxdy=0.293; dz =3.5;
 pace = (1/(dz/dxdy));
 [m,n,k] = size(fisis);
@@ -40,7 +41,7 @@ Box_size = [15 15 15];
 Y =interp3(fisis,Xq,Yq,Zq,'cubic',0);
 Y = smooth3(Y,'box',Box_size);
 
-%Partch Cortical
+%Patch Cortical
 W =interp3(cortical,Xq,Yq,Zq,'cubic',0);
 W = smooth3(W,'box',Box_size);
 
