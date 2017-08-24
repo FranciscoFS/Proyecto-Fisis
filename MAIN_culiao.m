@@ -13,7 +13,7 @@ if ~hasIPT
 	reply = questdlg(message, 'Toolbox missing', 'Yes', 'No', 'Yes');
 	if strcmpi(reply, 'No')
 		return;
-	end
+    end
 end
 
 %Rodillas
@@ -53,6 +53,7 @@ for k = 1:length(Classes)
     Selected_im = pos(round(length(pos)/2));
     subplot(size_plot(2),size_plot(1),k); imshow(foto(Selected_im).data,[]);
     title(['Corte N? ' num2str(k) foto(Selected_im ).corte])
+    
 end
 
 
@@ -63,78 +64,93 @@ close all
 N = str2double(Selected_Class{1});
 Indice = [foto.class] == N;
 foto = foto(Indice);
+
+%%
 V = zeros([size(foto(1).data) numel(foto)]);
 V_preFilt = zeros([size(foto(1).data) numel(foto)]);
 
 %Prefiltrado
-se = strel('disk',3);
+i = 20;
+se = strel('disk',i,8);
+m = 1;
 
 for k=1:numel(foto)
-    V(:,:,k) =  im2single(foto(k).data);
-    Im = imadjust((V(:,:,k))); 
-    Im = Im + imtophat(Im,se) - imbothat(Im,se);
-	V_preFilt(:,:,k) =  medfilt2(adapthisteq(Im),[3 3]);
+    Im = imadjust(im2single(foto(k).data));
+    V(:,:,k) =  Im;
+    %Im = imadjust((V(:,:,k))); 
+    Im = Im + m.*(imtophat(Im,se) - imbothat(Im,se));
+	V_preFilt(:,:,k) =  medfilt2(imadjust(Im),[5 5]);
+    %medfilt2(adapthisteq(Im),[5 5]);
 end  
  
-%info = dicominfo(V(:,:,1));
 
-%%
-
-f1 = figure;
+figure;
 plot_MRI(V); title('Volumen RAW');
 
 %Comienza el filtrado
-uiwait(msgbox({'Ahora se filtrara la imagen.' '' 'Para seguir a la siguiente filtracion solo debe pulsar OK.'},'Informacion','modal'));
+%uiwait(msgbox({'Ahora se filtrara la imagen.' '' 'Para seguir a la siguiente filtracion solo debe pulsar OK.'},'Informacion','modal'));
 
-f2= figure;
+%xclose all
+
+figure;
 plot_MRI(V_preFilt); title('Volumen Con Filtros de preprocesamiento');
 
-uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
+%%
+%uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
+
+close all
 
 % Kmeans
-V_kmeans1 = kmeans_p(V_preFilt(:),2,size(V));
-plot_MRI(V_kmeans1); title('Kmeans');
+V_kmeans = kmeans_p(V_preFilt(:),3,size(V));
+plot_MRI(V_kmeans); title('Kmeans');
 
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 %Arreglemos la Mascara
 answer = inputdlg('?Que cluster usar (1 o 2)?');
-answer = str2double(answer{1,1});
-Mask1 = logical(V_kmeans1==answer);
-Se1 = strel('disk',5);
-Se2 = strel('disk',1);
+%%
+Cluster = str2double(answer{1,1});
+Mask1 = logical(V_kmeans==Cluster);
+Se1 = strel('disk',5,8);
+Se2 = strel('disk',3,8);
 Mask1 = imerode(Mask1,Se2);
 Mask1 = imclose(Mask1,Se1);
 
 %Mask1 = im(Mask1,Se2);
 plot_MRI(Mask1); title('Mascara');
 
-uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
+%%
+%uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Aplicar Filtro de Gabriel
 V_filt = zeros(size(V));
 
 for k=1:size(V,3)
-	V_filt(:,:,k) = filtro_gabriel(V_preFilt(:,:,k),not(Mask1(:,:,k)),0.5,10);
+	V_filt(:,:,k) = filtro_gabriel(V_preFilt(:,:,k), not(Mask1(:,:,k)),5,2);
 end
-
+figure;
 plot_MRI(V_filt); title('Filtro de Gabriel');
-
-uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
+figure;
+plot_MRI(V_preFilt); title('preFiltro');
+%uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Random Walker
 %%
-V_final = zeros(size(V_filt));
-V_final_BW = zeros(size(V_filt));
+
+% V_final = zeros(size(V_filt));
+% V_fisis_final_BW = zeros(size(V_filt));
+% V_bones_final_BW = zeros(size(V_filt));
 
 f3 = figure;
 
-for k=1:size(V_filt,3)
+
+
+for k=21:size(V_filt,3)
     
     close all
 
     Im_seg = 1- V_preFilt(:,:,k);
-    Im = V(:,:,k);
+    Im = V_filt(:,:,k);
     
     figure; 
     subplot(1,2,1);
@@ -147,7 +163,9 @@ for k=1:size(V_filt,3)
     reply = questdlg(message, 'Physis', 'Yes', 'No','No');
        
     if strcmpi(reply, '') % Esto por si hay un error y queri "salir rapido" del programa
-    return;
+        
+        return;
+        
     elseif strcmpi(reply, 'Yes')
         
         Change = 1;
@@ -155,16 +173,20 @@ for k=1:size(V_filt,3)
         while Change
             
             close all
-            imshow(Im, []);title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
+            imshow(Im_seg, []);title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
             
-            uiwait(msgbox('Ingrese las semillas del foreground, con el ultimo haga doble click'));
+            uiwait(msgbox('Ingrese las semillas del Hueso, con el ultimo haga doble click'));
             [X1,Y1] = getpts();
             
-            uiwait(msgbox('Ingrese las semillas del background, con el ultimo haga doble click'));
+            uiwait(msgbox('Ingrese las semillas de las Fisis con el ultimo haga doble click'));
             [X2,Y2] = getpts();
+            
+            uiwait(msgbox('Ingrese las semillas del background, con el ultimo haga doble click'));
+           [X3,Y3] = getpts();
 
             L1 = ones(1,length(X1));
             L2 = 2*ones(1,length(X2));
+            L3 = 3*ones(1,length(X3));
 
             axis equal
             axis tight
@@ -173,8 +195,9 @@ for k=1:size(V_filt,3)
            
             close all
             
-            [mask,probabilities] = random_walker(Im_seg,[sub2ind(size(Im_seg),uint16(Y1'),uint16(X1')), sub2ind(size(Im_seg),uint16(Y2'),uint16(X2'))],[L1 L2]);
-
+            [mask,probabilities] = random_walker(Im,[sub2ind(size(Im_seg),uint16(Y1'),uint16(X1')),...
+                sub2ind(size(Im_seg),uint16(Y2'),uint16(X2')),sub2ind(size(Im_seg),uint16(Y3'),uint16(X3'))],[L1 L2 L3]);
+%sub2ind(size(Im_seg),uint16(Y3'),uint16(X3'))
             subplot(1,2,1);
             imshow(mask,[]);
 
@@ -188,6 +211,7 @@ for k=1:size(V_filt,3)
             hold on
             plot(X1,Y1,'g.','Markersize',24);
             plot(X2,Y2,'r.','Markersize',24);
+            plot(X3,Y3,'b.','Markersize',24);
             title('Outlined mask')
 
             message = sprintf('Is it Ok?');
@@ -195,7 +219,8 @@ for k=1:size(V_filt,3)
          
             if strcmpi(reply, 'Yes')
                 Change = 0;
-                V_final_BW(:,:,k) = mask==1;
+                V_fisis_final_BW(:,:,k) = mask==1;
+                V_bones_final_BW(:,:,k) = mask==2;
                 V_final(:,:,k) = (mask==1).*V_preFilt(:,:,k);
                 
             else
@@ -209,7 +234,7 @@ for k=1:size(V_filt,3)
     end
 end
 
-
+%%
 %Plot 3D
 uiwait(msgbox('Ahora se mostrara en 3D la fisis.'));
 if exist ('info') == 1

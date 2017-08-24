@@ -5,7 +5,7 @@ function [I_out] = filtro_gabriel(I,R,alpha,beta)
     % R, es la Máscara
     % alpha y Beta, son parámetros que regulan el filtro
 
-    slice = R;
+    slice = im2double(R);
     im = I;
     I_out = zeros(size(I));
   
@@ -15,16 +15,16 @@ function [I_out] = filtro_gabriel(I,R,alpha,beta)
 
             if slice(ii,jj) == 1
 
-                I_out(ii,jj) = im(ii,jj) + im(ii,jj)^alpha;
+                I_out(ii,jj) = im(ii,jj) + im(ii,jj).^alpha;
 
-                if im(ii,jj) > 1
+                if I_out(ii,jj) > 1
 
                    I_out(ii,jj) = 1;
                 end
 
-            else
+            elseif slice(ii,jj) == 0
 
-                I_out(ii,jj) = im(ii,jj)/beta;
+                I_out(ii,jj) = im(ii,jj)./beta;
 
             end
         end 
