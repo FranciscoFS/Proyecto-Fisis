@@ -275,8 +275,3 @@ contador = contador + 1;
 
 end
 
-message = sprintf('Quiere ver la distribucion de las fisis');
-reply = questdlg(message, 'Physis', 'Yes', 'No','No');
-if strcmpi(reply, 'Yes')
-    Distribucion_fisis(rodillas);
-end
