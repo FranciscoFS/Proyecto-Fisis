@@ -21,6 +21,7 @@ rodillas = {};
 seguir = 1;
 contador = 1;
 
+%%
 while seguir
 
 Var = 1;
@@ -39,8 +40,13 @@ while Var
     end
 end
 
+%info 
+info = {};
+info{1,1} = unique([foto.PixelSpacing]);
+info{2,1} = unique([foto.SliceThickness]);
+
 if mod(length(Classes),2) == 0
-    size_plot = [2,length(Classes)/2];
+    size_plot = [2,lengthunique([foto.SliceThickness])(Classes)/2];
 else
     size_plot = [2,round(length(Classes)/2)];
 end
@@ -70,7 +76,7 @@ V = zeros([size(foto(1).data) numel(foto)]);
 V_preFilt = zeros([size(foto(1).data) numel(foto)]);
 
 %Prefiltrado
-i = 20;
+i = 35;
 se = strel('disk',i,8);
 m = 1;
 
@@ -79,7 +85,7 @@ for k=1:numel(foto)
     V(:,:,k) =  Im;
     %Im = imadjust((V(:,:,k))); 
     Im = Im + m.*(imtophat(Im,se) - imbothat(Im,se));
-	V_preFilt(:,:,k) =  medfilt2(imadjust(Im),[5 5]);
+	V_preFilt(:,:,k) =  medfilt2(adapthisteq(Im),[5 5]);
     %medfilt2(adapthisteq(Im),[5 5]);
 end  
  
@@ -112,7 +118,7 @@ answer = inputdlg('?Que cluster usar (1 o 2)?');
 Cluster = str2double(answer{1,1});
 Mask1 = logical(V_kmeans==Cluster);
 Se1 = strel('disk',5,8);
-Se2 = strel('disk',3,8);
+Se2 = strel('disk',1,8);
 Mask1 = imerode(Mask1,Se2);
 Mask1 = imclose(Mask1,Se1);
 
@@ -120,36 +126,41 @@ Mask1 = imclose(Mask1,Se1);
 plot_MRI(Mask1); title('Mascara');
 
 %%
-%uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
+uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Aplicar Filtro de Gabriel
 V_filt = zeros(size(V));
 
+alfa = 5;
+beta = 2;
+
 for k=1:size(V,3)
-	V_filt(:,:,k) = filtro_gabriel(V_preFilt(:,:,k), not(Mask1(:,:,k)),5,2);
+	V_filt(:,:,k) = filtro_gabriel(V_preFilt(:,:,k), not(Mask1(:,:,k)),alfa,beta);
 end
 figure;
 plot_MRI(V_filt); title('Filtro de Gabriel');
-figure;
-plot_MRI(V_preFilt); title('preFiltro');
+
+% figure;
+% plot_MRI(V_preFilt); title('preFiltro');
 %uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Random Walker
 %%
 
-% V_final = zeros(size(V_filt));
-% V_fisis_final_BW = zeros(size(V_filt));
-% V_bones_final_BW = zeros(size(V_filt));
+ V_final_fisis = zeros(size(V_filt));
+ V_final_bones = zeros(size(V_filt));
+ V_fisis_final_BW = zeros(size(V_filt));
+ V_bones_final_BW = zeros(size(V_filt));
 
 f3 = figure;
 
 
 
-for k=21:size(V_filt,3)
+for k=1:size(V_filt,3)
     
     close all
 
-    Im_seg = 1- V_preFilt(:,:,k);
+    Im_seg = 1- V_filt(:,:,k);
     Im = V_filt(:,:,k);
     
     figure; 
@@ -173,7 +184,7 @@ for k=21:size(V_filt,3)
         while Change
             
             close all
-            imshow(Im_seg, []);title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
+            imshow(V(:,:,k), []);title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
             
             uiwait(msgbox('Ingrese las semillas del Hueso, con el ultimo haga doble click'));
             [X1,Y1] = getpts();
@@ -197,7 +208,7 @@ for k=21:size(V_filt,3)
             
             [mask,probabilities] = random_walker(Im,[sub2ind(size(Im_seg),uint16(Y1'),uint16(X1')),...
                 sub2ind(size(Im_seg),uint16(Y2'),uint16(X2')),sub2ind(size(Im_seg),uint16(Y3'),uint16(X3'))],[L1 L2 L3]);
-%sub2ind(size(Im_seg),uint16(Y3'),uint16(X3'))
+
             subplot(1,2,1);
             imshow(mask,[]);
 
@@ -219,10 +230,10 @@ for k=21:size(V_filt,3)
          
             if strcmpi(reply, 'Yes')
                 Change = 0;
-                V_fisis_final_BW(:,:,k) = mask==1;
-                V_bones_final_BW(:,:,k) = mask==2;
-                V_final(:,:,k) = (mask==1).*V_preFilt(:,:,k);
-                
+                V_bones_final_BW(:,:,k) = mask==1;
+                V_fisis_final_BW(:,:,k) = mask==2;
+                V_final_bones(:,:,k) = (mask==1).*V_preFilt(:,:,k);
+                V_final_fisis(:,:,k) = (mask==2).*V_preFilt(:,:,k);
             else
                 continue
             end
@@ -234,6 +245,7 @@ for k=21:size(V_filt,3)
     end
 end
 
+
 %%
 %Plot 3D
 uiwait(msgbox('Ahora se mostrara en 3D la fisis.'));
@@ -243,24 +255,22 @@ else
     isosurf(V_final_BW, V_final)
 end
 
-% Falta la info del DICOM para poder plotearlo con las proporciones correctas
-
-
 %Guardar rodilla
 message = sprintf('Quiere ponerle el nombre o  que se haga automatico?');
 reply = questdlg(message, 'Guardar', 'Ponerle', 'Auto','No');
 
+
 if strcmpi(reply, 'Ponerle')
     nombre = inputdlg('Select Class to use');
-    save([nombre '.mat'],'V_final_BW', 'V_final', 'filename','info')
+    save([nombre '.mat'],'V_final_fisis',' V_final_bones','V_fisis_final_BW', 'V_bones_final_BW','V_final', 'filename','info')
     
 elseif strcmpi(reply, 'Auto')
-    rodillas{contador,1} = V_final_BW;
-    rodillas{contador,2} = V_final;
-    save(['fisis_'  filename],{'V_final_BW', 'V_final', 'filename','info'})
+%     rodillas{contador,1} = V_final_BW;
+%     rodillas{contador,2} = V_final;
+    save(['fisis_'  filename],'V_final_fisis',' V_final_bones','V_fisis_final_BW', 'V_bones_final_BW','V_final', 'filename','info')
 end
 
-save(['Todas_las_fisis' '.mat'],'rodillas')
+%save(['Todas_las_fisis' '.mat'],'rodillas')
 
 
 %Siguiente rodilla
@@ -273,8 +283,3 @@ contador = contador + 1;
 
 end
 
-message = sprintf('Quiere ver la distribucion de las fisis');
-reply = questdlg(message, 'Physis', 'Yes', 'No','No');
-if strcmpi(reply, 'Yes')
-    Distribucion_fisis(rodillas);
-end

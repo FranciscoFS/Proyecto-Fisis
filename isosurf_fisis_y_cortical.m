@@ -1,4 +1,4 @@
-function isosurf_2(fisis,cortical,info)
+function isosurf(fisis,cortical,info)
 
 %Cargar fisis promedio
 message = sprintf('De donde cargar la fisis?');
@@ -27,35 +27,35 @@ else
     dxdy = str2double(dxdy);
     dz = inputdlg('Ingrese dz');
     dz = str2double(dz);
-    
-%Partch fisis
-%% Ej  
-dxdy=0.293; dz =3.5;
+end   
+%Patch fisis
+%%
+%Ej  dx=dy=0.293 y Dz =3.5;
+%Ej dx = 0.4688 y dz = 3
 pace = (1/(dz/dxdy));
 [m,n,k] = size(fisis);
 [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
-Box_size = [15 15 15];
+Box_size = [41 41 41];
 
-
-Y =interp3(fisis,Xq,Yq,Zq,'cubic',0);
+Y =interp3(fisis,Xq,Yq,Zq,'cubic');
 Y = smooth3(Y,'box',Box_size);
 
-%Partch Cortical
-W =interp3(cortical,Xq,Yq,Zq,'cubic',0);
-W = smooth3(W,'box',Box_size);
+%Patch Cortical
+W =interp3(cortical,Xq,Yq,Zq,'cubic');
+W = smooth3(W>0,'box',Box_size);
 
 
 %Vista y Luz
 
 %isosurface(smooth3(W))
 %%
-close all
-p1= patch(isosurface(Y , 0.65),'FaceColor','red','EdgeColor','blue','FaceAlpha','0.95');
-p2= patch(isosurface(W , 0.3),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+%close all
+p1= patch(isosurface(Y , 0.3),'FaceColor','red','EdgeColor','none','FaceAlpha','0.95');
+p2= patch(isosurface(W , 0.5),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
 reducepatch(p2,0.01)
 
 view(3)
-axis equal
+axis tight
 daspect([1 1 1])
 l = camlight('headlight');
 lighting gouraud

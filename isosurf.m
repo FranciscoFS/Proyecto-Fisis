@@ -29,7 +29,7 @@ else
     dxdy = str2double(dxdy);
     dz = inputdlg('Ingrese dz');
     dz = str2double(dz);
-%     dx 0.4688 dy 3
+%     dx 0.4688 dz 3
     
 end
 ax = gca;
@@ -38,6 +38,5 @@ ax.DataAspectRatio= [dz,dz,dxdy];
 
 l = camlight('headlight');
 axis tight
-colormap white
 grid on;
 end

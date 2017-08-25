@@ -27,10 +27,12 @@ else
     dxdy = str2double(dxdy);
     dz = inputdlg('Ingrese dz');
     dz = str2double(dz);
-    
-%Partch fisis
-%% Ej  
-dxdy=0.293; dz =3.5;
+end    
+%Patch fisis
+%% Ej
+%Ej dx = 0.4688 y dz = 3
+% Ej 2 dxdy=0.293; dz =3.5;
+dxdy=0.4688; dz =3;
 pace = (1/(dz/dxdy));
 [m,n,k] = size(fisis);
 [Xq,Yq,Zq] = meshgrid(1:m,1:n,1.5:pace:k);
@@ -40,7 +42,7 @@ Box_size = [15 15 15];
 Y =interp3(fisis,Xq,Yq,Zq,'cubic',0);
 Y = smooth3(Y,'box',Box_size);
 
-%Partch Cortical
+%Patch Cortical
 W =interp3(cortical,Xq,Yq,Zq,'cubic',0);
 W = smooth3(W,'box',Box_size);
 
@@ -50,8 +52,13 @@ W = smooth3(W,'box',Box_size);
 %isosurface(smooth3(W))
 %%
 close all
+<<<<<<< HEAD
 p1= patch(isosurface(Y , 0.4),'FaceColor','green','EdgeColor','none','FaceAlpha','0.95');
 p2= patch(isosurface(W , 0.2),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+=======
+p1= patch(isosurface(Y , 0.25),'FaceColor','yellow','EdgeColor','none','FaceAlpha','0.95');
+p2= patch(isosurface(W , 0.3),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+>>>>>>> 12826754ea65e0a7a8cebe9942a5610bd406bc2d
 reducepatch(p2,0.01)
 
 view(3)
