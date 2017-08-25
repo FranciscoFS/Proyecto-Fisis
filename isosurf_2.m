@@ -20,8 +20,8 @@ end
 
 %Proporciones RM
 if exist('info') == 1
-    dxdy = info.PixelSpacing{1};
-    dz = info.SliceThickness;
+    dxdy = info{1,1};
+    dz = info{2,1};
 else
     dxdy = inputdlg('Ingrese dxdy');
     dxdy = str2double(dxdy);
@@ -32,11 +32,11 @@ end
 %% Ej
 %Ej dx = 0.4688 y dz = 3
 % Ej 2 dxdy=0.293; dz =3.5;
-dxdy=0.4688; dz =3;
+%dxdy=0.4688; dz =3;
 pace = (1/(dz/dxdy));
 [m,n,k] = size(fisis);
 [Xq,Yq,Zq] = meshgrid(1:m,1:n,1.5:pace:k);
-Box_size = [15 15 15];
+Box_size = [3 3 3];
 
 
 Y =interp3(fisis,Xq,Yq,Zq,'cubic',0);
