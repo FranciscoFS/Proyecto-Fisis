@@ -4,7 +4,9 @@ clear all
 
 folder = uigetdir();
 DIM = dir(folder);
+addpath(genpath(folder));
 warning('off','all')
+
 
 for k=1:numel(DIM)
     

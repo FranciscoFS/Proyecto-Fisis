@@ -70,7 +70,7 @@ V = zeros([size(foto(1).data) numel(foto)]);
 V_preFilt = zeros([size(foto(1).data) numel(foto)]);
 
 %Prefiltrado
-i = 20;
+i = 35;
 se = strel('disk',i,8);
 m = 1;
 
@@ -79,7 +79,7 @@ for k=1:numel(foto)
     V(:,:,k) =  Im;
     %Im = imadjust((V(:,:,k))); 
     Im = Im + m.*(imtophat(Im,se) - imbothat(Im,se));
-	V_preFilt(:,:,k) =  medfilt2(imadjust(Im),[5 5]);
+	V_preFilt(:,:,k) =  medfilt2(adapthisteq(Im),[5 5]);
     %medfilt2(adapthisteq(Im),[5 5]);
 end  
  
@@ -112,7 +112,7 @@ answer = inputdlg('?Que cluster usar (1 o 2)?');
 Cluster = str2double(answer{1,1});
 Mask1 = logical(V_kmeans==Cluster);
 Se1 = strel('disk',5,8);
-Se2 = strel('disk',3,8);
+Se2 = strel('disk',1,8);
 Mask1 = imerode(Mask1,Se2);
 Mask1 = imclose(Mask1,Se1);
 
@@ -137,19 +137,20 @@ plot_MRI(V_preFilt); title('preFiltro');
 % Random Walker
 %%
 
-% V_final = zeros(size(V_filt));
-% V_fisis_final_BW = zeros(size(V_filt));
-% V_bones_final_BW = zeros(size(V_filt));
+ V_final_fisis = zeros(size(V_filt));
+ V_final_bones = zeros(size(V_filt));
+ V_fisis_final_BW = zeros(size(V_filt));
+ V_bones_final_BW = zeros(size(V_filt));
 
 f3 = figure;
 
 
 
-for k=21:size(V_filt,3)
+for k=1:size(V_filt,3)
     
     close all
 
-    Im_seg = 1- V_preFilt(:,:,k);
+    Im_seg = 1- V_filt(:,:,k);
     Im = V_filt(:,:,k);
     
     figure; 
@@ -197,7 +198,7 @@ for k=21:size(V_filt,3)
             
             [mask,probabilities] = random_walker(Im,[sub2ind(size(Im_seg),uint16(Y1'),uint16(X1')),...
                 sub2ind(size(Im_seg),uint16(Y2'),uint16(X2')),sub2ind(size(Im_seg),uint16(Y3'),uint16(X3'))],[L1 L2 L3]);
-%sub2ind(size(Im_seg),uint16(Y3'),uint16(X3'))
+
             subplot(1,2,1);
             imshow(mask,[]);
 
@@ -219,10 +220,10 @@ for k=21:size(V_filt,3)
          
             if strcmpi(reply, 'Yes')
                 Change = 0;
-                V_fisis_final_BW(:,:,k) = mask==1;
-                V_bones_final_BW(:,:,k) = mask==2;
-                V_final(:,:,k) = (mask==1).*V_preFilt(:,:,k);
-                
+                V_bones_final_BW(:,:,k) = mask==1;
+                V_fisis_final_BW(:,:,k) = mask==2;
+                V_final_bones(:,:,k) = (mask==1).*V_preFilt(:,:,k);
+                V_final_fisis(:,:,k) = (mask==2).*V_preFilt(:,:,k);
             else
                 continue
             end
@@ -233,6 +234,7 @@ for k=21:size(V_filt,3)
         continue
     end
 end
+
 
 %%
 %Plot 3D
