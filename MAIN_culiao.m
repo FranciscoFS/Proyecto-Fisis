@@ -40,8 +40,13 @@ while Var
     end
 end
 
+%info 
+info = {};
+info{1,1} = unique([foto.PixelSpacing]);
+info{2,1} = unique([foto.SliceThickness]);
+
 if mod(length(Classes),2) == 0
-    size_plot = [2,length(Classes)/2];
+    size_plot = [2,lengthunique([foto.SliceThickness])(Classes)/2];
 else
     size_plot = [2,round(length(Classes)/2)];
 end
@@ -121,7 +126,7 @@ Mask1 = imclose(Mask1,Se1);
 plot_MRI(Mask1); title('Mascara');
 
 %%
-%uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
+uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Aplicar Filtro de Gabriel
 V_filt = zeros(size(V));
@@ -134,8 +139,9 @@ for k=1:size(V,3)
 end
 figure;
 plot_MRI(V_filt); title('Filtro de Gabriel');
-figure;
-plot_MRI(V_preFilt); title('preFiltro');
+
+% figure;
+% plot_MRI(V_preFilt); title('preFiltro');
 %uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Random Walker
@@ -178,7 +184,7 @@ for k=1:size(V_filt,3)
         while Change
             
             close all
-            imshow(Im_seg, []);title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
+            imshow(V(:,:,k), []);title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
             
             uiwait(msgbox('Ingrese las semillas del Hueso, con el ultimo haga doble click'));
             [X1,Y1] = getpts();
@@ -249,24 +255,22 @@ else
     isosurf(V_final_BW, V_final)
 end
 
-% Falta la info del DICOM para poder plotearlo con las proporciones correctas
-
-
 %Guardar rodilla
 message = sprintf('Quiere ponerle el nombre o  que se haga automatico?');
 reply = questdlg(message, 'Guardar', 'Ponerle', 'Auto','No');
 
+
 if strcmpi(reply, 'Ponerle')
     nombre = inputdlg('Select Class to use');
-    save([nombre '.mat'],'V_final_BW', 'V_final', 'filename','info')
+    save([nombre '.mat'],'V_final_fisis',' V_final_bones','V_fisis_final_BW', 'V_bones_final_BW','V_final', 'filename','info')
     
 elseif strcmpi(reply, 'Auto')
-    rodillas{contador,1} = V_final_BW;
-    rodillas{contador,2} = V_final;
-    save(['fisis_'  filename],{'V_final_BW', 'V_final', 'filename','info'})
+%     rodillas{contador,1} = V_final_BW;
+%     rodillas{contador,2} = V_final;
+    save(['fisis_'  filename],'V_final_fisis',' V_final_bones','V_fisis_final_BW', 'V_bones_final_BW','V_final', 'filename','info')
 end
 
-save(['Todas_las_fisis' '.mat'],'rodillas')
+%save(['Todas_las_fisis' '.mat'],'rodillas')
 
 
 %Siguiente rodilla
