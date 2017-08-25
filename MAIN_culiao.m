@@ -255,14 +255,15 @@ end
 message = sprintf('Quiere ponerle el nombre o  que se haga automatico?');
 reply = questdlg(message, 'Guardar', 'Ponerle', 'Auto','No');
 
+
 if strcmpi(reply, 'Ponerle')
     nombre = inputdlg('Select Class to use');
-    save([nombre '.mat'],'V_fisis_final_BW', 'V_bones_final_BW','V_final', 'filename','info')
+    save([nombre '.mat'],'V_final_fisis',' V_final_bones','V_fisis_final_BW', 'V_bones_final_BW','V_final', 'filename','info')
     
 elseif strcmpi(reply, 'Auto')
 %     rodillas{contador,1} = V_final_BW;
 %     rodillas{contador,2} = V_final;
-    save(['fisis_'  filename],'V_fisis_final_BW', 'V_bones_final_BW','V_final', 'filename','info')
+    save(['fisis_'  filename],'V_final_fisis',' V_final_bones','V_fisis_final_BW', 'V_bones_final_BW','V_final', 'filename','info')
 end
 
 %save(['Todas_las_fisis' '.mat'],'rodillas')
