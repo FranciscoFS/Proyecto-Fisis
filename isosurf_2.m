@@ -50,8 +50,8 @@ W = smooth3(W,'box',Box_size);
 %isosurface(smooth3(W))
 %%
 close all
-p1= patch(isosurface(Y , 0.5),'FaceColor','green','EdgeColor','none','FaceAlpha','0.95');
-p2= patch(isosurface(W , 0.3),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+p1= patch(isosurface(Y , 0.4),'FaceColor','green','EdgeColor','none','FaceAlpha','0.95');
+p2= patch(isosurface(W , 0.2),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
 reducepatch(p2,0.01)
 
 view(3)
