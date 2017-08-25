@@ -4,6 +4,7 @@ clear all
 
 folder = uigetdir();
 DIM = dir(folder);
+addpath(getpath(folder));
 warning('off','all')
 
 for k=1:numel(DIM)
@@ -23,7 +24,7 @@ for k=1:numel(DIM)
     
     disp('END')
 end
-
+1
 
 
 

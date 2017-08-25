@@ -5,6 +5,7 @@ clear all
    '*.*',  'All Files (*.*)'}, ...
   'Seleccione las slides a analizar', ...
    'MultiSelect', 'on');
+% addpath(getpath(folder));
 cd;
 cd(pathname);
 X = [];

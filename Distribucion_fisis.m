@@ -12,6 +12,10 @@ if strcmpi(reply, 'Desde un/varios archivo(s)')
   'Seleccione las fisis a analizar', ...
    'MultiSelect', 'on');
 
+cd;
+cd(pathname);
+
+
 rodillas = {};
 
 for i=1:size(filename,2)
