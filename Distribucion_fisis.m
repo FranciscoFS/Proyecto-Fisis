@@ -29,8 +29,6 @@ end
 %1. Girar y rotar las rodillas respecto a su eje principal (femur) y a su
 %centro de masa?
 
-%De
-
 %Rotación con respecto a x
 Rx = [ 1 0 0 0; 
    0  cos(a1) -sin(a1) 0; 
@@ -48,9 +46,9 @@ Rz = [ cos(a3) -sin(a3) 0 0;
    0 0 1 0; 
    0 0 0 1 ];
 
-matriz_rotacion = Rx*Ry*Rz
+tform = affine3d(Rx*Ry*Rz);
+rotado = imwarp(Aqui va la matriz a rotar,tform);
 
-   
 
 
 %2. Sumar todas las rodillas
