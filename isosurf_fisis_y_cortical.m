@@ -1,4 +1,4 @@
-function isosurf(fisis,cortical,info)
+function isosurf_fisis_y_cortical(fisis,cortical,info)
 
 %Cargar fisis promedio
 message = sprintf('De donde cargar la fisis?');
@@ -20,8 +20,8 @@ end
 
 %Proporciones RM
 if exist('info') == 1
-    dxdy = info.PixelSpacing{1};
-    dz = info.SliceThickness;
+    dxdy = info{1,1};
+    dz = info{2,1};
 else
     dxdy = inputdlg('Ingrese dxdy');
     dxdy = str2double(dxdy);
@@ -35,7 +35,7 @@ end
 pace = (1/(dz/dxdy));
 [m,n,k] = size(fisis);
 [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
-Box_size = [41 41 41];
+Box_size = [3 3 3];
 
 Y =interp3(fisis,Xq,Yq,Zq,'cubic');
 Y = smooth3(Y,'box',Box_size);
@@ -50,8 +50,8 @@ W = smooth3(W>0,'box',Box_size);
 %isosurface(smooth3(W))
 %%
 %close all
-p1= patch(isosurface(Y , 0.3),'FaceColor','red','EdgeColor','none','FaceAlpha','0.95');
-p2= patch(isosurface(W , 0.5),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+p1= patch(isosurface(Y),'FaceColor','red','EdgeColor','none','FaceAlpha','0.95');
+p2= patch(isosurface(W),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
 reducepatch(p2,0.01)
 
 view(3)

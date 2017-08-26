@@ -52,18 +52,7 @@ matriz_rotacion = Rx*Ry*Rz
 
    
 
-
-%2. Sumar todas las rodillas
-
-info = rodillas{i,5};
-dxdy = info{1,1};
-dz= info{2,1};
-pace = (1/(dz/dxdy));
-[m,n,k] = size(fisis);
-[Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
-Box_size = [3 3 3];
-
-Y =interp3(fisis,Xq,Yq,Zq,'cubic');
+   
 
 
 
@@ -72,9 +61,7 @@ Y =interp3(fisis,Xq,Yq,Zq,'cubic');
 
 
 
-
-
-
+%2. Crear una matriz en la que se puedan sumar todas las rodillas
 
 esp_pixel = [];
 esp_slice = [];
