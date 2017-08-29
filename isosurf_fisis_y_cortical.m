@@ -1,22 +1,22 @@
 function isosurf(fisis,cortical,info)
 
-%Cargar fisis promedio
-message = sprintf('De donde cargar la fisis?');
-reply = questdlg(message,'Fisis', 'Workspace', 'Desde un archivo', 'No');
-
-if strcmpi(reply, 'Desde un archivo')
-        [filename, pathname] = uigetfile({'*.mat';'*.m';'*.slx';'*.*'},'Seleccione las fisis a analizar');
-        load(filename)
-end
-
-%Cargar cortical promedio
-message = sprintf('De donde cargar la cortical?');
-reply = questdlg(message,'Cortical', 'Workspace', 'Desde un archivo', 'No');
-
-if strcmpi(reply, 'Desde un archivo')
-        [filename, pathname] = uigetfile({'*.mat';'*.m';'*.slx';'*.*'},'Seleccione las fisis a analizar');
-        load(filename)
-end
+% %Cargar fisis promedio
+% message = sprintf('De donde cargar la fisis?');
+% reply = questdlg(message,'Fisis', 'Workspace', 'Desde un archivo', 'No');
+% 
+% if strcmpi(reply, 'Desde un archivo')
+%         [filename, pathname] = uigetfile({'*.mat';'*.m';'*.slx';'*.*'},'Seleccione las fisis a analizar');
+%         load(filename)
+% end
+% 
+% %Cargar cortical promedio
+% message = sprintf('De donde cargar la cortical?');
+% reply = questdlg(message,'Cortical', 'Workspace', 'Desde un archivo', 'No');
+% 
+% if strcmpi(reply, 'Desde un archivo')
+%         [filename, pathname] = uigetfile({'*.mat';'*.m';'*.slx';'*.*'},'Seleccione las fisis a analizar');
+%         load(filename)
+% end
 
 %Proporciones RM
 if exist('info') == 1

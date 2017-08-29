@@ -46,7 +46,7 @@ info{1,1} = unique([foto.PixelSpacing]);
 info{2,1} = unique([foto.SliceThickness]);
 
 if mod(length(Classes),2) == 0
-    size_plot = [2,lengthunique([foto.SliceThickness])(Classes)/2];
+    size_plot = [2,length(Classes)/2];
 else
     size_plot = [2,round(length(Classes)/2)];
 end
