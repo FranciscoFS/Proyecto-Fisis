@@ -29,11 +29,7 @@ end
 %1. Girar y rotar las rodillas respecto a su eje principal (femur) y a su
 %centro de masa?
 
-%Primera opcion:
-
-angulo = 0;
-
-rotado= imrotate3(volumen,angulo
+%De
 
 %Rotación con respecto a x
 Rx = [ 1 0 0 0; 
@@ -52,25 +48,11 @@ Rz = [ cos(a3) -sin(a3) 0 0;
    0 0 1 0; 
    0 0 0 1 ];
 
-tform = affine3d(Rx*Ry*Rz);
-rotado = imwarp(Aqui va la matriz a rotar,tform);
+matriz_rotacion = Rx*Ry*Rz
 
+   
 
-
-
-%2. Sumar todas las rodillas
-
-info = rodillas{i,5};
-dxdy = info{1,1};
-dz= info{2,1};
-pace = (1/(dz/dxdy));
-[m,n,k] = size(fisis);
-[Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
-Box_size = [3 3 3];
-
-Y =interp3(fisis,Xq,Yq,Zq,'cubic');
-
-ceropadding = padarray(Y,[lo_que_le_falta lo_que_le_falta],'both');
+   
 
 
 
@@ -79,8 +61,7 @@ ceropadding = padarray(Y,[lo_que_le_falta lo_que_le_falta],'both');
 
 
 
-
-
+%2. Crear una matriz en la que se puedan sumar todas las rodillas
 
 esp_pixel = [];
 esp_slice = [];

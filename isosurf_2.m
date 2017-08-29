@@ -21,8 +21,13 @@ function isosurf_2(fisis,cortical,info)
 %Proporciones RM
 
 if exist('info') == 1
+<<<<<<< HEAD
     dxdy = info{1};
     dz = info{2};
+=======
+    dxdy = info{1,1};
+    dz = info{2,1};
+>>>>>>> ddc1ba3e1ff306ed5d5c316058a24474d32b9113
 else
     dxdy = inputdlg('Ingrese dxdy');
     dxdy = str2double(dxdy);
@@ -33,11 +38,19 @@ end
 %Patch fisis
 %Ej dx = 0.4688 y dz = 3
 % Ej 2 dxdy=0.293; dz =3.5;
+<<<<<<< HEAD
 
 pace = (1/(dz/dxdy));
 [m,n,k] = size(fisis);
 [Xq,Yq,Zq] = meshgrid(1:m,1:n,1.5:pace:k);
 Box_size = [9 9 9];
+=======
+%dxdy=0.4688; dz =3;
+pace = (1/(dz/dxdy));
+[m,n,k] = size(fisis);
+[Xq,Yq,Zq] = meshgrid(1:m,1:n,1.5:pace:k);
+Box_size = [3 3 3];
+>>>>>>> ddc1ba3e1ff306ed5d5c316058a24474d32b9113
 
 
 fprintf('Working in Fisis ..... \n');
@@ -55,8 +68,8 @@ W = smooth3(W,'box',Box_size);
 %Vista y Luz
 
 close all
-p1= patch(isosurface(Y , 0.25),'FaceColor','yellow','EdgeColor','none','FaceAlpha','0.95');
-p2= patch(isosurface(W , 0.3),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+p1= patch(isosurface(Y , 0.3),'FaceColor','red','EdgeColor','none','FaceAlpha','0.95');
+p2= patch(isosurface(W , 0.5),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
 reducepatch(p2,0.01)
 
 view(3)
