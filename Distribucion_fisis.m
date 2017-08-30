@@ -1,72 +1,136 @@
 function Distribucion_fisis
 %Distribucion espacial de la fisis promedio
 %Elegir 
+
 message = sprintf('Que quiere cargar?');
 reply = questdlg(message,'Fisis', 'Rodillas de workspace', 'Desde un/varios archivo(s)', 'No');
 
-if strcmpi(reply, 'Desde un/varios archivo(s)')
+
+uiwait(msgbox('Seleccione las rodillas de los pacientes a analizar (los .mat)'));
+
 [filename, pathname, filterindex] = uigetfile( ...
 {  '*.mat','MAT-files (*.mat)'; ...
    '*.slx;*.mdl','Models (*.slx, *.mdl)'; ...
    '*.*',  'All Files (*.*)'}, ...
-  'Seleccione las fisis a analizar', ...
+  'Seleccione las rodillas de los pacientes a analizar', ...
    'MultiSelect', 'on');
 
 cd;
 cd(pathname);
 
-
 rodillas = {};
 
 for i=1:size(filename,2)
     load(filename{1,i})
-    rodillas{i,1} = V_final_BW;
-    rodillas{i,2} = V_final;
-end
+    rodillas{i,1} = V_final_fisis;
+    rodillas{i,2} = V_final_bones;
+    rodillas{i,3} = V_fisis_final_BW;
+    rodillas{i,4} = V_bones_final_BW;
+    rodillas{i,5} = info;
+    rodillas{i,6} = filename;   
 end
 
-%Resize
-mayor = 0;
+
+%1. Girar y rotar las rodillas respecto a su eje principal (femur) y a su
+%centro de masa?
+
+%Primera opcion:
+
+angulo = 0;
+
+rotado= imrotate3(volumen,angulo)
+
+%Rotaci�n con respecto a x
+Rx = [ 1 0 0 0; 
+   0  cos(a1) -sin(a1) 0; 
+   0 sin(a1) cos(a1) 0; 
+   0 0 0 1 ];
+
+%Rotaci�n con respecto a y
+Ry = [ cos(a2) 0 sin(a2) 0; 
+   0 1 0 0; 
+   -sin(a2) 0 cos(a2) 0; 
+   0 0 0 1 ];
+%respecto a z                               
+Rz = [ cos(a3) -sin(a3) 0 0; 
+   sin(a3)  cos(a3) 0 0; 
+   0 0 1 0; 
+   0 0 0 1 ];
+
+tform = affine3d(Rx*Ry*Rz);
+rotado = imwarp(Aqui va la matriz a rotar,tform);
+
+
+
+
+%2. Sumar todas las rodillas
+
+info = rodillas{i,5};
+dxdy = info{1,1};
+dz= info{2,1};
+pace = (1/(dz/dxdy));
+[m,n,k] = size(fisis);
+[Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
+Box_size = [3 3 3];
+
+Y =interp3(fisis,Xq,Yq,Zq,'cubic');
+
+ceropadding = padarray(Y,[lo_que_le_falta lo_que_le_falta],'both');
+
+
+esp_pixel = [];
+esp_slice = [];
+
 for i=1:size(rodillas,1)
-    tam = max(size(rodillas{i,1}));
-    if tam>mayor
-        mayor = tam
+    info = rodillas{i,5};
+    espaciado_pixel = info{1,1};
+    esp_pixel(i) = espaciado_pixel;
+    espaciado_slice= info{2,1};
+    esp_slice(i) = espaciado_slice;
+end
+
+ancho_mayor=0;
+alto_mayor=0;
+
+%Sacar dimensiones maximas
+
+for i=1:size(rodillas,1)
+    info = rodillas{i,5};
+    espaciado_pixel = info{1,1};
+    espaciado_slice= info{2,1};
+    tam1 = max(size(rodillas{i,1}))*espaciado_pixel;
+    tam2 = min(size(rodillas{i,1}))*espaciado_slice;
+    if tam1>ancho_mayor
+        ancho_mayor = tam1
+    end
+    if tam2>ancho_mayor
+        alto_mayor = tam2
     end
 end
+
+    %entonces las dimensiones serian = ancho_mayor x ancho_mayor x
+    %alto_mayor
+    
+X = repmat(int16(0), [ancho_mayor, ancho_mayor, alto_mayor]);
+
+    
+
+
+% %Resize
+% mayor = 0;
+% for i=1:size(rodillas,1)
+%     tam = max(size(rodillas{i,1}));
+%     if tam>mayor
+%         mayor = tam
+%     end
+% end
 
 %cellsz = cellfun(@size,rodillas,'uni',false);
 %cellsz = cellfun(@max,cellsz,'uni',false);
 
-for i=1:size(rodillas,1)
-    rodillas{i,1} = imresize(rodillas{i,1},[mayor,mayor])
-    rodillas{i,2} = imresize(rodillas{i,2},[mayor,mayor])
-end
-
-message = sprintf('A que fisis le quiere ver la distribucion?');
-reply = questdlg(message, 'Fisis','V_final_BW', 'V_final','No');
-
-if strcmpi(reply, 'V_final_BW')
-    elegir = 1;
-elseif strcmpi(reply, 'V_final')
-    elegir = 2;    
-end
-
-fisis_prom = {mayor,mayor,1};
-
-%SUMAR LAS FISIS
-% Despues sigo con esto, o sigue tu
-
-
-% for i=1:size(rodillas,1);
-%     for e=1:size(rodillas{i,elegir},3)
-%         rodillas{i,elegir}
-%     fisis_prom = fisis_prom{ + rodillas{i,elegir};
-%     end
+% for i=1:size(rodillas,1)
+%     rodillas{i,1} = imresize(rodillas{i,1},[mayor,mayor])
+%     rodillas{i,2} = imresize(rodillas{i,2},[mayor,mayor])
 % end
-% 
-% rodillas = rodillas./max(rodillas(:));
-% Indice = (rodillas(:) > 0);
-% [X,Y,Z] = meshgrid(size(rodillas,1),size(rodillas,2),size(rodillas,3));
-% scatter3(X(Indice),Y(Indice),Z(Indice),5,Disk_T(Indice));
-% daspect([1 1 1]);
+
 end
