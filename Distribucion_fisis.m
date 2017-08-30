@@ -1,11 +1,15 @@
 function Distribucion_fisis
 %Distribucion espacial de la fisis promedio
+<<<<<<< HEAD
 %Elegir 
 
 message = sprintf('Que quiere cargar?');
 reply = questdlg(message,'Fisis', 'Rodillas de workspace', 'Desde un/varios archivo(s)', 'No');
 
 
+=======
+
+>>>>>>> e966550a6949bd06d48b9302159300cdc8fee4bd
 uiwait(msgbox('Seleccione las rodillas de los pacientes a analizar (los .mat)'));
 
 [filename, pathname, filterindex] = uigetfile( ...
@@ -38,15 +42,25 @@ end
 
 angulo = 0;
 
+<<<<<<< HEAD
 rotado= imrotate3(volumen,angulo)
 
 %Rotaciï¿½n con respecto a x
+=======
+rotado= imrotate3(volumen,angulo
+
+%Rotación con respecto a x
+>>>>>>> e966550a6949bd06d48b9302159300cdc8fee4bd
 Rx = [ 1 0 0 0; 
    0  cos(a1) -sin(a1) 0; 
    0 sin(a1) cos(a1) 0; 
    0 0 0 1 ];
 
+<<<<<<< HEAD
 %Rotaciï¿½n con respecto a y
+=======
+%Rotación con respecto a y
+>>>>>>> e966550a6949bd06d48b9302159300cdc8fee4bd
 Ry = [ cos(a2) 0 sin(a2) 0; 
    0 1 0 0; 
    -sin(a2) 0 cos(a2) 0; 
@@ -78,6 +92,18 @@ Y =interp3(fisis,Xq,Yq,Zq,'cubic');
 ceropadding = padarray(Y,[lo_que_le_falta lo_que_le_falta],'both');
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+>>>>>>> e966550a6949bd06d48b9302159300cdc8fee4bd
 esp_pixel = [];
 esp_slice = [];
 
@@ -93,7 +119,10 @@ ancho_mayor=0;
 alto_mayor=0;
 
 %Sacar dimensiones maximas
+<<<<<<< HEAD
 
+=======
+>>>>>>> e966550a6949bd06d48b9302159300cdc8fee4bd
 for i=1:size(rodillas,1)
     info = rodillas{i,5};
     espaciado_pixel = info{1,1};
@@ -107,7 +136,12 @@ for i=1:size(rodillas,1)
         alto_mayor = tam2
     end
 end
+    %entonces las dimensiones serian = ancho_mayor x ancho_mayor x
+    %alto_mayor
+    
+X = repmat(int16(0), [ancho_mayor, ancho_mayor, alto_mayor]);
 
+<<<<<<< HEAD
     %entonces las dimensiones serian = ancho_mayor x ancho_mayor x
     %alto_mayor
     
@@ -116,6 +150,11 @@ X = repmat(int16(0), [ancho_mayor, ancho_mayor, alto_mayor]);
     
 
 
+=======
+    
+
+
+>>>>>>> e966550a6949bd06d48b9302159300cdc8fee4bd
 % %Resize
 % mayor = 0;
 % for i=1:size(rodillas,1)

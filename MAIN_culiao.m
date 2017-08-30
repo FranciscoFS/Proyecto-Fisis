@@ -145,7 +145,12 @@ plot_MRI(V_filt); title('Filtro de Gabriel');
 %uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Random Walker
+<<<<<<< HEAD
 
+=======
+%%
+% 
+>>>>>>> e966550a6949bd06d48b9302159300cdc8fee4bd
 %  V_final_fisis = zeros(size(V_filt));
 %  V_final_bones = zeros(size(V_filt));
 %  V_fisis_final_BW = zeros(size(V_filt));
@@ -155,7 +160,7 @@ f3 = figure;
 
 
 
-for k=1:size(V_filt,3)
+for k=20:size(V_filt,3)
     
     close all
 
