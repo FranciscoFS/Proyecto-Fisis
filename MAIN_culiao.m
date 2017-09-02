@@ -35,7 +35,7 @@ while Var
     if length(Classes) < 10
         Var = 0;
     else
-        uiwait(msgbox('Seleccione otro Sujeto, con m?s Cortes','Success','modal'));
+        uiwait(msgbox('Seleccione otro Sujeto, con mas Cortes','Success','modal'));
         continue
     end
 end

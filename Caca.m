@@ -5,9 +5,11 @@
 %3. Ajustar slicethickness y pixelspacing con respecto a las menores
 %4. Sumar
 %5. Ver
+%% Girar 
+
+
 
 %% SUMA DE FISIS
-
 dxdy2 = 0.4688; dz2 = 3;
 dxdy= 0.293; dz =3.5;
 
