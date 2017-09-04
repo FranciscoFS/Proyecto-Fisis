@@ -145,23 +145,18 @@ plot_MRI(V_filt); title('Filtro de Gabriel');
 %uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Random Walker
-<<<<<<< HEAD
 
-=======
 %%
 % 
->>>>>>> e966550a6949bd06d48b9302159300cdc8fee4bd
-%  V_final_fisis = zeros(size(V_filt));
-%  V_final_bones = zeros(size(V_filt));
-%  V_fisis_final_BW = zeros(size(V_filt));
-%  V_bones_final_BW = zeros(size(V_filt));
+% V_final_fisis = zeros(size(V_filt));
+% V_final_bones = zeros(size(V_filt));
+% V_fisis_final_BW = zeros(size(V_filt));
+% V_bones_final_BW = zeros(size(V_filt));
 
 f3 = figure;
 
-
-
-for k=20:size(V_filt,3)
-    
+for k=1:size(V_filt,3)
+    k
     close all
 
     Im_seg = 1- V_filt(:,:,k);
@@ -251,31 +246,25 @@ end
 
 
 %%
-%Plot 3D
-uiwait(msgbox('Ahora se mostrara en 3D la fisis.'));
-if exist ('info') == 1
-    isosurf(V_final_BW, V_final,info)
-else
-    isosurf(V_bones_final_BW,V_bones_final_BW)
-end
+% %Plot 3D
+% uiwait(msgbox('Ahora se mostrara en 3D la fisis.'));
+% if exist ('info') == 1
+%     isosurf(V_final_BW, V_final,info)
+% else
+%     isosurf(V_bones_final_BW,V_bones_final_BW)
+% end
 
 %Guardar rodilla
 message = sprintf('Quiere ponerle el nombre o  que se haga automatico?');
 reply = questdlg(message, 'Guardar', 'Ponerle', 'Auto','No');
-
 
 if strcmpi(reply, 'Ponerle')
     nombre = inputdlg('Select Class to use');
     save([nombre '.mat'],'V_final_fisis','V_final_bones','V_fisis_final_BW', 'V_bones_final_BW', 'filename','info')
     
 elseif strcmpi(reply, 'Auto')
-%     rodillas{contador,1} = V_final_BW;
-%     rodillas{contador,2} = V_final;
     save(['fisis_'  filename],'V_final_fisis','V_final_bones','V_fisis_final_BW', 'V_bones_final_BW', 'filename','info')
 end
-
-%save(['Todas_las_fisis' '.mat'],'rodillas')
-
 
 %Siguiente rodilla
 message = sprintf('Quiere segmentar otra rodilla?');
