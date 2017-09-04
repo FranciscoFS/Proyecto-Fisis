@@ -32,6 +32,7 @@ end
 %%
 %Ej  dx=dy=0.293 y Dz =3.5;
 %Ej dx = 0.4688 y dz = 3
+
 pace = (1/(dz/dxdy));
 [m,n,k] = size(fisis);
 [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
@@ -50,8 +51,8 @@ W = smooth3(W>0,'box',Box_size);
 %isosurface(smooth3(W))
 %%
 %close all
-p1= patch(isosurface(Y),'FaceColor','red','EdgeColor','none','FaceAlpha','0.95');
-p2= patch(isosurface(W),'FaceColor','none','EdgeColor','blue','Marker','*','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+p1= patch(isosurface(Y),'FaceColor','red','EdgeColor','none');
+p2= patch(isosurface(W),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
 reducepatch(p2,0.01)
 
 view(3)

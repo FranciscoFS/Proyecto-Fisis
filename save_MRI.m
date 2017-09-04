@@ -1,7 +1,7 @@
 function [MRI] = save_MRI(DIM)
+
     class = 1;
-    
- 
+   
     for k = 1:numel(DIM) 
         
         x = dicomread(DIM(k).name);
@@ -40,7 +40,8 @@ function [MRI] = save_MRI(DIM)
             MRI(k).data = x;
             MRI(k).corte = inf.SeriesDescription;
             MRI(k).class = class;
-            
+            MRI(k).PixelSpacing = inf.PixelSpacing;
+            MRI(k).SliceThickness = inf.SliceThickness;
         end
            
     end

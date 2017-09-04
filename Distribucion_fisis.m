@@ -1,5 +1,9 @@
 function Distribucion_fisis
 %Distribucion espacial de la fisis promedio
+%Elegir 
+
+message = sprintf('Que quiere cargar?');
+reply = questdlg(message,'Fisis', 'Rodillas de workspace', 'Desde un/varios archivo(s)', 'No');
 
 uiwait(msgbox('Seleccione las rodillas de los pacientes a analizar (los .mat)'));
 
@@ -32,6 +36,10 @@ end
 %Primera opcion:
 
 angulo = 0;
+
+rotado= imrotate3(volumen,angulo)
+
+%Rotaci�n con respecto a x
 
 rotado= imrotate3(volumen,angulo
 
@@ -73,15 +81,6 @@ Y =interp3(fisis,Xq,Yq,Zq,'cubic');
 ceropadding = padarray(Y,[lo_que_le_falta lo_que_le_falta],'both');
 
 
-
-
-
-
-
-
-
-
-
 esp_pixel = [];
 esp_slice = [];
 
@@ -97,6 +96,7 @@ ancho_mayor=0;
 alto_mayor=0;
 
 %Sacar dimensiones maximas
+
 for i=1:size(rodillas,1)
     info = rodillas{i,5};
     espaciado_pixel = info{1,1};
@@ -115,8 +115,12 @@ end
     
 X = repmat(int16(0), [ancho_mayor, ancho_mayor, alto_mayor]);
 
+    %entonces las dimensiones serian = ancho_mayor x ancho_mayor x
+    %alto_mayor
     
+X = repmat(int16(0), [ancho_mayor, ancho_mayor, alto_mayor]);
 
+    
 
 % %Resize
 % mayor = 0;

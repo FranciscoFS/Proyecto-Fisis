@@ -35,7 +35,7 @@ while Var
     if length(Classes) < 10
         Var = 0;
     else
-        uiwait(msgbox('Seleccione otro Sujeto, con m?s Cortes','Success','modal'));
+        uiwait(msgbox('Seleccione otro Sujeto, con mas Cortes','Success','modal'));
         continue
     end
 end
@@ -145,8 +145,12 @@ plot_MRI(V_filt); title('Filtro de Gabriel');
 %uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Random Walker
+<<<<<<< HEAD
+
+=======
 %%
 % 
+>>>>>>> e966550a6949bd06d48b9302159300cdc8fee4bd
 %  V_final_fisis = zeros(size(V_filt));
 %  V_final_bones = zeros(size(V_filt));
 %  V_fisis_final_BW = zeros(size(V_filt));
