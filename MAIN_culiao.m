@@ -188,22 +188,31 @@ for k=1:size(V_filt,3)
         Change = 1;
             
         while Change
-            
+            falto = 0;
             close all
             imshow(V(:,:,k), []);title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
-            
+       
             for ii = 1:N
-                
-                uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho.Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
-                [Puntos{ii,1}, Puntos{ii,2}] = getpts();
-                
-                if size(Puntos{ii,1},1) == 1
-                    m(1,ii) = 1;
-                end
-                
+                    if falto == 1
+                        message = sprintf(['Te faltaron puntos en '  Words{ii} '?']);
+                        reply = questdlg(message, 'Physis', 'Yes', 'No','No');
+                        if strcmpi(reply, 'No')
+                            continue;
+                        elseif strcmpi(reply, 'Yes')
+                        uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho.Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
+                        [Puntos{ii,1}, Puntos{ii,2}] = getpts();
+                        end
+                    else
+                        uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho.Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
+                        [Puntos{ii,1}, Puntos{ii,2}] = getpts();
+                    end
+                    if size(Puntos{ii,1},1) == 1
+                        m(1,ii) = 1;
+                    end
                 L  = [L ii*ones(1,length(Puntos{ii,1}))];
                 Vector = [Vector sub2ind(size(Im_seg),uint16(Puntos{ii,2}'),uint16(Puntos{ii,1}'))];         
             end
+            
             axis equal
             axis tight
             axis off
@@ -224,10 +233,13 @@ for k=1:size(V_filt,3)
             axis tight
             axis off
             hold on
-  
-            plot(X1,Y1,'g.','Markersize',24);
-            plot(X2,Y2,'r.','Markersize',24);
-            plot(X3,Y3,'b.','Markersize',24);
+            
+            plot(Puntos{1,1}, Puntos{1,2},'g.','Markersize',24);
+            plot(Puntos{2,1}, Puntos{2,2},'r.','Markersize',24);
+            plot(Puntos{3,1}, Puntos{3,2},'b.','Markersize',24);
+            plot(Puntos{4,1}, Puntos{4,2},'y.','Markersize',24);
+            plot(Puntos{5,1}, Puntos{5,2},'m.','Markersize',24);
+            plot(Puntos{6,1}, Puntos{6,2},'c.','Markersize',24);
             title('Outlined mask')
 
             message = sprintf('Is it Ok?');
@@ -235,7 +247,7 @@ for k=1:size(V_filt,3)
          
             if strcmpi(reply, 'Yes')
                 Change = 0;
-                
+                falto = 0;
                 if m(1,1) ==0
                 V_femur_bones_BW(:,:,k) = mask==1;
                 end
@@ -255,8 +267,8 @@ for k=1:size(V_filt,3)
                 V_perone_fisis_BW(:,:,k) = mask==6;
                 end
 
-            %elseif strcmpi(reply, 'Me faltaron puntos')
-            %
+            elseif strcmpi(reply, 'Me faltaron puntos')
+                falto = 1;
             else
                 continue
             end
