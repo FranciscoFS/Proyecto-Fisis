@@ -2,14 +2,12 @@ clear all;
 close all;
 imtool close all;
 clearvars; 
-
 fprintf('Iniciando Segmentacion\n'); 
 workspace;
 
 % Revisa que este instalado Image Processing Toolbox
 
 hasIPT = license('test', 'image_toolbox');
-
 if ~hasIPT
 	message = sprintf('Sorry, but you do not seem to have the Image Processing Toolbox.\nDo you want to try to continue anyway?');
 	reply = questdlg(message, 'Toolbox missing', 'Yes', 'No', 'Yes');
@@ -60,7 +58,7 @@ for k = 1:length(Classes)
     pos = find([foto.class] == Classes(k));
     Selected_im = pos(round(length(pos)/2));
     subplot(size_plot(2),size_plot(1),k); imshow(foto(Selected_im).data,[]);
-    title(['Corte N° ' num2str(k) '  '  foto(Selected_im ).corte])
+    title(['Corte N? ' num2str(k) foto(Selected_im ).corte])
     
 end
 
@@ -87,7 +85,7 @@ for k=1:numel(foto)
     V(:,:,k) =  Im;
     %Im = imadjust((V(:,:,k))); 
     Im = Im + m.*(imtophat(Im,se) - imbothat(Im,se));
-	V_preFilt(:,:,k) = medfilt2(adapthisteq(Im),[5 5]);
+	V_preFilt(:,:,k) =  medfilt2(adapthisteq(Im),[5 5]);
     %medfilt2(adapthisteq(Im),[5 5]);
 end  
  
@@ -96,15 +94,15 @@ figure;
 plot_MRI(V); title('Volumen RAW');
 
 %Comienza el filtrado
-uiwait(msgbox({'Ahora se filtrara la imagen.' '' 'Para seguir a la siguiente filtracion solo debe pulsar OK.'},'Informacion','modal'));
+%uiwait(msgbox({'Ahora se filtrara la imagen.' '' 'Para seguir a la siguiente filtracion solo debe pulsar OK.'},'Informacion','modal'));
 
-close all
+%xclose all
 
 figure;
 plot_MRI(V_preFilt); title('Volumen Con Filtros de preprocesamiento');
 
 %%
-uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
+%uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 close all
 
@@ -133,32 +131,38 @@ uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 % Aplicar Filtro de Gabriel
 V_filt = zeros(size(V));
 
-alfa = 2;
-beta = 5;
+alfa = 5;
+beta = 2;
 
 for k=1:size(V,3)
 	V_filt(:,:,k) = filtro_gabriel(V_preFilt(:,:,k), not(Mask1(:,:,k)),alfa,beta);
 end
-
 figure;
 plot_MRI(V_filt); title('Filtro de Gabriel');
 
 % figure;
 % plot_MRI(V_preFilt); title('preFiltro');
+%uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
-uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
+% Random Walker
 
-%% Random Walker
+%%
+%Aqui y al final tenis que agregarle las weas para que se guarden las otras cosas como perone y tibia 
 
- V_final_fisis = zeros(size(V_filt));
- V_final_bones = zeros(size(V_filt));
- V_fisis_final_BW = zeros(size(V_filt));
- V_bones_final_BW = zeros(size(V_filt));
+V_final_fisis = zeros(size(V_filt));
+V_final_bones = zeros(size(V_filt));
+V_fisis_final_BW = zeros(size(V_filt));
+V_bones_final_BW = zeros(size(V_filt));
+
 
 f3 = figure;
+N = 7; % Numero de Clusters
+Words = {'Femur','Fisis Femur','Tibia','Fisis Tibia', 'Perone','Fisis Perone','Background'};
+Vector = [];
+L = [];
 
 for k=1:size(V_filt,3)
-    
+ 
     close all
 
     Im_seg = 1- V_filt(:,:,k);
@@ -187,18 +191,14 @@ for k=1:size(V_filt,3)
             close all
             imshow(V(:,:,k), []);title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
             
-            uiwait(msgbox('Ingrese las semillas del Hueso, con el ultimo haga doble click'));
-            [X1,Y1] = getpts();
-            
-            uiwait(msgbox('Ingrese las semillas de las Fisis con el ultimo haga doble click'));
-            [X2,Y2] = getpts();
-            
-            uiwait(msgbox('Ingrese las semillas del background, con el ultimo haga doble click'));
-           [X3,Y3] = getpts();
-
-            L1 = ones(1,length(X1));
-            L2 = 2*ones(1,length(X2));
-            L3 = 3*ones(1,length(X3));
+            for ii = 1:N
+                
+                uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click']));
+                [Puntos{ii,1}, Puntos{ii,2}] = getpts();
+                L  = [L ii*ones(1,length(Puntos{ii,1}))];
+                Vector = [Vector sub2ind(size(Im_seg),uint16(Puntos{ii,2}'),uint16(Puntos{ii,1}'))];
+          
+            end
 
             axis equal
             axis tight
@@ -248,40 +248,33 @@ end
 
 
 %%
-%Plot 3D
-uiwait(msgbox('Ahora se mostrara en 3D la fisis.'));
-
-if exist ('info') == 1
-    isosurf(V_final_BW, V_final,info)
-else
-    isosurf(V_bones_final_BW,V_bones_final_BW)
-end
+% %Plot 3D
+% uiwait(msgbox('Ahora se mostrara en 3D la fisis.'));
+% if exist ('info') == 1
+%     isosurf(V_final_BW, V_final,info)
+% else
+%     isosurf(V_bones_final_BW,V_bones_final_BW)
+% end
 
 %Guardar rodilla
 message = sprintf('Quiere ponerle el nombre o  que se haga automatico?');
 reply = questdlg(message, 'Guardar', 'Ponerle', 'Auto','No');
-
 
 if strcmpi(reply, 'Ponerle')
     nombre = inputdlg('Select Class to use');
     save([nombre '.mat'],'V_final_fisis','V_final_bones','V_fisis_final_BW', 'V_bones_final_BW', 'filename','info')
     
 elseif strcmpi(reply, 'Auto')
-%     rodillas{contador,1} = V_final_BW;
-%     rodillas{contador,2} = V_final;
     save(['fisis_'  filename],'V_final_fisis','V_final_bones','V_fisis_final_BW', 'V_bones_final_BW', 'filename','info')
 end
 
-%save(['Todas_las_fisis' '.mat'],'rodillas')
-
-
-% %Siguiente rodilla
-% message = sprintf('Quiere segmentar otra rodilla?');
-% reply = questdlg(message, 'Physis', 'Yes', 'No','No');
-% if strcmpi(reply, 'No')
-%     seguir = 0;
-% end
-% contador = contador + 1;
+%Siguiente rodilla
+message = sprintf('Quiere segmentar otra rodilla?');
+reply = questdlg(message, 'Physis', 'Yes', 'No','No');
+if strcmpi(reply, 'No')
+    seguir = 0;
+end
+contador = contador + 1;
 
 end
 
