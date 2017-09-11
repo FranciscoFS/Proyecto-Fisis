@@ -22,6 +22,7 @@ cd(pathname);
 rodillas = {};
 
 for i=1:size(filename,2)
+   
     load(filename{1,i})
     rodillas{i,1} = V_final_fisis;
     rodillas{i,2} = V_final_bones;
@@ -83,7 +84,7 @@ for i=1:size(rodillas,1)
         vol4 = interp3(v4,Xq,Yq,Zq);
     end
     
-    %Padarray
+    %Padarray (falta esto)
     [a1,~,b1] = size(v1);
     [a2,~,b2] = max(size(rodillas{i,1}));
 
@@ -147,9 +148,9 @@ for i=1:size(rodillas,1)
             fila_baja = lowestrow;
         end
     end
-    %imcrop
     
-    rodillas{i,1} = v1(1:fila_baja,1:n,1:k);
+    %imcrop
+	rodillas{i,1} = v1(1:fila_baja,1:n,1:k);
     rodillas{i,2} = v2(1:fila_baja,1:n,1:k);
     rodillas{i,3} = v3(1:fila_baja,1:n,1:k);
     rodillas{i,4} = V4(1:fila_baja,1:n,1:k);
