@@ -4,8 +4,10 @@ clear all
 
 folder = uigetdir();
 DIM = dir(folder);
-addpath(getpath(folder));
+p = genpath(folder);
+addpath(p);
 warning('off','all')
+
 
 for k=1:numel(DIM)
     
@@ -22,7 +24,7 @@ for k=1:numel(DIM)
         continue
     end
     
-    disp('END')
+    disp(['END' ' ' num2str(k) '/' num2str(numel(DIM))])
 end
 
 
