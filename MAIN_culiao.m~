@@ -207,7 +207,8 @@ for k=1:size(V_filt,3)
            
             close all
             
-            [mask,probabilities] = random_walker(Im,Vector,L);
+            [mask,probabilities] = random_walker(Im,[sub2ind(size(Im_seg),uint16(Y1'),uint16(X1')),...
+                sub2ind(size(Im_seg),uint16(Y2'),uint16(X2')),sub2ind(size(Im_seg),uint16(Y3'),uint16(X3'))],[L1 L2 L3]);
 
             subplot(1,2,1);
             imshow(mask,[]);
