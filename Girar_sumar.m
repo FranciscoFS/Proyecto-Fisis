@@ -128,7 +128,7 @@ for i=1:size(rodillas,1)
     rodillas{i,4} = imrotate3(rodillas{i,4},angulo);
 end
 
-%% 3 LLEVAR AL PISO
+%% 4 LLEVAR AL PISO
 
 for i=1:size(rodillas,1)
     v1 = rodillas{i,1};

@@ -23,7 +23,7 @@ figure;
 scatter3(Xx_f,Yy_f,Zz_f);
 
 [Coef,Score,~] = pca([Xx_f Yy_f Zz_f]);
-
+    
 figure;
 scatter3(Score(:,1),Score(:,2),Score(:,3));
 %% Ejemplo 2D
@@ -43,7 +43,7 @@ imshow(Elipse);
 Xx_f = Xx(Elipse>0);
 Yy_f = Yy(Elipse>0);
 figure;
-scatter(Yy_f,Xx_f);
+scatter(Xx_f,Yy_f);
 
 %Con pca
 
