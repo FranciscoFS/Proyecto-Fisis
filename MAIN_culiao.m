@@ -227,12 +227,19 @@ for k=2:size(V_filt,3)
                             continue;
                         elseif strcmpi(reply, 'Yes')
 <<<<<<< HEAD
+<<<<<<< HEAD
                             
                         uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho.Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
                         [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
                         Puntos{ii,1} = [Puntos{ii,1},Puntos_nuevos{ii,1}];
                         Puntos{ii,2} = [Puntos{ii,2},Puntos_nuevos{ii,2}];
                         
+=======
+                        uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho. Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
+                        [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
+                        Puntos{ii,1} = [Puntos{ii,1};Puntos_nuevos{ii,1}];
+                        Puntos{ii,2} = [Puntos{ii,2};Puntos_nuevos{ii,2}];
+>>>>>>> 7cbd283660ccbc9f21ed73261a74b6832678408c
 =======
                         uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho. Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
                         [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
