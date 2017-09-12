@@ -73,41 +73,37 @@ info{2,1} = unique([foto.SliceThickness]);
 
 V = zeros([size(foto(1).data) numel(foto)]);
 V_preFilt = zeros([size(foto(1).data) numel(foto)]);
+%%
+%Prefiltrado
+i = 50;
+se = strel('disk',i,8);
 
 for k=1:numel(foto)
     Im = imadjust(im2single(foto(k).data));
     V(:,:,k) =  Im;
 end
-%% Prefiltrado
 
-i = 50;
-se = strel('disk',i,8);
-Test = V(:,:,round(size(V,3)/2));
-STD_inicial = std(Test(:));
-Umbral = 30;
-tic()
-for m=1:.5:10
+STD_inicial = std(V(:));
+
+for m=0:.5:5
     
-    Im = Test + m.*(imtophat(Test,se) - imbothat(Test,se));
-    Im = medfilt2(adapthisteq(Im),[5 5]);
-    Error = ((std(Im(:)) - STD_inicial)/STD_inicial)*100;
+    for ii=1:size(V,3)
+        Im = V(:,:,ii);
+        Im = Im + m.*(imtophat(Im,se) - imbothat(Im,se));
+        V_preFilt(:,:,ii) =  medfilt2(adapthisteq(Im),[5 5]);
+    end
     
-    if Error > Umbral
+    Error = ((std(V_preFilt(:)) - STD_inicial)/STD_inicial)*100;
+    
+    if Error > 35
         M_final = m;
-        
-        for ii=1:size(V,3)
-            Im = V(:,:,ii);
-            Im = Im + M_final.*(imtophat(Im,se) - imbothat(Im,se));
-            V_preFilt(:,:,ii) =  medfilt2(adapthisteq(Im),[5 5]);
-        end
-        
         break
     
     else
         continue
     end
 end
-toc()
+ 
 
 figure;
 plot_MRI(V); title('Volumen RAW');
@@ -120,7 +116,7 @@ uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 close all
 
 % Kmeans
-V_kmeans = kmeans_p(V_preFilt(:),2,size(V));
+V_kmeans = kmeans_p(V_preFilt(:),3,size(V));
 plot_MRI(V_kmeans); title('Kmeans');
 
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
@@ -138,7 +134,7 @@ Maskf = imclose(Mask1,Se1);
 %Mask1 = im(Mask1,Se2);
 plot_MRI(Mask1); title('Mascara');
 figure;
-plot_MRI(not(Maskf)); title('Mascara');
+plot_MRI(Maskf); title('Mascara');
 
 %%
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
