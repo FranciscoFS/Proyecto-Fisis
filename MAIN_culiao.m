@@ -88,7 +88,6 @@ se = strel('disk',i,8);
 Test = V(:,:,round(size(V,3)/2));
 STD_inicial = std(Test(:));
 Umbral = 30;
-tic()
 
 for m=1:.5:10
     
@@ -111,7 +110,7 @@ for m=1:.5:10
         continue
     end
 end
-toc()
+
 
 figure;
 plot_MRI(V); title('Volumen RAW');
@@ -126,6 +125,7 @@ uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 close all
 
 % Kmeans
+rng(1)
 V_kmeans = kmeans_p(V_preFilt(:),2,size(V));
 plot_MRI(V_kmeans); title('Kmeans');
 
@@ -139,7 +139,7 @@ Mask1 = logical(V_kmeans==Cluster);
 Se1 = strel('disk',3,8);
 Se2 = strel('disk',3,8);
 Maskf = imerode(Mask1,Se2);
-Maskf = imclose(Mask1,Se1);
+Maskf = imclose(Maskf,Se1);
 
 %Mask1 = im(Mask1,Se2);
 plot_MRI(Mask1); title('Mascara');
