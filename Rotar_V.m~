@@ -1,7 +1,6 @@
 function [V_rotado] = Rotar_V(Volumenes)
 
         % Hay que hacer el proceso para cada Volumen
-        
         V_rotado = Volumenes;
         
         [n,m,k] = size(Volumenes.femur.hueso);
@@ -33,7 +32,7 @@ function [V_rotado] = Rotar_V(Volumenes)
         V_rotado.tibia.bones = imrotate3(Volumenes.femur.bones,Theta_tibia,[0 1 0],'crop','FillValues',0);
         
 end
-  
+        
         
         
         

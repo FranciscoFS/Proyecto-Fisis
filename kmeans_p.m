@@ -8,8 +8,7 @@ function [I_out] = kmeans_p(I,k,Size)
         % k, es el nº de clusters
         % en Size poner size(V), el size del Volumen o si es imagen size(I)
     
-    rng(1)
-    
+        
     Idx = kmeans(I,k,'MaxIter',100000);
     I_out = reshape(Idx,Size);
     
