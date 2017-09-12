@@ -178,12 +178,11 @@ V_seg.perone.bones = zeros(size(V_filt));
 V_seg.tibia.fisis = zeros(size(V_filt));
 V_seg.tibia.bones = zeros(size(V_filt));
 
-%%
 N = 7; % Numero de Clusters
 Words = {'Femur','Fisis Femur','Tibia','Fisis Tibia', 'Perone','Fisis Perone','Background'};
 colores = {'g.','r.','b.','y.','m.','c.','w.'};
 
-for k=2:size(V_filt,3)
+for k=1:size(V_filt,3)
     
     falto = 0;
     m = ones(1,N);
@@ -226,26 +225,12 @@ for k=2:size(V_filt,3)
                         if strcmpi(reply, 'No')
                             continue;
                         elseif strcmpi(reply, 'Yes')
-<<<<<<< HEAD
-<<<<<<< HEAD
                             
-                        uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho.Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
-                        [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
-                        Puntos{ii,1} = [Puntos{ii,1},Puntos_nuevos{ii,1}];
-                        Puntos{ii,2} = [Puntos{ii,2},Puntos_nuevos{ii,2}];
-                        
-=======
-                        uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho. Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
-                        [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
-                        Puntos{ii,1} = [Puntos{ii,1};Puntos_nuevos{ii,1}];
-                        Puntos{ii,2} = [Puntos{ii,2};Puntos_nuevos{ii,2}];
->>>>>>> 7cbd283660ccbc9f21ed73261a74b6832678408c
-=======
-                        uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho. Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
-                        [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
-                        Puntos{ii,1} = [Puntos{ii,1};Puntos_nuevos{ii,1}];
-                        Puntos{ii,2} = [Puntos{ii,2};Puntos_nuevos{ii,2}];
->>>>>>> 7cbd283660ccbc9f21ed73261a74b6832678408c
+                            uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho. Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
+                            [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
+                            Puntos{ii,1} = [Puntos{ii,1};Puntos_nuevos{ii,1}];
+                            Puntos{ii,2} = [Puntos{ii,2};Puntos_nuevos{ii,2}];
+
                         end
                     else
                         uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho. Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
@@ -279,6 +264,7 @@ for k=2:size(V_filt,3)
             [mask,probabilities] = random_walker(Im,Vector,L);
             
             figure('units', 'normalize', 'outerposition',[0 0 1 1]);
+            
             subplot(1,2,1);
             imshow(mask,[]);
             subplot(1,2,2);
