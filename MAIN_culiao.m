@@ -19,10 +19,12 @@ end
 %Rodillas
 seguir = 1;
 
-%%
+
 while seguir
 
 Var = 1;
+
+uiwait(msgbox('Seleccione el paciente a analizar','Success','modal'));
 
 while Var
     [filename, pathname] = uigetfile({'*.mat';'*.m';'*.slx';'*.*'},'Seleccione MRI de Paciente a analizar');
@@ -33,7 +35,7 @@ while Var
     if length(Classes) < 10
         Var = 0;
     else
-        uiwait(msgbox('Seleccione otro Sujeto, con mas Cortes','Success','modal'));
+        uiwait(msgbox('Seleccione otro paciente, con mas Cortes','Success','modal'));
         continue
     end
 end
@@ -53,23 +55,23 @@ for k = 1:length(Classes)
     pos = find([foto.class] == Classes(k));
     Selected_im = pos(round(length(pos)/2));
     subplot(size_plot(2),size_plot(1),k); imshow(foto(Selected_im).data,[]);
-    title(['Corte N° ' num2str(k) foto(Selected_im ).corte])
+    title(['Corte N ' num2str(k) foto(Selected_im ).corte])
     
 end
 
 
 % Seleccionar la clase
-Selected_Class = inputdlg('Select Class to use');
+Selected_Class = inputdlg('Seleccione la clase a usar');
 close all
 
 N = str2double(Selected_Class{1});
 Indice = [foto.class] == N;
 foto = foto(Indice);
+
 %info 
 info = {};
 info{1,1} = unique([foto.PixelSpacing]);
 info{2,1} = unique([foto.SliceThickness]);
-
 
 V = zeros([size(foto(1).data) numel(foto)]);
 V_preFilt = zeros([size(foto(1).data) numel(foto)]);
@@ -78,7 +80,8 @@ for k=1:numel(foto)
     Im = imadjust(im2single(foto(k).data));
     V(:,:,k) =  Im;
 end
-%% Prefiltrado
+
+% Prefiltrado
 
 i = 50;
 se = strel('disk',i,8);
@@ -86,6 +89,7 @@ Test = V(:,:,round(size(V,3)/2));
 STD_inicial = std(Test(:));
 Umbral = 30;
 tic()
+
 for m=1:.5:10
     
     Im = Test + m.*(imtophat(Test,se) - imbothat(Test,se));
@@ -112,11 +116,13 @@ toc()
 figure;
 plot_MRI(V); title('Volumen RAW');
 
+uiwait(msgbox({'Ahora se filtrara la imagen.' '' 'Para seguir a la siguiente filtracion solo debe pulsar OK.'},'Informacion','modal'));
+
 figure;
 plot_MRI(V_preFilt); title('Volumen Con Filtros de preprocesamiento');
 
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
-%%
+
 close all
 
 % Kmeans
@@ -125,9 +131,9 @@ plot_MRI(V_kmeans); title('Kmeans');
 
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
-%% Arreglemos la Mascara
+% Arreglemos la Mascara
 
-answer = inputdlg('?Que cluster usar (1 o 2)?');
+answer = inputdlg('¿Que cluster usar (1 o 2)?');
 Cluster = str2double(answer{1,1});
 Mask1 = logical(V_kmeans==Cluster);
 Se1 = strel('disk',3,8);
@@ -140,10 +146,9 @@ plot_MRI(Mask1); title('Mascara');
 figure;
 plot_MRI(not(Maskf)); title('Mascara');
 
-%%
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
-% Aplicar Filtro de Gabriel
+% Aplicar FiltroG
 V_filt = zeros(size(V));
 
 alfa = 2.5;
@@ -154,31 +159,32 @@ for k=1:size(V,3)
 end
 
 figure;
-plot_MRI(V_filt); title('Filtro de Gabriel');
-figure; 
-plot_MRI(V_preFilt); title('Filtro de Gabriel');
+plot_MRI(V_filt); title('Filtro G');
+
+%plot_MRI(V_preFilt); title('Filtro de Gabriel');
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Random Walker
 
 %%
-%Aqui y al final tenis que agregarle las weas para que se guarden las otras cosas como perone y tibia 
+V_seg.vol.orig = V;
+V_seg.vol.filt = V_filt;
+V_seg.info = info;
+V_seg.filename = filename;
+V_seg.femur.fisis = zeros(size(V_filt));
+V_seg.femur.bones = zeros(size(V_filt));
+V_seg.perone.fisis = zeros(size(V_filt));
+V_seg.perone.bones = zeros(size(V_filt));
+V_seg.tibia.fisis = zeros(size(V_filt));
+V_seg.tibia.bones = zeros(size(V_filt));
 
-V_femur_fisis_BW = zeros(size(V_filt));
-V_femur_bones_BW = zeros(size(V_filt));
-V_perone_fisis_BW = zeros(size(V_filt));
-V_perone_bones_BW = zeros(size(V_filt));
-V_tibia_fisis_BW = zeros(size(V_filt));
-V_tibia_bones_BW = zeros(size(V_filt));
-
-
-f3 = figure;
 N = 7; % Numero de Clusters
 Words = {'Femur','Fisis Femur','Tibia','Fisis Tibia', 'Perone','Fisis Perone','Background'};
 colores = {'g.','r.','b.','y.','m.','c.','k.'};
 
-for k=1:size(V_filt,3)
+for k=7:size(V_filt,3)
     
+    falto = 0;
     m = ones(1,N);
     L_i = {};
     Vector_i = {};
@@ -198,16 +204,14 @@ for k=1:size(V_filt,3)
     message = sprintf('Poner puntos?');
     reply = questdlg(message, 'Physis', 'Yes', 'No','No');
        
-    if strcmpi(reply, '') % Esto por si hay un error y queri "salir rapido" del programa
-        
+    if strcmpi(reply, '') 
         return;
-        
     elseif strcmpi(reply, 'Yes')
         
         Change = 1;
             
         while Change
-            falto = 0;
+            
             close all
             imshow(Im, []);title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
        
@@ -222,8 +226,9 @@ for k=1:size(V_filt,3)
                             continue;
                         elseif strcmpi(reply, 'Yes')
                         uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho.Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
-                        [Puntos{ii,1}, Puntos{ii,2}] = getpts();
-                        
+                        [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
+                        Puntos{ii,1} = [Puntos{ii,1},Puntos_nuevos{ii,1}];
+                        Puntos{ii,2} = [Puntos{ii,2},Puntos_nuevos{ii,2}];
                         end
                     else
                         uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho.Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
@@ -252,8 +257,7 @@ for k=1:size(V_filt,3)
                     L = [L L_i{kk}];
                     Vector = [Vector Vector_i{kk}];
                 end
-            end
-                    
+            end  
             
             [mask,probabilities] = random_walker(Im,Vector,L);
 
@@ -277,29 +281,29 @@ for k=1:size(V_filt,3)
             title('Outlined mask')
             
             message = sprintf('Is it Ok?');
-            reply = questdlg(message, 'Physis', 'Yes', 'No','Me faltaron puntos','No');
+            reply = questdlg(message,'Physis','Yes','No(Hacer esta slice de nuevo)','Me faltaron puntos','No');
          
             if strcmpi(reply, 'Yes')
                 Change = 0;
                 falto = 0;
                 
                 if m(1)
-                    V_femur_bones_BW(:,:,k) = mask==1;
+                    V_seg.femur.bones(:,:,k) = mask==1;
                 
                 elseif m(2)
-                    V_femur_fisis_BW(:,:,k) = mask==2;
+                    V_seg.femur.fisis(:,:,k) = mask==2;
                 
                 elseif m(3)
-                    V_tibia_bones_BW(:,:,k) = mask==3;
+                    V_seg.tibia.bones(:,:,k) = mask==3;
                 
                 elseif m(4) 
-                    V_tibia_fisis_BW(:,:,k) = mask==4;
+                    V_seg.tibia.fisis(:,:,k) = mask==4;
                 
                 elseif m(5)             
-                    V_perone_bones_BW(:,:,k) = mask==5;
+                    V_seg.perone.bones(:,:,k) = mask==5;
                 
                 elseif m(6)
-                    V_perone_fisis_BW(:,:,k) = mask==6;
+                    V_seg.perone.fisis(:,:,k) = mask==6;
                 end
 
             elseif strcmpi(reply, 'Me faltaron puntos')
@@ -324,10 +328,9 @@ reply = questdlg(message, 'Guardar', 'Ponerle', 'Auto','No');
 
 if strcmpi(reply, 'Ponerle')
     nombre = inputdlg('Select Class to use');
-    save([nombre '.mat'],'V_femur_fisis_BW','V_femur_bones_BW','V_perone_fisis_BW', 'V_perone_bones_BW','V_tibia_fisis_BW','V_tibia_bones_BW', 'filename','info')
-    
+    save([nombre '.mat'],'V_seg')
 elseif strcmpi(reply, 'Auto')
-    save(['fisis_'  filename],'V_femur_fisis_BW','V_femur_bones_BW','V_perone_fisis_BW', 'V_perone_bones_BW','V_tibia_fisis_BW','V_tibia_bones_BW', 'filename','info')
+    save(['Rodilla_'  filename],'V_seg')
 end
 
 %Siguiente rodilla
