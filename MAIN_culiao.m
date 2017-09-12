@@ -48,8 +48,7 @@ else
     size_plot = [2,round(length(Classes)/2)];
 end
 
-figure;
-
+figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 for k = 1:length(Classes)
     
     pos = find([foto.class] == Classes(k));
@@ -112,12 +111,13 @@ for m=1:.5:10
 end
 
 
-figure;
+figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 plot_MRI(V); title('Volumen RAW');
+
 
 uiwait(msgbox({'Ahora se filtrara la imagen.' '' 'Para seguir a la siguiente filtracion solo debe pulsar OK.'},'Informacion','modal'));
 
-figure;
+figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 plot_MRI(V_preFilt); title('Volumen Con Filtros de preprocesamiento');
 
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
@@ -143,7 +143,7 @@ Maskf = imclose(Maskf,Se1);
 
 %Mask1 = im(Mask1,Se2);
 plot_MRI(Mask1); title('Mascara');
-figure;
+figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 plot_MRI(not(Maskf)); title('Mascara');
 
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
@@ -158,7 +158,7 @@ for k=1:size(V,3)
 	V_filt(:,:,k) = filtro_gabriel(V_preFilt(:,:,k), not(Maskf(:,:,k)),alfa,beta);
 end
 
-figure;
+figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 plot_MRI(V_filt); title('Filtro G');
 
 %plot_MRI(V_preFilt); title('Filtro de Gabriel');
@@ -178,11 +178,12 @@ V_seg.perone.bones = zeros(size(V_filt));
 V_seg.tibia.fisis = zeros(size(V_filt));
 V_seg.tibia.bones = zeros(size(V_filt));
 
+%%
 N = 7; % Numero de Clusters
 Words = {'Femur','Fisis Femur','Tibia','Fisis Tibia', 'Perone','Fisis Perone','Background'};
-colores = {'g.','r.','b.','y.','m.','c.','k.'};
+colores = {'g.','r.','b.','y.','m.','c.','w.'};
 
-for k=7:size(V_filt,3)
+for k=2:size(V_filt,3)
     
     falto = 0;
     m = ones(1,N);
@@ -194,7 +195,7 @@ for k=7:size(V_filt,3)
     Im_seg = 1- V_filt(:,:,k);
     Im = V_filt(:,:,k);
     
-    figure; 
+    figure('units', 'normalize', 'outerposition',[0 0 1 1]); 
     subplot(1,2,1);
     imshow(Im,[]); title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);  
   
@@ -225,13 +226,13 @@ for k=7:size(V_filt,3)
                         if strcmpi(reply, 'No')
                             continue;
                         elseif strcmpi(reply, 'Yes')
-                        uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho.Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
+                        uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho. Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
                         [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
-                        Puntos{ii,1} = [Puntos{ii,1},Puntos_nuevos{ii,1}];
-                        Puntos{ii,2} = [Puntos{ii,2},Puntos_nuevos{ii,2}];
+                        Puntos{ii,1} = [Puntos{ii,1};Puntos_nuevos{ii,1}];
+                        Puntos{ii,2} = [Puntos{ii,2};Puntos_nuevos{ii,2}];
                         end
                     else
-                        uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho.Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
+                        uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho. Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
                         [Puntos{ii,1}, Puntos{ii,2}] = getpts();
                     end
                     
@@ -260,10 +261,10 @@ for k=7:size(V_filt,3)
             end  
             
             [mask,probabilities] = random_walker(Im,Vector,L);
-
+            
+            figure('units', 'normalize', 'outerposition',[0 0 1 1]);
             subplot(1,2,1);
             imshow(mask,[]);
-
             subplot(1,2,2);
             [imgMasks,segOutline,imgMarkup]=segoutput(Im_seg,mask);
             imagesc(imgMarkup);
@@ -275,7 +276,7 @@ for k=7:size(V_filt,3)
             
             for jj = 1:N
                 if m(jj)
-                    plot(Puntos{jj,1}, Puntos{jj,2},colores{jj},'Markersize',24);
+                    plot(Puntos{jj,1}, Puntos{jj,2},colores{jj},'Markersize',12);
                 end
             end
             title('Outlined mask')
