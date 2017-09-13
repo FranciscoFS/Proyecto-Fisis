@@ -50,10 +50,12 @@ end
 
 figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 for k = 1:length(Classes)
+    
     pos = find([foto.class] == Classes(k));
     Selected_im = pos(round(length(pos)/2));
     subplot(size_plot(2),size_plot(1),k); imshow(foto(Selected_im).data,[]);
     title(['Corte N ' num2str(k) foto(Selected_im ).corte])
+    
 end
 
 
@@ -78,14 +80,8 @@ for k=1:numel(foto)
     V(:,:,k) =  Im;
 end
 
-%Todas las rodillas a rodillas derecha (en dicominfo no encontre nada)
-message = sprintf('La rodilla es izquierda?');
-reply = questdlg(message, 'Physis', 'Yes', 'No','No');
-if strcmpi(reply, 'Yes')
-    V = flipdim(V,3);
-end
-
 % Prefiltrado
+
 i = 50;
 se = strel('disk',i,8);
 Test = V(:,:,round(size(V,3)/2));
@@ -118,6 +114,7 @@ end
 figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 plot_MRI(V); title('Volumen RAW');
 
+
 uiwait(msgbox({'Ahora se filtrara la imagen.' '' 'Para seguir a la siguiente filtracion solo debe pulsar OK.'},'Informacion','modal'));
 
 figure('units', 'normalize', 'outerposition',[0 0 1 1]);
@@ -135,6 +132,7 @@ plot_MRI(V_kmeans); title('Kmeans');
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Arreglemos la Mascara
+
 answer = inputdlg('¿Que cluster usar (1 o 2)?');
 Cluster = str2double(answer{1,1});
 Mask1 = logical(V_kmeans==Cluster);
@@ -172,7 +170,7 @@ uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 V_seg.vol.orig = V;
 V_seg.vol.filt = V_filt;
 V_seg.info = info;
-V_seg.puntos = [];
+V_seg.
 V_seg.filename = filename;
 V_seg.femur.fisis = zeros(size(V_filt));
 V_seg.femur.bones = zeros(size(V_filt));
@@ -180,14 +178,13 @@ V_seg.perone.fisis = zeros(size(V_filt));
 V_seg.perone.bones = zeros(size(V_filt));
 V_seg.tibia.fisis = zeros(size(V_filt));
 V_seg.tibia.bones = zeros(size(V_filt));
-V_seg.rotula = zeros(size(V_filt));
 
 %%
-N = 8; % Numero de Clusters
-Words = {'Femur','Fisis Femur','Tibia','Fisis Tibia', 'Perone','Fisis Perone','Rotula','Background'};
+N = 7; % Numero de Clusters
+Words = {'Femur','Fisis Femur','Tibia','Fisis Tibia', 'Perone','Fisis Perone','Background'};
 colores = {'g.','r.','b.','y.','m.','c.','w.'};
 
-for k=1:size(V_filt,3)
+for k=4:size(V_filt,3)
     
     falto = 0;
     m = ones(1,N);
@@ -202,6 +199,7 @@ for k=1:size(V_filt,3)
     figure('units', 'normalize', 'outerposition',[0 0 1 1]); 
     subplot(1,2,1);
     imshow(Im,[]); title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);  
+  
     subplot(1,2,2);
     imshow(V(:,:,k)); 
 
@@ -301,27 +299,24 @@ for k=1:size(V_filt,3)
             if strcmpi(reply, 'Yes')
                 Change = 0;
                 falto = 0;
-                V_seg.puntos = [Puntos{ii,1}, Puntos{ii,2}];
+                
                 if m(1)
                     V_seg.femur.bones(:,:,k) = mask==1;
-                end
-                if m(2)
+                
+                elseif m(2)
                     V_seg.femur.fisis(:,:,k) = mask==2;
-                end
-                if m(3)
+                
+                elseif m(3)
                     V_seg.tibia.bones(:,:,k) = mask==3;
-                end
-                if m(4) 
+                
+                elseif m(4) 
                     V_seg.tibia.fisis(:,:,k) = mask==4;
-                end
-                if m(5)             
+                
+                elseif m(5)             
                     V_seg.perone.bones(:,:,k) = mask==5;
-                end
-                if m(6)
+                
+                elseif m(6)
                     V_seg.perone.fisis(:,:,k) = mask==6;
-                end    
-                if m(7)
-                    V_seg.rotula = mask==7;
                 end
 
             elseif strcmpi(reply, 'Me faltaron puntos')
