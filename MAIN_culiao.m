@@ -323,7 +323,7 @@ for k=1:size(V_filt,3)
                     V_seg.perone.fisis(:,:,k) = mask==6;
                 end    
                 if m(7)
-                    V_seg.rotula = mask==7;
+                    V_seg.rotula(:,:,k) = mask==7;
                 end
 
             elseif strcmpi(reply, 'Me faltaron puntos')
