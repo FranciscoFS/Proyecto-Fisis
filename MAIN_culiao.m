@@ -172,7 +172,8 @@ uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 V_seg.vol.orig = V;
 V_seg.vol.filt = V_filt;
 V_seg.info = info;
-V_seg.puntos = [];
+V_seg.mascara = [];
+V_seg.puntos = {};
 V_seg.filename = filename;
 V_seg.femur.fisis = zeros(size(V_filt));
 V_seg.femur.bones = zeros(size(V_filt));
@@ -185,7 +186,7 @@ V_seg.rotula = zeros(size(V_filt));
 %%
 N = 8; % Numero de Clusters
 Words = {'Femur','Fisis Femur','Tibia','Fisis Tibia', 'Perone','Fisis Perone','Rotula','Background'};
-colores = {'g.','r.','b.','y.','m.','c.','w.'};
+colores = {'g.','r.','b.','y.','m.','c.','g.', 'g.'};
 
 for k=1:size(V_filt,3)
     
@@ -220,9 +221,9 @@ for k=1:size(V_filt,3)
             
             close all
             f1 = figure('units', 'normalize', 'outerposition',[0.5 0 0.5 1]);
-            imshow(V(:,:,k));title('Imagen de referencia');
-            figure('units', 'normalize', 'outerposition',[0 0 0.5 1]);
-            imshow(Im, []);title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
+            imshow(V(:,:,k),'InitialMagnification','fit');title('Imagen de referencia');
+            f2 = figure('units', 'normalize', 'outerposition',[0 0 0.5 1]);
+            imshow(Im, [],'InitialMagnification','fit');title(['Imagen ' num2str(k)  ' de ' num2str(size(V_filt,3))]);
             hold on
             
             for ii = 1:N
@@ -301,7 +302,8 @@ for k=1:size(V_filt,3)
             if strcmpi(reply, 'Yes')
                 Change = 0;
                 falto = 0;
-                V_seg.puntos = [Puntos{ii,1}, Puntos{ii,2}];
+                V_seg.puntos(:,:,k) = [Puntos(:,1),Puntos(:,2)];
+                V_seg.mascara(:,:,k) = Im;
                 if m(1)
                     V_seg.femur.bones(:,:,k) = mask==1;
                 end
