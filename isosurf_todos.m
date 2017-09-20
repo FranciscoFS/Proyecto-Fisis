@@ -3,9 +3,9 @@ function isosurf_todos(V)
 info = V.info;
 
 %Proporciones RM
-if exist('info') == 1
-    dxdy = info{1,1}
-    dz = info{2,1}
+if exist('info')
+    dxdy = info{1,1};
+    dz = info{2,1};
 else
     dxdy = inputdlg('Ingrese dxdy');
     dxdy = str2double(dxdy);
@@ -16,7 +16,7 @@ end
 pace = (1/(dz/dxdy));
 [m,n,k] = size(V.femur.fisis);
 [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
-Box_size = [3 3 3];
+Box_size = [9 9 9];
 
 %Patch femur fisis
 ff =interp3(V.femur.fisis,Xq,Yq,Zq,'cubic');
@@ -37,8 +37,8 @@ pf = smooth3(pf,'box',Box_size);
 ph =interp3(V.perone.bones,Xq,Yq,Zq,'cubic');
 ph = smooth3(ph>0,'box',Box_size);
 %Patch rotula
-% r =interp3(V.rotula,Xq,Yq,Zq,'cubic');
-% r = smooth3(r>0,'box',Box_size);
+r =interp3(V.rotula,Xq,Yq,Zq,'cubic');
+r = smooth3(r>0,'box',Box_size);
 
 %Vista y Luz
 
@@ -51,12 +51,12 @@ p3= patch(isosurface(tf),'FaceColor','red','EdgeColor','none');
 p4= patch(isosurface(th),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
 reducepatch(p4,0.01)
 %Patch perone
-p5= patch(isosurface(pf),'FaceColor','red','EdgeColor','none');
+p5= patch(isosurface(pf,0.3),'FaceColor','red','EdgeColor','none');
 p6= patch(isosurface(ph),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
 reducepatch(p6,0.01)
 %Patch rotula
-% p7= patch(isosurface(r),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-% reducepatch(p7,0.01)
+p7= patch(isosurface(r),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+reducepatch(p7,0.01)
 
 view(3)
 axis tight

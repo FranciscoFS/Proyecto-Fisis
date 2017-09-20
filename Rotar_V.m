@@ -1,14 +1,18 @@
-function [V_rotado] = Rotar_V(Volumenes)
+function [V_rotado] = Rotar_V(V_seg)
 
         % Hay que hacer el proceso para cada Volumen
         
-        V_rotado = Volumenes;
+        V_rotado = V_seg;
         
-        [n,m,k] = size(Volumenes.femur.hueso);
+        [n,m,~] = size(V_seg.femur.bones);
         [Xx,Yy] = meshgrid(1:n,1:m);
-        Muestra_femur = Volumenes.femur.bones(:,:,round(k/2));
-        Muestra_perone = Volumenes.perone.bones(:,:,round(k/2));
-        Muestra_tibia = Volumenes.tibia.bones(:,:,round(k/2));
+        [~,~,v1] = ind2sub(size(V_seg.perone.bones),find(V_seg.perone.bones > 0));
+        [~,~,v2] = ind2sub(size(V_seg.femur.bones),find(V_seg.femur.bones > 0));
+        [~,~,v3] = ind2sub(size(V_seg.tibia.bones),find(V_seg.tibia.bones > 0));
+        
+        Muestra_femur = V_seg.femur.bones(:,:,round(max(v2)/2));
+        Muestra_perone = V_seg.perone.bones(:,:,round(max(v1)/2));
+        Muestra_tibia = V_seg.tibia.bones(:,:,round(max(v3)/2));
         
         Xx_femur = Xx(Muestra_femur >0);
         Yy_femur = Yy(Muestra_femur >0);
@@ -25,12 +29,12 @@ function [V_rotado] = Rotar_V(Volumenes)
         [Coeff, ~] = pca([Xx_tibia,Yy_tibia]);
         Theta_tibia = 90 - acos(abs(Coeff(1,1))).*180/pi;
         
-        V_rotado.femur.bones = imrotate3(Volumenes.femur.bones,Theta_femur,[0 1 0],'crop','FillValues',0);
-        V_rotado.femur.fisis = imrotate3(Volumenes.femur.bones,Theta_femur,[0 1 0],'crop','FillValues',0);
-        V_rotado.perone.bones = imrotate3(Volumenes.femur.bones,Theta_perone,[0 1 0],'crop','FillValues',0);
-        V_rotado.perone.bones = imrotate3(Volumenes.femur.bones,Theta_perone,[0 1 0],'crop','FillValues',0);
-        V_rotado.tibia.bones = imrotate3(Volumenes.femur.bones,Theta_tibia,[0 1 0],'crop','FillValues',0);
-        V_rotado.tibia.bones = imrotate3(Volumenes.femur.bones,Theta_tibia,[0 1 0],'crop','FillValues',0);
+        V_rotado.femur.bones = imrotate3(V_seg.femur.bones,Theta_femur,[0 0 1],'cubic','crop','FillValues',0);
+        V_rotado.femur.fisis = imrotate3(V_seg.femur.fisis,Theta_femur,[0 0 1],'cubic','crop','FillValues',0);
+        V_rotado.perone.bones = imrotate3(V_seg.perone.bones,-1*Theta_perone,[0 0 1],'cubic','crop','FillValues',0);
+        V_rotado.perone.fisis = imrotate3(V_seg.perone.fisis,-1*Theta_perone,[0 0 1],'cubic','crop','FillValues',0);
+        V_rotado.tibia.bones = imrotate3(V_seg.tibia.bones,-1*Theta_tibia,[0 0 1],'cubic','crop','FillValues',0);
+        V_rotado.tibia.fisis = imrotate3(V_seg.tibia.fisis,-1*Theta_tibia,[0 0 1],'cubic','crop','FillValues',0);
         
 end
   

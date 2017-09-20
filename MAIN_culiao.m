@@ -90,7 +90,7 @@ i = 50;
 se = strel('disk',i,8);
 Test = V(:,:,round(size(V,3)/2));
 STD_inicial = std(Test(:));
-Umbral = 30;
+Umbral = 25;
 
 for m=1:.5:10
     
@@ -135,7 +135,7 @@ plot_MRI(V_kmeans); title('Kmeans');
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Arreglemos la Mascara
-answer = inputdlg('¿Que cluster usar (1 o 2)?');
+answer = inputdlg('ï¿½Que cluster usar (1 o 2)?');
 Cluster = str2double(answer{1,1});
 Mask1 = logical(V_kmeans==Cluster);
 Se1 = strel('disk',3,8);
@@ -186,7 +186,7 @@ V_seg.rotula = zeros(size(V_filt));
 %%
 N = 8; % Numero de Clusters
 Words = {'Femur','Fisis Femur','Tibia','Fisis Tibia', 'Perone','Fisis Perone','Rotula','Background'};
-colores = {'g.','r.','b.','y.','m.','c.','g.', 'g.'};
+colores = {'g.','r.','b.','y.','m.','c.','k.', 'w.'};
 
 for k=1:size(V_filt,3)
     
@@ -281,7 +281,7 @@ for k=1:size(V_filt,3)
             subplot(1,2,1);
             imshow(mask,[]);
             subplot(1,2,2);
-            [imgMasks,segOutline,imgMarkup]=segoutput(Im_seg,mask);
+            [imgMasks,segOutline,imgMarkup]=segoutput(Im,mask);
             imagesc(imgMarkup);
             colormap('gray')
             axis equal
