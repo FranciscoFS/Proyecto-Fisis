@@ -187,7 +187,7 @@ V_seg.rotula = zeros(size(V_filt));
 %%
 N = 8; % Numero de Clusters
 Words = {'Femur','Fisis Femur','Tibia','Fisis Tibia', 'Perone','Fisis Perone','Rotula','Background'};
-colores = {'g.','r.','b.','y.','m.','c.','g.', 'g.'};
+colores = {'g.','r.','b.','y.','m.','c.','k.', 'w.'};
 
 for k=1:size(V_filt,3)
     
@@ -282,7 +282,7 @@ for k=1:size(V_filt,3)
             subplot(1,2,1);
             imshow(mask,[]);
             subplot(1,2,2);
-            [imgMasks,segOutline,imgMarkup]=segoutput(Im_seg,mask);
+            [imgMasks,segOutline,imgMarkup]=segoutput(Im,mask);
             imagesc(imgMarkup);
             colormap('gray')
             axis equal

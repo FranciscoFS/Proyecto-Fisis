@@ -90,7 +90,7 @@ i = 50;
 se = strel('disk',i,8);
 Test = V(:,:,round(size(V,3)/2));
 STD_inicial = std(Test(:));
-Umbral = 25;
+Umbral = 30;
 
 for m=1:.5:10
     
@@ -104,7 +104,7 @@ for m=1:.5:10
         for ii=1:size(V,3)
             Im = V(:,:,ii);
             Im = Im + M_final.*(imtophat(Im,se) - imbothat(Im,se));
-            V_preFilt(:,:,ii) =  medfilt2(adapthisteq(Im),[5 5]);
+            V_preFilt(:,:,ii) =  medfilt2(adapthisteq(Im),[7 7]);
         end
         
         break
@@ -113,7 +113,6 @@ for m=1:.5:10
         continue
     end
 end
-
 
 figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 plot_MRI(V); title('Volumen RAW');
@@ -129,32 +128,38 @@ close all
 
 % Kmeans
 rng(1)
-V_kmeans = kmeans_p(V_preFilt(:),2,size(V));
+V_kmeans = kmeans_p(V_preFilt(:),3,size(V));
+
+figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 plot_MRI(V_kmeans); title('Kmeans');
 
+figure('units', 'normalize', 'outerposition',[0 0 1 1]);
+plot_MRI(V_preFilt); title('Volumen Con Filtros de preprocesamiento');
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
+%
 % Arreglemos la Mascara
-answer = inputdlg('�Que cluster usar (1 o 2)?');
+
+answer = inputdlg('Que cluster usar (1 o 2)?');
 Cluster = str2double(answer{1,1});
 Mask1 = logical(V_kmeans==Cluster);
-Se1 = strel('disk',3,8);
-Se2 = strel('disk',3,8);
-Maskf = imerode(Mask1,Se2);
-Maskf = imclose(Maskf,Se1);
+Se1 = strel('disk',1,8);
+Se2 = strel('disk',7,8);
+Maskf = imerode(Mask1,Se1);
+Maskf = imclose(Maskf,Se2);
 
-%Mask1 = im(Mask1,Se2);
+figure;
 plot_MRI(Mask1); title('Mascara');
 figure('units', 'normalize', 'outerposition',[0 0 1 1]);
-plot_MRI(not(Maskf)); title('Mascara');
+plot_MRI(Maskf); title('Mascara');
 
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
 
 % Aplicar FiltroG
 V_filt = zeros(size(V));
 
-alfa = 2.5;
-beta = 5;
+alfa = 2;
+beta = 1.5;
 
 for k=1:size(V,3)
 	V_filt(:,:,k) = filtro_gabriel(V_preFilt(:,:,k), not(Maskf(:,:,k)),alfa,beta);
@@ -162,6 +167,9 @@ end
 
 figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 plot_MRI(V_filt); title('Filtro G');
+
+figure('units', 'normalize', 'outerposition',[0 0 1 1]);
+plot_MRI(V_preFilt); title('Filtro G');
 
 %plot_MRI(V_preFilt); title('Filtro de Gabriel');
 uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.'));
