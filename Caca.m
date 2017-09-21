@@ -10,8 +10,8 @@
 
 
 %% SUMA DE FISIS
-dxdy2 = 0.4688; dz2 = 3;
 dxdy= 0.293; dz =3.5;
+dxdy2 = 0.4688; dz2 = 3;
 
 razon_dxdy = dxdy/dxdy2;
 razon_dz = dz2/dz;
