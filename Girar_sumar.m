@@ -29,7 +29,7 @@ for i=1:size(filename,2)
     rodillas{i,4} = V_seg.perone.bones;
     rodillas{i,5} = V_seg.tibia.fisis;
     rodillas{i,6} = V_seg.tibia.bones;
-    %rodillas{i,7} = V_seg.rotula;    
+    rodillas{i,7} = V_seg.rotula;    
     rodillas{i,8} = V_seg.info;
     rodillas{i,9} = V_seg.filename;
 end
@@ -62,7 +62,7 @@ for i=1:size(rodillas,1)
     v4 = rodillas{i,4};
     v5 = rodillas{i,5};
     v6 = rodillas{i,6};
-    %v7 = rodillas{i,7};
+    v7 = rodillas{i,7};
     info = rodillas{i,8};
     
     dxdy = info{1,1};
@@ -80,7 +80,7 @@ for i=1:size(rodillas,1)
         rodillas{i,4}  = interp3(v4,Xq,Yq,Zq);
         rodillas{i,5}  = interp3(v5,Xq,Yq,Zq);
         rodillas{i,6}  = interp3(v6,Xq,Yq,Zq);
-        %rodillas{i,7}  = interp3(v7,Xq,Yq,Zq);
+        rodillas{i,7}  = interp3(v7,Xq,Yq,Zq);
     end
 
     if dz > min_dz
@@ -91,7 +91,7 @@ for i=1:size(rodillas,1)
         rodillas{i,4}  = interp3(v4,Xq,Yq,Zq);
         rodillas{i,5}  = interp3(v5,Xq,Yq,Zq);
         rodillas{i,6}  = interp3(v6,Xq,Yq,Zq);
-        %rodillas{i,7}  = interp3(v7,Xq,Yq,Zq);
+        rodillas{i,7}  = interp3(v7,Xq,Yq,Zq);
     end
 end
 
@@ -116,7 +116,7 @@ for i=1:size(rodillas,1)
     rodillas{i,4} = padarray(rodillas{i,4},[d1 d1 d2],0,'post');
     rodillas{i,5} = padarray(rodillas{i,5},[d1 d1 d2],0,'post');
     rodillas{i,6} = padarray(rodillas{i,6},[d1 d1 d2],0,'post');
-    %rodillas{i,7} = padarray(rodillas{i,7},[d1 d1 d2],0,'both');
+    rodillas{i,7} = padarray(rodillas{i,7},[d1 d1 d2],0,'post');
 
 end
 %% 3 GIRAR RODILLAS (a partir de imagen central y eje mecanico)
@@ -149,7 +149,14 @@ for i=1:size(rodillas,1)
 end
 
 %% 4 LLEVAR AL PISO/SUBIR
-
+    rodillas{i,1} = V_seg.femur.fisis;
+    rodillas{i,2} = V_seg.femur.bones;
+    rodillas{i,3} = V_seg.perone.fisis;
+    rodillas{i,4} = V_seg.perone.bones;
+    rodillas{i,5} = V_seg.tibia.fisis;
+    rodillas{i,6} = V_seg.tibia.bones;
+    rodillas{i,7} = V_seg.rotula;
+    
 for i=1:size(rodillas,1)
 %BAJAR (solo lo correspondiente a femur)  
     v1 = rodillas{i,1};
@@ -159,7 +166,7 @@ for i=1:size(rodillas,1)
 %Punto mas bajo
     fila_baja = 0;
     for a=1:size(v1,3)
-        im = v1(:,:,a);
+        im = v2(:,:,a);
         [row, ~] = find(im);
         lowestrow = max(row);
         if lowestrow > fila_baja
@@ -183,12 +190,12 @@ for i=1:size(rodillas,1)
     v4 = rodillas{i,4};
     v5 = rodillas{i,5};
     v6 = rodillas{i,6};
-    %v7 = rodillas{i,7};
+    v7 = rodillas{i,7};
     
     %PERONE
     fila_alta = m;
     for a = 1:size(v1,3)
-        im = v3(:,:,a);
+        im = v4(:,:,a);
         [row, ~] = find(im);
         toprow = min(row);
         if toprow<fila_alta
@@ -206,9 +213,9 @@ for i=1:size(rodillas,1)
     rodillas{i,4} = padarray(rodillas{i,4},[d 0 0],0,'post');
     
     %TIBIA
-    fila_alta = 0;
+    fila_alta = m;
     for a = 1:size(v1,3)
-        im = v5(:,:,a);
+        im = v6(:,:,a);
         [row, ~] = find(im);
         toprow = min(row);
         if toprow<fila_alta
@@ -225,23 +232,23 @@ for i=1:size(rodillas,1)
     rodillas{i,5} = padarray(rodillas{i,5},[d 0 0],0,'pre');
     rodillas{i,6} = padarray(rodillas{i,6},[d 0 0],0,'pre');
     
-%     %ROTULA
-%     fila_alta = 0;
-%     for a = 1:size(v1,3)
-%         im = v7(:,:,a);
-%         [row, ~] = find(im);
-%         toprow = min(row);
-%         if toprow<fila_alta
-%             fila_alta = lowestrow;
-%         end
-%     end
-%     %imcrop
-% 	rodillas{i,7} = v7(fila_alta:m,1:n,1:k);
-%     %Nuevo tamaño
-%     [m2,~,~] = size(rodillas{i,7});
-%     d = m-m2;
-%     %Padarray
-%     rodillas{i,7} = padarray(rodillas{i,7},[d 0 0],0,'pre');    
+    %ROTULA
+    fila_alta = m;
+    for a = 1:size(v1,3)
+        im = v7(:,:,a);
+        [row, ~] = find(im);
+        toprow = min(row);
+        if toprow<fila_alta
+            fila_alta = lowestrow;
+        end
+    end
+    %imcrop
+	rodillas{i,7} = v7(fila_alta:m,1:n,1:k);
+    %Nuevo tamaño
+    [m2,~,~] = size(rodillas{i,7});
+    d = m-m2;
+    %Padarray
+    rodillas{i,7} = padarray(rodillas{i,7},[d 0 0],0,'pre');    
 end
 
 %% 5 SUMAR
@@ -251,7 +258,7 @@ tf_suma = rodillas{i,3};
 th_suma = rodillas{i,4};
 pf_suma = rodillas{i,5};
 ph_suma = rodillas{i,6};
-%r_suma = rodillas{i,7};
+r_suma = rodillas{i,7};
     
 for i=2:size(rodillas,1)
     ff_suma = ff_suma + rodillas{i,1};
@@ -260,7 +267,7 @@ for i=2:size(rodillas,1)
     th_suma = th_suma + rodillas{i,4};
     pf_suma = pf_suma + rodillas{i,5};
     ph_suma = ph_suma + rodillas{i,6};
-    %r_suma = r_suma + rodillas{i,7};
+    r_suma = r_suma + rodillas{i,7};
 end
 
 %% VER
