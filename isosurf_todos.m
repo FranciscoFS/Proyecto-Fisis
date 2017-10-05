@@ -16,7 +16,7 @@ end
 pace = (1/(dz/dxdy));
 [m,n,k] = size(V.femur.fisis);
 [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
-Box_size = [9 9 9];
+Box_size = [3 3 3];
 
 %Patch femur fisis
 ff =interp3(V.femur.fisis,Xq,Yq,Zq,'cubic');

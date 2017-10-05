@@ -119,7 +119,7 @@ for i=1:size(rodillas,1)
     rodillas{i,7} = padarray(rodillas{i,7},[d1 d1 d2],0,'post');
 
 end
-%% 3 GIRAR RODILLAS (a partir de imagen central y eje mecanico)
+%% 3 GIRARODILLAS (a partir de imagen central y eje mecanico)
 
 for i=1:size(rodillas,1)
     porte_V = size(rodillas{i,4},3);
