@@ -37,8 +37,8 @@ pf = smooth3(pf,'box',Box_size);
 ph =interp3(V.perone.bones,Xq,Yq,Zq,'cubic');
 ph = smooth3(ph>0,'box',Box_size);
 %Patch rotula
-r =interp3(V.rotula,Xq,Yq,Zq,'cubic');
-r = smooth3(r>0,'box',Box_size);
+% r =interp3(V.rotula,Xq,Yq,Zq,'cubic');
+% r = smooth3(r>0,'box',Box_size);
 
 %Vista y Luz
 
@@ -55,8 +55,8 @@ p5= patch(isosurface(pf,0.3),'FaceColor','red','EdgeColor','none');
 p6= patch(isosurface(ph),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
 reducepatch(p6,0.01)
 %Patch rotula
-p7= patch(isosurface(r),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-reducepatch(p7,0.01)
+% p7= patch(isosurface(r),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+% reducepatch(p7,0.01)
 
 view(3)
 axis tight
