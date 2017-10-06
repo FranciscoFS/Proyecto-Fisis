@@ -44,13 +44,16 @@ if infor.PixelSpacing(1)~= infor.PixelSpacing(2)
 end
 info{1,1} = infor.PixelSpacing(1);
 info{2,1} = infor.SliceThickness;
-
+info{3,1} = infor.PatientBirthDate;
+info{4,1} = infor.PatientWeight;
+info{5,1} = infor.PatientAge;
+info{6,1} = infor.PatientSex;
 
 V_preFilt = zeros([size(im) size(V,3)]);
 
 figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 plot_MRI(V); title('Volumen Sin Filtros, ver donde esta el perone');
-close all
+
 
 %Todas las rodillas a rodillas derecha (en dicominfo no encontre nada)
 message = sprintf('El perone esta al principio?');
