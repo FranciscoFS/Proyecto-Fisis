@@ -33,7 +33,7 @@ V=[];
 
 for p = 3:size(DIM,1)
     im = imadjust(im2single(dicomread(DIM(p).name)));
-    V(:,:,p) = im;
+    V(:,:,p-2) = im;
 end
 
 %info
