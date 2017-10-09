@@ -366,6 +366,7 @@ message = sprintf('Quiere segmentar otra rodilla?');
 reply = questdlg(message, 'Physis', 'Yes', 'No','No');
 if strcmpi(reply, 'No')
     seguir = 0;
+    fprintf('Eres libre... era broma te tocan 20 mas \n');
 end
 
 end

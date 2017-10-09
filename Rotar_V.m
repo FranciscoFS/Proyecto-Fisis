@@ -10,9 +10,9 @@ function [V_rotado] = Rotar_V(V_seg)
         [~,~,v2] = ind2sub(size(V_seg.femur.bones),find(V_seg.femur.bones > 0));
         [~,~,v3] = ind2sub(size(V_seg.tibia.bones),find(V_seg.tibia.bones > 0));
         
-        Muestra_femur = V_seg.femur.bones(:,:,round(max(v2)/2));
-        Muestra_perone = V_seg.perone.bones(:,:,round(max(v1)/2));
-        Muestra_tibia = V_seg.tibia.bones(:,:,round(max(v3)/2));
+        Muestra_femur = V_seg.femur.bones(:,:,round((max(v2)+min(v2))/2));
+        Muestra_perone = V_seg.perone.bones(:,:,round((max(v1)+min(v1))/2));
+        Muestra_tibia = V_seg.tibia.bones(:,:,round((max(v3)+min(v3))/2));
         
         Xx_femur = Xx(Muestra_femur >0);
         Yy_femur = Yy(Muestra_femur >0);
@@ -29,12 +29,12 @@ function [V_rotado] = Rotar_V(V_seg)
         [Coeff, ~] = pca([Xx_tibia,Yy_tibia]);
         Theta_tibia = 90 - acos(abs(Coeff(1,1))).*180/pi;
         
-        V_rotado.femur.bones = imrotate3(V_seg.femur.bones,Theta_femur,[0 0 1],'cubic','crop','FillValues',0);
-        V_rotado.femur.fisis = imrotate3(V_seg.femur.fisis,Theta_femur,[0 0 1],'cubic','crop','FillValues',0);
-        V_rotado.perone.bones = imrotate3(V_seg.perone.bones,-1*Theta_perone,[0 0 1],'cubic','crop','FillValues',0);
-        V_rotado.perone.fisis = imrotate3(V_seg.perone.fisis,-1*Theta_perone,[0 0 1],'cubic','crop','FillValues',0);
-        V_rotado.tibia.bones = imrotate3(V_seg.tibia.bones,-1*Theta_tibia,[0 0 1],'cubic','crop','FillValues',0);
-        V_rotado.tibia.fisis = imrotate3(V_seg.tibia.fisis,-1*Theta_tibia,[0 0 1],'cubic','crop','FillValues',0);
+        V_rotado.femur.bones = imrotate3(V_seg.femur.bones,Theta_femur,[0 0 1],'crop','FillValues',0) >0;
+        V_rotado.femur.fisis = imrotate3(V_seg.femur.fisis,Theta_femur,[0 0 1],'crop','FillValues',0) >0;
+        V_rotado.perone.bones = imrotate3(V_seg.perone.bones,-1*Theta_perone,[0 0 1],'crop','FillValues',0) >0;
+        V_rotado.perone.fisis = imrotate3(V_seg.perone.fisis,-1*Theta_perone,[0 0 1],'crop','FillValues',0) >0;
+        V_rotado.tibia.bones = imrotate3(V_seg.tibia.bones,-1*Theta_tibia,[0 0 1],'crop','FillValues',0)>0;
+        V_rotado.tibia.fisis = imrotate3(V_seg.tibia.fisis,-1*Theta_tibia,[0 0 1],'crop','FillValues',0)>0;
         
 end
   
