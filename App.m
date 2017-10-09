@@ -22,7 +22,7 @@ function varargout = App(varargin)
 
 % Edit the above text to modify the response to help App
 
-% Last Modified by GUIDE v2.5 08-Oct-2017 19:38:28
+% Last Modified by GUIDE v2.5 09-Oct-2017 19:33:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -208,18 +208,18 @@ if handles.Prefiltrado
             Im_seg = 1- handles.V_filt(:,:,k);
             Im =handles.V_filt(:,:,k);
 
-            f1 = figure('units', 'normalize', 'outerposition',[0 0 1 1]); 
-            subplot(1,2,1);
-            imshow(Im,[]); title(['Imagen ' num2str(k)  ' de ' num2str(size(handles.V_filt,3))]);  
-            subplot(1,2,2);
-            imshow(handles.V(:,:,k)); 
+%             f1 = figure('units', 'normalize', 'outerposition',[0 0 1 1]); 
+%             subplot(1,2,1);
+%             imshow(Im,[]); title(['Imagen ' num2str(k)  ' de ' num2str(size(handles.V_filt,3))]);  
+%             subplot(1,2,2);
+%             imshow(handles.V(:,:,k)); 
 
 
             Change = 1;
 
             while Change
 
-                close(f1)
+                %close(f1)
                 f1 = figure('units', 'normalize', 'outerposition',[0.5 0 0.5 1]);
                 imshow(handles.V(:,:,k),'InitialMagnification','fit');title('Imagen de referencia');
                 f2 = figure('units', 'normalize', 'outerposition',[0 0 0.5 1]);
@@ -303,7 +303,7 @@ if handles.Prefiltrado
                     Change = 0;
                     falto = 0;
                     condicion = 0;
-                    handles.V_seg.puntos(:,:,k) = [Puntos(:,1),Puntos(:,2)];
+                    handles.V_seg.puntos{k} = [Puntos(:,1),Puntos(:,2)];
                     handles.V_seg.mascara(:,:,k) = mask;
                     handles.check(handles.v) = 1;
                     if m(1)
@@ -331,13 +331,14 @@ if handles.Prefiltrado
                     close(f3)
                 elseif strcmpi(reply, 'Me faltaron puntos')
                     falto = 1;
+                    close(f3)
                 else
                     falto = 0;
+                    close(f3)
                 end
 
             end
         end
-
     end
 
 else
@@ -387,9 +388,16 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-V_seg = handles.V_seg;
-save(['Rodilla_'  handles.filename],'V_seg')
-guidata(hObject, handles);
+
+if handles.Prefiltrado
+    uiwait(msgbox('Seleccione carpeta para guardar al paciente','Guardar','modal'));
+    folder = uigetdir();
+    V_seg = handles.V_seg;
+    save([folder '/' 'Rodilla_'  handles.filename],'V_seg')
+    guidata(hObject, handles);
+else
+    msgbox('Porfavor use EMPEZAR primero antes de Segmentar slides')
+end
 
 
 % --- Executes on button press in pushbutton5.
@@ -459,12 +467,13 @@ function edit1_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
-
+set(hObject, 'String','No Realizado')
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+guidata(hObject,handles)
 
 
 % --------------------------------------------------------------------
@@ -472,3 +481,14 @@ function Untitled_1_Callback(hObject, eventdata, handles)
 % hObject    handle to Untitled_1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton6.
+function pushbutton6_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+clc
+clear all
+close all
+
