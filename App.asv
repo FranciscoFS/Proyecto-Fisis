@@ -152,6 +152,9 @@ else
     return
 end
 
+% uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.','Informacion','modal'));
+close(f1)
+
 % Aplicar FiltroG
 handles.V_filt = zeros(size(handles.V));
 
@@ -189,19 +192,18 @@ guidata(hObject, handles);
 function Segmentar_Callback(hObject, ~, handles)
 
 if handles.Prefiltrado
-    condicion = 1;
+    
     if handles.check(handles.v)
          message = sprintf('Ya realizaste esta Slide, seguro que quires hacerla denuevo?');
-         reply = questdlg(message,'Chequeo','Si','No','No');
-       
+         reply = questdlg(message,'Chequeo','Si','No (No hacerla)');
+
          if reply == 'No'
              condicion = 0;
          end
 
     end
- 
+    condicion = 1;
     handles = segmentar(handles,condicion);
-    set(handles.edit1,'String','Realizado');
     guidata(hObject, handles);
 else
     msgbox('Porfavor use EMPEZAR primero antes de Segmentar slides')
@@ -430,9 +432,9 @@ function Perone_fisis_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 if get(hObject,'Value')
-    handles.Indice(6) = 1;
+    handles.Indice(1) = 1;
 else
-    handles.Indice(6) = 0;
+    handles.Indice(1) = 0;
 end
 guidata(hObject,handles)
 % Hint: get(hObject,'Value') returns toggle state of Perone_fisis
@@ -444,9 +446,9 @@ function Rotula_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 if get(hObject,'Value')
-    handles.Indice(7) = 1;
+    handles.Indice(1) = 1;
 else
-    handles.Indice(7) = 0;
+    handles.Indice(1) = 0;
 end
 guidata(hObject,handles)
 % Hint: get(hObject,'Value') returns toggle state of Rotula
