@@ -22,7 +22,7 @@ function varargout = App(varargin)
 
 % Edit the above text to modify the response to help App
 
-% Last Modified by GUIDE v2.5 09-Oct-2017 19:33:00
+% Last Modified by GUIDE v2.5 09-Oct-2017 22:52:09
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -73,9 +73,9 @@ function varargout = App_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, ~, handles)
-% hObject    handle to pushbutton1 (see GCBO)
+% --- Executes on button press in Empezar.
+function Empezar_Callback(hObject, ~, handles)
+% hObject    handle to Empezar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -95,6 +95,8 @@ end
 
 close(f1)
 
+h = waitbar(0,'Trabajando...');
+
 % Prefiltrado
 i = 50;
 se = strel('disk',i,8);
@@ -108,11 +110,10 @@ for m=1:.5:30
     Error = ((std(Im(:)) - STD_inicial)/STD_inicial)*100;
     
     if Error > Umbral
-        M_final = m;
-        
+        waitbar(1/3)
         for ii=1:size(handles.V,3)
             Im = handles.V(:,:,ii);
-            Im = Im + M_final.*(imtophat(Im,se) - imbothat(Im,se));
+            Im = Im + m.*(imtophat(Im,se) - imbothat(Im,se));
             handles.V_preFilt(:,:,ii) =  medfilt2(adapthisteq(Im),[7 7]);
         end
         
@@ -123,20 +124,32 @@ for m=1:.5:30
     end
 end
 
+waitbar(2/3)
+
 % Kmeans
 rng(1)
 V_kmeans = kmeans_p(handles.V_preFilt(:),3,size(handles.V));
+
+waitbar(1)
+close(h)
 
 f1 = figure('units', 'normalize', 'outerposition',[0 0 1 1]);
 plot_MRI(V_kmeans); title('Kmeans');
 answer = inputdlg('Que cluster usar (1, 2, 3)?');
 
-Cluster = str2double(answer{1,1});
-Mask1 = logical(V_kmeans==Cluster);
-Se1 = strel('disk',1,8);
-Se2 = strel('disk',7,8);
-Maskf = imerode(Mask1,Se1);
-Maskf = imclose(Maskf,Se2);
+if not(isempty(answer))
+    Cluster = str2double(answer{1,1});
+    Mask1 = logical(V_kmeans==Cluster);
+    Se1 = strel('disk',1,8);
+    Se2 = strel('disk',7,8);
+    Maskf = imerode(Mask1,Se1);
+    Maskf = imclose(Maskf,Se2);
+    close(f1)
+    
+else 
+    close(f1)
+    return
+end
 
 % uiwait(msgbox('Para seguir a la siguiente filtracion solo debe pulsar OK.','Informacion','modal'));
 close(f1)
@@ -175,7 +188,7 @@ guidata(hObject, handles);
 
 
 
-function pushbutton2_Callback(hObject, eventdata, handles)
+function Segmentar_Callback(hObject, ~, handles)
 
 if handles.Prefiltrado
     
@@ -208,12 +221,6 @@ if handles.Prefiltrado
             Im_seg = 1- handles.V_filt(:,:,k);
             Im =handles.V_filt(:,:,k);
 
-%             f1 = figure('units', 'normalize', 'outerposition',[0 0 1 1]); 
-%             subplot(1,2,1);
-%             imshow(Im,[]); title(['Imagen ' num2str(k)  ' de ' num2str(size(handles.V_filt,3))]);  
-%             subplot(1,2,2);
-%             imshow(handles.V(:,:,k)); 
-
 
             Change = 1;
 
@@ -237,14 +244,14 @@ if handles.Prefiltrado
                                 end
                             end
                             message = sprintf(['Te faltaron puntos en '  Words{ii} '?']);
-                            reply = questdlg(message, 'Physis', 'Yes', 'No','No');
+                            reply = questdlg(message, 'Fisis', 'Yes', 'No','No');
 
                             if strcmpi(reply, 'No')
                                 continue;
                             elseif strcmpi(reply, 'Yes')
-                            [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
-                            Puntos{ii,1} = [Puntos{ii,1};Puntos_nuevos{ii,1}];
-                            Puntos{ii,2} = [Puntos{ii,2};Puntos_nuevos{ii,2}];
+                                [Puntos_nuevos{ii,1}, Puntos_nuevos{ii,2}] = getpts();
+                                Puntos{ii,1} = [Puntos{ii,1};Puntos_nuevos{ii,1}];
+                                Puntos{ii,2} = [Puntos{ii,2};Puntos_nuevos{ii,2}];
                             end
                         else
                             uiwait(msgbox(['Ingrese las semillas del ' Words{ii} ', con el ultimo haga doble click o click derecho. Si NO hay, SOLO ponga 1 punto en algun lugar que no sea de las partes anteriores']));
@@ -329,14 +336,16 @@ if handles.Prefiltrado
                     end
                     guidata(hObject, handles);
                     close(f3)
+                    
                 elseif strcmpi(reply, 'Me faltaron puntos')
                     falto = 1;
                     close(f3)
+                    
                 else
                     falto = 0;
                     close(f3)
+                    
                 end
-
             end
         end
     end
@@ -351,7 +360,7 @@ end
 
 
 % --- Executes on slider movement.
-function slider1_Callback(hObject, eventdata, handles)
+function slider1_Callback(hObject, ~, handles)
 % hObject    handle to slider1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -372,7 +381,7 @@ guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function slider1_CreateFcn(hObject, eventdata, handles)
+function slider1_CreateFcn(hObject, ~, handles)
 % hObject    handle to slider1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
@@ -383,73 +392,76 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
 end
 
 
-% --- Executes on button press in pushbutton4.
-function pushbutton4_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton4 (see GCBO)
+% --- Executes on button press in Guardar.
+function Guardar_Callback(hObject, ~, handles)
+% hObject    handle to Guardar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 if handles.Prefiltrado
     uiwait(msgbox('Seleccione carpeta para guardar al paciente','Guardar','modal'));
-    folder = uigetdir();
+    folder_save = uigetdir();
     V_seg = handles.V_seg;
-    save([folder '/' 'Rodilla_'  handles.filename],'V_seg')
+    save([folder_save '/' 'Rodilla_'  handles.filename],'V_seg')
     guidata(hObject, handles);
 else
-    msgbox('Porfavor use EMPEZAR primero antes de Segmentar slides')
+    msgbox('No hay nada para guardar aún')
 end
 
 
-% --- Executes on button press in pushbutton5.
-function pushbutton5_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton5 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% --- Executes on button press in cargar.
+function cargar_Callback(hObject, eventdata, handles)
+
 uiwait(msgbox('Seleccione LA CARPETA del paciente a analizar','Success','modal'));
 
 folder = uigetdir();
-[~,handles.filename,~] = fileparts(folder);
-DIM = dir(folder);
 
-handles.V=[];
+if folder == 0
+    return
+else
+    [~,handles.filename,~] = fileparts(folder);
+    DIM = dir(folder);
 
-for p = 1:size(DIM,1)
-    
-    if not(DIM(p).isdir)
-        if strcmp(DIM(p).name(end-2:end),'dcm')
-            im = imadjust(im2single(dicomread([DIM(p).folder '/' DIM(p).name])));
-            handles.V(:,:,end+1) = im;
+    handles.V=[];
+
+    for p = 1:size(DIM,1)
+
+        if not(DIM(p).isdir)
+            if strcmp(DIM(p).name(end-2:end),'dcm')
+                im = imadjust(im2single(dicomread([DIM(p).folder '/' DIM(p).name])));
+                handles.V(:,:,end+1) = im;
+            end
         end
     end
+
+    %info
+    n = round(p/2);
+    infor = dicominfo([DIM(n).folder '/' DIM(n).name]);
+    handles.info = {};
+
+    if infor.PixelSpacing(1)~= infor.PixelSpacing(2)
+        uiwait(msgbox('ERROR! Avisar a Francisco y Tomas! anota que rodilla es esta','Success','modal'));
+    end
+
+    handles.info{1,1} = infor.PixelSpacing(1);
+    handles.info{2,1} = infor.SliceThickness;
+    handles.info{3,1} = infor.PatientBirthDate;
+    handles.info{4,1} = infor.PatientWeight;
+    handles.info{5,1} = infor.PatientAge;
+    handles.info{6,1} = infor.PatientSex;
+
+    handles.check = zeros(1,size(handles.V,3));
+
+    set(handles.slider1, 'Min', 1);
+    set(handles.slider1, 'Max', size(handles.V,3));
+    set(handles.slider1, 'SliderStep', [1/(size(handles.V,3)-1) , 1/(size(handles.V,3)-1) ]);
+    set(handles.slider1, 'Value', 10);
+    imshow(handles.V(:,:,10))
+    handles.Prefiltrado = 0;
+    handles.v = 10;
+
+    guidata(hObject, handles);
 end
-
-%info
-n = round(p/2);
-infor = dicominfo([DIM(n).folder '/' DIM(n).name]);
-handles.info = {};
-
-if infor.PixelSpacing(1)~= infor.PixelSpacing(2)
-    uiwait(msgbox('ERROR! Avisar a Francisco y Tomas! anota que rodilla es esta','Success','modal'));
-end
-
-handles.info{1,1} = infor.PixelSpacing(1);
-handles.info{2,1} = infor.SliceThickness;
-handles.info{3,1} = infor.PatientBirthDate;
-handles.info{4,1} = infor.PatientWeight;
-handles.info{5,1} = infor.PatientAge;
-handles.info{6,1} = infor.PatientSex;
-
-handles.check = zeros(1,size(handles.V,3));
-
-set(handles.slider1, 'Min', 1);
-set(handles.slider1, 'Max', size(handles.V,3));
-set(handles.slider1, 'SliderStep', [1/(size(handles.V,3)-1) , 1/(size(handles.V,3)-1) ]);
-set(handles.slider1, 'Value', 10);
-imshow(handles.V(:,:,10))
-handles.Prefiltrado = 0;
-handles.v = 10;
-
-guidata(hObject, handles);
 
 
 
@@ -476,13 +488,6 @@ end
 guidata(hObject,handles)
 
 
-% --------------------------------------------------------------------
-function Untitled_1_Callback(hObject, eventdata, handles)
-% hObject    handle to Untitled_1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
 % --- Executes on button press in pushbutton6.
 function pushbutton6_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6 (see GCBO)
@@ -492,3 +497,77 @@ clc
 clear all
 close all
 
+
+% --- Executes on button press in Femur_bone.
+function Femur_bone_Callback(hObject, eventdata, handles)
+% hObject    handle to Femur_bone (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of Femur_bone
+
+
+% --- Executes on button press in Tibia_bone.
+function Tibia_bone_Callback(hObject, eventdata, handles)
+% hObject    handle to Tibia_bone (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of Tibia_bone
+
+
+% --- Executes on button press in Tibia_fisis.
+function Tibia_fisis_Callback(hObject, eventdata, handles)
+% hObject    handle to Tibia_fisis (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of Tibia_fisis
+
+
+% --- Executes on button press in Femur_fisis.
+function Femur_fisis_Callback(hObject, eventdata, handles)
+% hObject    handle to Femur_fisis (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of Femur_fisis
+
+
+% --- Executes on button press in Perone_bone.
+function Perone_bone_Callback(hObject, eventdata, handles)
+% hObject    handle to Perone_bone (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of Perone_bone
+
+
+% --- Executes on button press in Perone_fisis.
+function Perone_fisis_Callback(hObject, eventdata, handles)
+% hObject    handle to Perone_fisis (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of Perone_fisis
+
+
+% --- Executes on button press in Rotula.
+function Rotula_Callback(hObject, eventdata, handles)
+% hObject    handle to Rotula (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of Rotula
+
+
+% --- Executes on button press in Ver_3D.
+function Ver_3D_Callback(hObject, eventdata, handles)
+% hObject    handle to Ver_3D (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+if handles.Prefiltrado
+    isosurf_todos(handles.V_seg)
+else
+    msgbox('Aun no hay nada que modelar, usar EMPEZAR y luego segmentar algo')
+end
