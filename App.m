@@ -22,7 +22,7 @@ function varargout = App(varargin)
 
 % Edit the above text to modify the response to help App
 
-% Last Modified by GUIDE v2.5 09-Oct-2017 22:52:09
+% Last Modified by GUIDE v2.5 11-Oct-2017 19:34:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -178,7 +178,7 @@ handles.V_seg.perone.bones = zeros(size(handles.V_filt));
 handles.V_seg.tibia.fisis = zeros(size(handles.V_filt));
 handles.V_seg.tibia.bones = zeros(size(handles.V_filt));
 handles.V_seg.rotula = zeros(size(handles.V_filt));
-
+handles.V_seg.check = zeros(size(handles.V,3));
 handles.Prefiltrado = 1;
 
 guidata(hObject, handles);
@@ -191,8 +191,8 @@ function Segmentar_Callback(hObject, ~, handles)
 if handles.Prefiltrado
     
     condicion = 1;
-    if handles.check(handles.v)
-         message = sprintf('Ya realizaste esta Slide, seguro que quires hacerla denuevo?');
+    if handles.V_seg.check(handles.v)
+         message = sprintf('¿Ya realizaste esta Slide, seguro que quires hacerla denuevo?');
          reply = questdlg(message,'Chequeo','Si','No','No');
        
          if reply == 'No'
@@ -203,6 +203,7 @@ if handles.Prefiltrado
  
     handles = segmentar(handles,condicion);
     set(handles.edit1,'String','Realizado');
+    handles.V_seg.check(handles.v) = 1;
     guidata(hObject, handles);
     
 else
@@ -220,11 +221,14 @@ function slider1_Callback(hObject, ~, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+handles.v = get(hObject,'Value');
+set(handles.edit2, 'String',handles.v)
+
 if handles.inicio
     handles.v = get(hObject,'Value');
     imshow(handles.V(:,:,handles.v));
 
-    if handles.check(handles.v)
+    if handles.V_seg.check(handles.v)
         set(handles.edit1,'String','Realizado')
     else
         set(handles.edit1, 'String','No Realizado')
@@ -306,7 +310,7 @@ else
     handles.info{5,1} = infor.PatientAge;
     handles.info{6,1} = infor.PatientSex;
 
-    handles.check = zeros(1,size(handles.V,3));
+    handles.V_seg.check = zeros(1,size(handles.V,3));
 
     set(handles.slider1, 'Min', 1);
     set(handles.slider1, 'Max', size(handles.V,3));
@@ -466,4 +470,59 @@ if handles.Prefiltrado
     isosurf_todos(handles.V_seg)
 else
     msgbox('Aun no hay nada que modelar, usar EMPEZAR y luego segmentar algo')
+end
+
+
+% --- Executes on button press in pushbutton8.
+function pushbutton8_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% --- Executes on button press in Guardar.
+
+uiwait(msgbox('Seleccione EL ARCHIVO del paciente a TERMINAR','Success','modal'));
+[filename, pathname,~] = uigetfile();
+cd;
+cd(pathname);
+
+    handles.V_seg = open(filename); %todo dentro
+    handles.V = handles.V_seg.vol.orig;
+    
+    set(handles.slider1, 'Min', 1);
+    set(handles.slider1, 'Max', size(handles.V,3));
+    set(handles.slider1, 'SliderStep', [1/(size(handles.V,3)-1) , 1/(size(handles.V,3)-1) ]);
+    set(handles.slider1, 'Value', 10);
+    imshow(handles.V(:,:,10))
+    handles.Prefiltrado = 1;
+    handles.v = 10;
+    handles.inicio = 1;
+
+    guidata(hObject, handles);
+
+
+    
+
+
+
+
+
+function edit2_Callback(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit2 as text
+%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
 end
