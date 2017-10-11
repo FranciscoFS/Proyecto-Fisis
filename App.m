@@ -189,6 +189,7 @@ guidata(hObject, handles);
 function Segmentar_Callback(hObject, ~, handles)
 
 if handles.Prefiltrado
+    
     condicion = 1;
     if handles.check(handles.v)
          message = sprintf('Ya realizaste esta Slide, seguro que quires hacerla denuevo?');
@@ -203,6 +204,7 @@ if handles.Prefiltrado
     handles = segmentar(handles,condicion);
     set(handles.edit1,'String','Realizado');
     guidata(hObject, handles);
+    
 else
     msgbox('Porfavor use EMPEZAR primero antes de Segmentar slides')
 end
@@ -387,6 +389,7 @@ function Tibia_fisis_Callback(hObject, eventdata, handles)
 % hObject    handle to Tibia_fisis (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 if get(hObject,'Value')
     handles.Indice(4) = 1;
 else
@@ -429,6 +432,7 @@ function Perone_fisis_Callback(hObject, eventdata, handles)
 % hObject    handle to Perone_fisis (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 if get(hObject,'Value')
     handles.Indice(6) = 1;
 else

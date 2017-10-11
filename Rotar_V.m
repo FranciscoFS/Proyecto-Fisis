@@ -36,6 +36,8 @@ function [V_rotado] = Rotar_V(V_seg)
         V_rotado.tibia.bones = imrotate3(V_seg.tibia.bones,-1*Theta_tibia,[0 0 1],'crop','FillValues',0)>0;
         V_rotado.tibia.fisis = imrotate3(V_seg.tibia.fisis,-1*Theta_tibia,[0 0 1],'crop','FillValues',0)>0;
         
+        
+        
 end
   
         
