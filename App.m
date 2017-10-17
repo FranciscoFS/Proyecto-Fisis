@@ -22,7 +22,7 @@ function varargout = App(varargin)
 
 % Edit the above text to modify the response to help App
 
-% Last Modified by GUIDE v2.5 11-Oct-2017 19:34:57
+% Last Modified by GUIDE v2.5 17-Oct-2017 16:19:44
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -178,7 +178,6 @@ handles.V_seg.perone.bones = zeros(size(handles.V_filt));
 handles.V_seg.tibia.fisis = zeros(size(handles.V_filt));
 handles.V_seg.tibia.bones = zeros(size(handles.V_filt));
 handles.V_seg.rotula = zeros(size(handles.V_filt));
-handles.V_seg.check = zeros(size(handles.V,3));
 handles.Prefiltrado = 1;
 
 guidata(hObject, handles);
@@ -211,10 +210,6 @@ else
 end
 
 
-
-
-
-
 % --- Executes on slider movement.
 function slider1_Callback(hObject, ~, handles)
 % hObject    handle to slider1 (see GCBO)
@@ -226,7 +221,12 @@ set(handles.edit2, 'String',handles.v)
 
 if handles.inicio
     handles.v = get(hObject,'Value');
-    imshow(handles.V(:,:,handles.v));
+    
+    if get(handles.cambiar,'Value')
+        imshow(handles.V_seg.mascara(:,:,handles.v),[]);
+    else
+        imshow(handles.V(:,:,handles.v));
+    end
 
     if handles.V_seg.check(handles.v)
         set(handles.edit1,'String','Realizado')
@@ -245,12 +245,12 @@ function slider1_CreateFcn(hObject, ~, handles)
 % hObject    handle to slider1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
-
+handles.v = get(hObject,'Value');
 % Hint: slider controls usually have a light gray background.
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
-
+guidata(hObject,handles)
 
 % --- Executes on button press in Guardar.
 function Guardar_Callback(hObject, ~, handles)
@@ -309,8 +309,9 @@ else
     handles.info{4,1} = infor.PatientWeight;
     handles.info{5,1} = infor.PatientAge;
     handles.info{6,1} = infor.PatientSex;
-
+    
     handles.V_seg.check = zeros(1,size(handles.V,3));
+    handles.V_seg.mascara = zeros(size(handles.V));
 
     set(handles.slider1, 'Min', 1);
     set(handles.slider1, 'Max', size(handles.V,3));
@@ -482,12 +483,14 @@ function pushbutton8_Callback(hObject, eventdata, handles)
 
 uiwait(msgbox('Seleccione EL ARCHIVO del paciente a TERMINAR','Success','modal'));
 [filename, pathname,~] = uigetfile();
-cd;
-cd(pathname);
 
-    handles.V_seg = open(filename); %todo dentro
+if filename == 0
+    return
+else
+    Load = open([pathname filename]); %todo dentro
+    handles.V_seg = Load.V_seg;
     handles.V = handles.V_seg.vol.orig;
-    
+
     set(handles.slider1, 'Min', 1);
     set(handles.slider1, 'Max', size(handles.V,3));
     set(handles.slider1, 'SliderStep', [1/(size(handles.V,3)-1) , 1/(size(handles.V,3)-1) ]);
@@ -498,14 +501,10 @@ cd(pathname);
     handles.inicio = 1;
 
     guidata(hObject, handles);
+end
 
 
     
-
-
-
-
-
 function edit2_Callback(hObject, eventdata, handles)
 % hObject    handle to edit2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -520,9 +519,27 @@ function edit2_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
-
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in cambiar.
+function cambiar_Callback(hObject, eventdata, handles)
+% hObject    handle to cambiar (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if handles.inicio
+    
+    if get(hObject, 'Value')
+       imshow(handles.V_seg.mascara(:,:,handles.v),[]);
+    else
+        imshow(handles.V(:,:,handles.v));
+    end
+    
+end
+
+% Hint: get(hObject,'Value') returns toggle state of cambiar
