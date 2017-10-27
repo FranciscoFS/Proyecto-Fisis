@@ -17,12 +17,34 @@ while v == 0
                 'ListString',str);
 end
 
+
 lista = [ff_suma,fh_suma,tf_suma,th_suma,pf_suma,ph_suma];
 fisis_usar = lista(2s-1);
 hueso_usar = lista(2s);
 
 %1. Elegir un punto desde donde "perforar"
 clickA3DPoint(fisis_usar);
+uiwait(msgbox('Ahora se mostraran las slide. Haga click con el mouse para la siguiente. Presione una tecla para la anterior'));
+i = 1;
+f = figure;
+
+while i > 0
+imshow(X(:,:,i),[]) 
+k = waitforbuttonpress;
+if k == 0
+    i = i+1;
+    if i > size(X,3)
+        i =size(X,3);
+    end
+elseif k == 1
+    i= i-1;
+    if i < 1
+        i = 1;
+    end
+end
+end
+
+
 
 %2. Elegir una dirección y distancia
 prompt = {'Ingrese angulo con respecto a z:','Ingrese angulo con respecto a x:', 'Ingrese profundidad en mm:'};
