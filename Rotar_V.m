@@ -3,9 +3,15 @@ function [V_rotado] = Rotar_V(V_seg)
         % Hay que hacer el proceso para cada Volumen
         
         V_rotado = V_seg;
+        dxdy = V_seg.info{1,1};
+        dz = V_seg.info{2,1};
+        pace = (1/(dz/dxdy));
+        [n,m,k] = size(V_seg.femur.bones);
+        [Xx,Yy,Zz] = meshgrid(1:n,1:m,1:pace:k);
+        femur = interp3(V.femur.bones,Xx,Yy,Zz,'cubic');
+        tibia = interp3(V.femur.bones,Xx,Yy,Zz,'cubic');
+        perone = interp3(V.femur.bones,Xx,Yy,Zz,'cubic');
         
-        [n,m,~] = size(V_seg.femur.bones);
-        [Xx,Yy] = meshgrid(1:n,1:m);
         [~,~,v1] = ind2sub(size(V_seg.perone.bones),find(V_seg.perone.bones > 0));
         [~,~,v2] = ind2sub(size(V_seg.femur.bones),find(V_seg.femur.bones > 0));
         [~,~,v3] = ind2sub(size(V_seg.tibia.bones),find(V_seg.tibia.bones > 0));

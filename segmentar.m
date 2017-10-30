@@ -14,8 +14,8 @@ function [handles] = segmentar(handles,condicion)
         L_i = {};
         Vector_i = {};
         
-        Im_seg = 1- handles.V_filt(:,:,k);
-        Im =handles.V_filt(:,:,k);
+        Im_seg = 1- handles.V_seg.vol.filt(:,:,k);
+        Im =handles.V_seg.vol.filt(:,:,k);
 
         Change = 1;
 
@@ -23,9 +23,9 @@ function [handles] = segmentar(handles,condicion)
 
             %close(f1)
             f1 = figure('units', 'normalize', 'outerposition',[0.5 0 0.5 1]);
-            imshow(handles.V(:,:,k),'InitialMagnification','fit');title('Imagen de referencia');
+            imshow(handles.V_seg.vol.orig(:,:,k),'InitialMagnification','fit');title('Imagen de referencia');
             f2 = figure('units', 'normalize', 'outerposition',[0 0 0.5 1]);
-            imshow(Im, [],'InitialMagnification','fit');title(['Imagen ' num2str(k)  ' de ' num2str(size(handles.V_filt,3))]);
+            imshow(Im, [],'InitialMagnification','fit');title(['Imagen ' num2str(k)  ' de ' num2str(size(handles.V_seg.vol.filt,3))]);
             hold on
 
             for ii = 1:N
