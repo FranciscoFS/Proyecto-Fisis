@@ -1,9 +1,8 @@
 function [handles] = segmentar(handles,condicion)
     
     while condicion
-    
-    Indice = handles.Indice;
-    Valor_cluster = find(Indice ==1);
+
+    Valor_cluster = find(handles.Indice ==1);
     N  = sum(handles.Indice); % Numero de Clusters
     Words = ["Femur","Fisis Femur","Tibia","Fisis Tibia", "Perone","Fisis Perone","Rotula","Background"];
     Words= cellstr(Words(logical(handles.Indice)));
@@ -89,7 +88,9 @@ function [handles] = segmentar(handles,condicion)
             hold on
 
             for jj = 1:N
-                plot(Puntos{jj,1}, Puntos{jj,2},colores{jj},'Markersize',12);
+               % if m(j
+                    plot(Puntos{jj,1}, Puntos{jj,2},colores{jj},'Markersize',12);
+                %end
             end
             title('Outlined mask')
 
