@@ -10,7 +10,6 @@ function [handles] = segmentar(handles,condicion)
     k = handles.v;
 
         falto = 0;
-        m = ones(1,N);
         L_i = {};
         Vector_i = {};
         
@@ -30,13 +29,13 @@ function [handles] = segmentar(handles,condicion)
 
             for ii = 1:N
                     
-                    title(['Imagen ' num2str(k)  ' de ' num2str(size(handles.V_filt,3)) ': ' Words{ii}]);  
+                    title(['Imagen ' num2str(k)  ' de ' num2str(size(handles.V_seg.vol.filt,3)) ': ' Words{ii}]);  
                     if falto == 1
 
                         for jj = 1:N
-                            if m(jj)
+                          %  if m(jj)
                                 plot(Puntos{jj,1}, Puntos{jj,2},colores{jj},'Markersize',12);
-                            end
+                            %end
                         end
                         message = sprintf(['Te faltaron puntos en '  Words{ii} '?']);
                         reply = questdlg(message, 'Fisis', 'Yes', 'No','No');
@@ -53,12 +52,8 @@ function [handles] = segmentar(handles,condicion)
                         [Puntos{ii,1}, Puntos{ii,2}] = getpts();
                     end
 
-                    if size(Puntos{ii,1},1) == 1
-                        m(ii) = 0;
-                    end
-
                 L_i{ii}  = [ii*ones(1,length(Puntos{ii,1}))];
-                Vector_i{ii} = [sub2ind(size(Im_seg),uint16(Puntos{ii,2}'),uint16(Puntos{ii,1}'))];         
+                Vector_i{ii} = [sub2ind(size(Im_seg),ui nt16(Puntos{ii,2}'),uint16(Puntos{ii,1}'))];         
             end
 
             axis equal
@@ -70,11 +65,9 @@ function [handles] = segmentar(handles,condicion)
             L = [];
             Vector = [];
 
-            for kk=1:length(m)
-                if m(kk)
-                    L = [L L_i{kk}];
-                    Vector = [Vector Vector_i{kk}];
-                end
+            for kk=1:N  
+                L = [L L_i{kk}];
+                Vector = [Vector Vector_i{kk}];
             end  
 
             [mask,~] = random_walker(Im,Vector,L);
@@ -92,9 +85,9 @@ function [handles] = segmentar(handles,condicion)
             hold on
 
             for jj = 1:N
-                if m(jj)
+               % if m(jj)
                     plot(Puntos{jj,1}, Puntos{jj,2},colores{jj},'Markersize',12);
-                end
+                %end
             end
             title('Outlined mask')
 
