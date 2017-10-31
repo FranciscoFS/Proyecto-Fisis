@@ -312,6 +312,7 @@ else
     
     handles.V_seg.check = zeros(1,size(handles.V,3));
     handles.V_seg.mascara = zeros(size(handles.V));
+    handles.V_seg.filename = 
 
     set(handles.slider1, 'Min', 1);
     set(handles.slider1, 'Max', size(handles.V,3));
@@ -397,6 +398,7 @@ function Tibia_fisis_Callback(hObject, eventdata, handles)
 
 if get(hObject,'Value')
     handles.Indice(4) = 1;
+    disp(sum(handles.Indice))
 else
     handles.Indice(4) = 0;
 end

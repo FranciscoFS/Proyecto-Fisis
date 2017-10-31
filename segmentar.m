@@ -73,7 +73,7 @@ function [handles] = segmentar(handles,condicion)
                 L = [L L_i{kk}];
                 Vector = [Vector Vector_i{kk}];
             end  
-
+            
             [mask,~] = random_walker(Im,Vector,L);
 
             f3 = figure('units', 'normalize', 'outerposition',[0 0 1 1]);

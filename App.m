@@ -262,7 +262,7 @@ if handles.Prefiltrado
     uiwait(msgbox('Seleccione carpeta para guardar al paciente','Guardar','modal'));
     folder_save = uigetdir();
     V_seg = handles.V_seg;
-    save([folder_save '/' 'Rodilla_'  handles.filename],'V_seg')
+    save([folder_save '/' 'Rodilla_'  handles.V_seg.filename],'V_seg')
     guidata(hObject, handles);
 else
     msgbox('No hay nada para guardar aún')
