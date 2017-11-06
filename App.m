@@ -56,6 +56,7 @@ function App_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 handles.inicio = 0;
 handles.Indice = [0 0 0 0 0 0 0 1];
+set(handles.Empezar, 'Visible', 'off');
 % Update handles structure
 guidata(hObject, handles);
 
@@ -76,6 +77,7 @@ varargout{1} = handles.output;
 
 % --- Executes on button press in Empezar.
 function Empezar_Callback(hObject, ~, handles)
+
 % hObject    handle to Empezar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -180,7 +182,10 @@ handles.V_seg.tibia.bones = zeros(size(handles.V_filt));
 handles.V_seg.rotula = zeros(size(handles.V_filt));
 handles.Prefiltrado = 1;
 
+set(handles.Empezar, 'Visible', 'off');
+
 guidata(hObject, handles);
+
 
 
 
@@ -191,7 +196,7 @@ if handles.Prefiltrado
     
     condicion = 1;
     if handles.V_seg.check(handles.v)
-         message = sprintf('¿Ya realizaste esta Slide, seguro que quires hacerla denuevo?');
+         message = sprintf('ï¿½Ya realizaste esta Slide, seguro que quires hacerla denuevo?');
          reply = questdlg(message,'Chequeo','Si','No','No');
        
          if reply == 'No'
@@ -225,7 +230,7 @@ if handles.inicio
     if get(handles.cambiar,'Value')
         imshow(handles.V_seg.mascara(:,:,handles.v),[]);
     else
-        imshow(handles.V_seg.vol.orig(:,:,handles.v));
+        imshow(handles.V(:,:,handles.v));
     end
 
     if handles.V_seg.check(handles.v)
@@ -321,7 +326,9 @@ else
     handles.Prefiltrado = 0;
     handles.v = 10;
     handles.inicio = 1;
-
+    
+    
+    set(handles.Empezar, 'Visible', 'on');
     guidata(hObject, handles);
 end
 
@@ -397,7 +404,6 @@ function Tibia_fisis_Callback(hObject, eventdata, handles)
 
 if get(hObject,'Value')
     handles.Indice(4) = 1;
-    disp(sum(handles.Indice))
 else
     handles.Indice(4) = 0;
 end

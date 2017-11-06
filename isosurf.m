@@ -22,8 +22,8 @@ end
 %AspectRatio
 
 if exist('info') == 1
-    dxdy = info.PixelSpacing{1};
-    dz = info.SliceThickness;
+    dxdy = info{1};
+    dz = info{2};
 else
     dxdy = inputdlg('Ingrese dxdy');
     dxdy = str2double(dxdy);

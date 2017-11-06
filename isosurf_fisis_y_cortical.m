@@ -1,23 +1,4 @@
 function isosurf_fisis_y_cortical(fisis,cortical,info)
-
-%Cargar fisis promedio
-message = sprintf('De donde cargar la fisis?');
-reply = questdlg(message,'Fisis', 'Workspace', 'Desde un archivo', 'No');
-
-if strcmpi(reply, 'Desde un archivo')
-        [filename, pathname] = uigetfile({'*.mat';'*.m';'*.slx';'*.*'},'Seleccione las fisis a analizar');
-        load(filename)
-end
-
-%Cargar cortical promedio
-message = sprintf('De donde cargar la cortical?');
-reply = questdlg(message,'Cortical', 'Workspace', 'Desde un archivo', 'No');
-
-if strcmpi(reply, 'Desde un archivo')
-        [filename, pathname] = uigetfile({'*.mat';'*.m';'*.slx';'*.*'},'Seleccione las fisis a analizar');
-        load(filename)
-end
-
 %Proporciones RM
 if exist('info') == 1
     dxdy = info{1,1}
@@ -27,11 +8,9 @@ else
     dxdy = str2double(dxdy);
     dz = inputdlg('Ingrese dz');
     dz = str2double(dz);
-end   
+end
+
 %Patch fisis
-%%
-%Ej  dx=dy=0.293 y Dz =3.5;
-%Ej dx = 0.4688 y dz = 3
 
 pace = (1/(dz/dxdy));
 [m,n,k] = size(fisis);
@@ -43,7 +22,7 @@ Y = smooth3(Y,'box',Box_size);
 
 %Patch Cortical
 W =interp3(cortical,Xq,Yq,Zq,'cubic');
-W = smooth3(W>0,'box',Box_size);
+W = smooth3(W,'box',Box_size);
 
 
 %Vista y Luz
