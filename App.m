@@ -225,7 +225,7 @@ if handles.inicio
     if get(handles.cambiar,'Value')
         imshow(handles.V_seg.mascara(:,:,handles.v),[]);
     else
-        imshow(handles.V_seg.vol.orig(:,:,handles.v));
+        imshow(handles.V(:,:,handles.v));
     end
 
     if handles.V_seg.check(handles.v)
@@ -397,7 +397,6 @@ function Tibia_fisis_Callback(hObject, eventdata, handles)
 
 if get(hObject,'Value')
     handles.Indice(4) = 1;
-    disp(sum(handles.Indice))
 else
     handles.Indice(4) = 0;
 end
