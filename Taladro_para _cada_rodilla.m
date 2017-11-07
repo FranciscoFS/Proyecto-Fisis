@@ -1,6 +1,6 @@
 %Asumiendo que v.rodilla es la suma total de rodilla (femur, perone, tibia con sus respectivas fisis).
 
-%0 Seleccionar qué hueso será el que se analizará
+%0 Seleccionar quï¿½ hueso serï¿½ el que se analizarï¿½
 clear all
 close all
 uiwait(msgbox('Seleccione la Rodilla a anlizar'));
@@ -59,7 +59,7 @@ end
 end
 
 
-%2. Elegir una dirección y distancia (por ahora solo "derecho hacia adentro")
+%2. Elegir una direcciï¿½n y distancia (por ahora solo "derecho hacia adentro")
 bien = 0
 while bien == 0;
 prompt = {'Ingrese angulo con respecto a z:','Ingrese angulo con respecto a x:', 'Ingrese profundidad en mm:'};
@@ -84,11 +84,12 @@ if (mm - fix(mm)) >= 0.5
 else
     mm = floor(mm);
 end
+
 %Entonces mm es cuantas slice perforar
 
 %3. Elegir el % de datos a los que se le quiere "no achuntar" (Esto es para
 %taladro de la suma
-% prompt = {'¿Sobre que % de los datos quiere trabajar?'};
+% prompt = {'ï¿½Sobre que % de los datos quiere trabajar?'};
 % dlg_title = 'Input';
 % num_lines = 1;
 % defaultans = {100};
