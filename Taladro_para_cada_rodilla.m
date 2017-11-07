@@ -1,4 +1,10 @@
+<<<<<<< HEAD:Taladro_para _cada_rodilla.m
+%Asumiendo que v.rodilla es la suma total de rodilla (femur, perone, tibia con sus respectivas fisis).
+
+%0 Seleccionar quï¿½ hueso serï¿½ el que se analizarï¿½
+=======
 %0 Seleccionar qué hueso será el que se analizará
+>>>>>>> f1c1213c016b63a9b7f277b5733df88a850b6f44:Taladro_para_cada_rodilla.m
 clear all
 close all
 uiwait(msgbox('Seleccione la Rodilla a anlizar'));
@@ -57,11 +63,20 @@ end
 
 end
 
+<<<<<<< HEAD:Taladro_para _cada_rodilla.m
+
+%2. Elegir una direcciï¿½n y distancia (por ahora solo "derecho hacia adentro")
+=======
 %%
 %2. Elegir una dirección y distancia (por ahora solo "derecho hacia adentro")
 slice = V_seg.info{2,1};
 pixel = V_seg.info{1,1};
+<<<<<<< HEAD
 bien = 0;
+=======
+>>>>>>> f1c1213c016b63a9b7f277b5733df88a850b6f44:Taladro_para_cada_rodilla.m
+bien = 0
+>>>>>>> 912721256cc17734b9773aa5876c1b8aacd548f1
 
 while bien == 0
 prompt = {'Ingrese angulo con respecto a z:','Ingrese angulo con respecto a x:', 'Ingrese profundidad en mm:'};
@@ -87,6 +102,7 @@ else
     mm = floor(mm);
 end
 
+<<<<<<< HEAD
 if (coordenada(1) - fix(coordenada(1))) >= 0.5
     coordenada(1) = ceil(coordenada(1));
 else
@@ -98,12 +114,14 @@ if (coordenada(2) - fix(coordenada(2))) >= 0.5
 else
     coordenada(2) = floor(coordenada(2));
 end
+=======
+>>>>>>> 912721256cc17734b9773aa5876c1b8aacd548f1
 %Entonces mm es cuantas slice perforar
 
 
 %3. Elegir el % de datos a los que se le quiere "no achuntar" (Esto es para
 %taladro de la suma
-% prompt = {'¿Sobre que % de los datos quiere trabajar?'};
+% prompt = {'ï¿½Sobre que % de los datos quiere trabajar?'};
 % dlg_title = 'Input';
 % num_lines = 1;
 % defaultans = {100};

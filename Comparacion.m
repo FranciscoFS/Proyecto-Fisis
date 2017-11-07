@@ -1,4 +1,4 @@
-% Scrip para realizar comparación entre ayudantes para una Rodilla X
+% Scrip para realizar comparaciï¿½n entre ayudantes para una Rodilla X
 
 N = 2; %Numero de Participantes
 Pacientes = struct();
@@ -16,7 +16,7 @@ for kk=1:numel(Pacientes)
     
     for ii = 1:numel(Pacientes)
         
-        Matriz(kk,ii) = comparar(Pacientes(kk).Rodillas.V_seg,Pacientes(ii).Rodillas.V_seg);
+        Matriz(kk,ii) = comparar(Pacientes(kk).Rodillas.V_seg,Pacientes(ii).Rodillas.V_seg)*100;
         
     end
     
