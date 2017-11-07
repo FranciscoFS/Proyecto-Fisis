@@ -107,25 +107,25 @@ function [handles] = segmentar(handles,condicion)
                 
                 for kk=1:length(Indice)
   
-                    if  Indice(kk)
+                    if  Indice(kk) && kk == 1
                         handles.V_seg.femur.bones(:,:,k) = mask==1;
                         
-                    elseif Indice(kk)
+                    elseif Indice(kk) && kk == 2
                         handles.V_seg.femur.fisis(:,:,k) = mask==2;
                     
-                    elseif Indice(kk)
+                    elseif Indice(kk) && kk == 3
                         handles.V_seg.tibia.bones(:,:,k) = mask==3;
                     
-                    elseif Indice(kk)
+                    elseif Indice(kk) && kk == 4
                         handles.V_seg.tibia.fisis(:,:,k) = mask==4;
                     
-                    elseif Indice(kk)           
+                    elseif Indice(kk) && kk == 5           
                         handles.V_seg.perone.bones(:,:,k) = mask==5;
         
-                    elseif Indice(kk)
+                    elseif Indice(kk) && kk == 6
                         handles.V_seg.perone.fisis(:,:,k) = mask==6;
                       
-                    elseif Indice(kk)
+                    elseif Indice(kk) && kk == 7
                         handles.V_seg.rotula(:,:,k) = mask==7;
                     end
                     

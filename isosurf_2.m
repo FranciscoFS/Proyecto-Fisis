@@ -42,7 +42,7 @@ end
 pace = (1/(dz/dxdy));
 [m,n,k] = size(fisis);
 [Xq,Yq,Zq] = meshgrid(1:m,1:n,1.5:pace:k);
-Box_size = [9 9 9];
+Box_size = [3 3 3];
 
 fprintf('Working in Fisis ..... \n');
 
@@ -62,8 +62,8 @@ W = smooth3(W,'box',Box_size);
 
 close all
 
-p1= patch(isosurface(Y , 0.2),'FaceColor','green','EdgeColor','none','FaceAlpha','0.95');
-p2= patch(isosurface(W , 0.2),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+p1= patch(isosurface(Y),'FaceColor','green','EdgeColor','none','FaceAlpha','0.95');
+p2= patch(isosurface(W),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
 reducepatch(p2,0.01)
 
 view(3)
