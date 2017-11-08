@@ -1,0 +1,70 @@
+%%
+clear all
+
+folder = uigetdir();
+DIM = dir(folder);
+p = genpath(folder);
+addpath(p);
+
+
+Nombre_carpeta = {};
+PatientName = {};
+PatientID = {};
+MedicalAlerts = {};
+Numero = [];
+PixelSpacing = {};
+SliceThickness = [];
+PatientBirthDate = {};
+PatientWeight = [];
+PatientAge = {};
+PatientSex = {};
+InstanceCreationDate = {};
+
+for k=1:numel(DIM)
+    if DIM(k).isdir && length(DIM(k).name) > 5
+        MRIS = dir([DIM(k).folder '/' DIM(k).name '/*.dcm']);
+        fprintf('Saving..... %s \n', DIM(k).name);
+        
+        info=dicominfo(MRIS(1).name);
+        
+        Nombre_carpeta{k} = DIM(k).name;
+        PatientName{k} = info.PatientName;
+        PatientID{k} = info.PatientID;
+        %MedicalAlerts{k} = info.MedicalAlerts;
+        Numero(k) = k;
+        PixelSpacing{k} = info.PixelSpacing;
+        SliceThickness(k) = info.SliceThickness;
+        PatientBirthDate{k} = info.PatientBirthDate;
+        PatientWeight(k) = info.PatientWeight;
+        PatientAge{k} = info.PatientAge;
+        PatientSex{k} = info.PatientSex;
+        InstanceCreationDate{k} = info.InstanceCreationDate;
+        
+        fprintf('%s ..... Saved \n', DIM(k).name);
+    else
+        continue
+    end
+    
+    disp(['END' ' ' num2str(k) '/' num2str(numel(DIM))])
+end
+%%
+Nombre_carpeta = Nombre_carpeta'
+PatientName = PatientName'
+PatientID = PatientID'
+MedicalAlerts = MedicalAlerts'
+Numero = Numero'
+PixelSpacing = PixelSpacing'
+SliceThickness = SliceThickness'
+PatientBirthDate = PatientBirthDate'
+PatientWeight = PatientWeight'
+PatientAge = PatientAge'
+PatientSex = PatientSex'
+InstanceCreationDate = InstanceCreationDate'
+
+%%
+
+T = table(PatientName,PatientID,MedicalAlerts,Numero,PixelSpacing,SliceThickness,PatientBirthDate,PatientWeight,PatientAge,PatientSex,InstanceCreationDate,...
+    'RowNames',Nombre_carpeta);
+
+%%
+writetable(T,'Rodillas.xls')

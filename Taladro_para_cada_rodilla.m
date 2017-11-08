@@ -42,7 +42,7 @@ if elegida == 1
     uiwait(msgbox('Ponga UN punto en el borde del hueso donde desea hacer la perforacion.'));
     [x,y]= getpts();
     coordenada = [x,y,i];
-    elegida = 0;
+    close all
 elseif (k == 0 && elegida == 0)
     i = i+1;
     if i > size(X,3)
@@ -69,12 +69,12 @@ dlg_title = 'Input';
 num_lines = 1;
 defaultans = {'90','90','10'};
 answer1 = inputdlg(prompt,dlg_title,num_lines,defaultans);
-answer1 = str2double(answer1)
+answer1 = str2double(answer1);
 if (answer1(3)/slice) > size(V_seg.vol.orig,3)
-    bien = 0
+    bien = 0;
     uiwait(msgbox('Las medidas sobrepasan las de la rodilla'));
 else
-    bien = 1
+    bien = 1;
 end
 
 end
@@ -115,22 +115,18 @@ end
 %%
 %4. funcion perforar
 
-dist_a_fisis = Perforar(answer1(1), answer1(2), mm, hueso_usar, fisis_usar, V_seg, coordenada);
+dist_a_fisis = Perforar(answer1(1), answer1(2), mm, hueso_usar, fisis_usar, V_seg, coordenada)
 
 %%
 %5. Graficar
-str = {"Arriba","Abajo","Izquierda","Derecha"};
-v = 0;
-while v == 0
-[s,v] = listdlg('PromptString','Seleccione la distancia en que direccion hacia la fisis',...
-                'SelectionMode','single',...
-                'ListSize', [300,300],...
-                'ListString',str);
-end
-
-dist_a_fisis.(s)
-
-
+% str = {"Arriba","Abajo","Izquierda","Derecha"};
+% v = 0;
+% while v == 0
+% [s,v] = listdlg('PromptString','Seleccione la distancia en que direccion hacia la fisis',...
+%                 'SelectionMode','single',...
+%                 'ListSize', [300,300],...
+%                 'ListString',str);
+% end
 
 x = 0:mm;
 y = dist_a_fisis.arriba;

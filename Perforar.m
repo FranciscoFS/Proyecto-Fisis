@@ -11,7 +11,7 @@ pixel = info{1,1};
     for a= coordenada(3):(coordenada(3)+ mm)
         fila_baja = 0;
         encontrado = 0;
-        im = f(:,:,a);
+        im = f(:,:,a)
         c = coordenada(2);
         
         while (encontrado == 0 && c > 0)
@@ -19,7 +19,7 @@ pixel = info{1,1};
                 fila_baja = c;
                 encontrado = 1;
             end
-            c = c-1;
+            c = c-1
         end        
         if encontrado == 1
             distancias_a_fisis.arriba(a-coordenada(3)+1) = abs(coordenada(2)-fila_baja)*pixel;
