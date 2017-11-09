@@ -2,9 +2,6 @@ clear all
 
 folder = uigetdir();
 DIM = dir(folder);
-%p = genpath(folder);
-%addpath(p);
-
 
 Nombre_carpeta = {};
 PatientID = {};
@@ -22,13 +19,12 @@ InstitutionName = {};
 StudyDescription = {};
 
 for k=1:numel(DIM)
-    if DIM(k).isdir && length(DIM(k).name) > 5
+    
+    if DIM(k).isdir && not(isempty(str2num(DIM(k).name)))
         MRIS = dir([DIM(k).folder '/' DIM(k).name '/*.dcm']);
-        cd;
-        cd(MRIS(1).folder);
         fprintf('Saving..... %s \n', DIM(k).name);
         
-        info=dicominfo(MRIS(1).name);
+        info=dicominfo([MRIS(1).folder '\' MRIS(1).name]);
         
         Nombre_carpeta{k-2} = DIM(k).name;
         FamilyName{k-2} = info.PatientName.FamilyName;
@@ -44,9 +40,14 @@ for k=1:numel(DIM)
         InstanceCreationDate{k-2} = info.InstanceCreationDate;
         InstitutionName{k-2} = info.InstitutionName;
         StudyDescription{k-2} = info.StudyDescription;
-        
         fprintf('%s ..... Saved \n', DIM(k).name);
         info = 0;
+        
+        oldname = fullfile(MRIS(1).folder);
+        newname = [fullfile(folder) '\' num2str(k-2) ' x'];
+        movefile(oldname,newname);
+        
+        
     else
         continue
     end
@@ -73,6 +74,4 @@ StudyDescription = StudyDescription';
 T = table(Numero,Nombre_carpeta,GivenName,FamilyName,PatientID,PixelSpacing,SliceThickness,PatientBirthDate,PatientWeight,PatientAge,PatientSex,InstanceCreationDate, InstitutionName, StudyDescription);
 
 %%
-cd;
-cd(folder);
 writetable(T,'Rodillas.xls')
