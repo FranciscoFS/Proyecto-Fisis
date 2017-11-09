@@ -9,7 +9,6 @@ DIM = dir(folder);
 
 Nombre_carpeta = {};
 PatientID = {};
-MedicalAlerts = {};
 Numero = [];
 PixelSpacing = {};
 SliceThickness = [];
@@ -20,6 +19,8 @@ PatientSex = {};
 InstanceCreationDate = {};
 FamilyName = {};
 GivenName = {};
+InstitutionName = {};
+StudyDescription = {};
 
 for k=1:numel(DIM)
     if DIM(k).isdir && length(DIM(k).name) > 5
@@ -42,6 +43,8 @@ for k=1:numel(DIM)
         PatientAge{k-2} = info.PatientAge;
         PatientSex{k-2} = info.PatientSex;
         InstanceCreationDate{k-2} = info.InstanceCreationDate;
+        InstitutionName{k-2} = info.InstitutionName;
+        StudyDescription{k-2} = info.StudyDescription;
         
         fprintf('%s ..... Saved \n', DIM(k).name);
         info = 0;
@@ -64,9 +67,13 @@ PatientWeight = PatientWeight';
 PatientAge = PatientAge';
 PatientSex = PatientSex';
 InstanceCreationDate = InstanceCreationDate';
+InstitutionName = InstitutionName';
+StudyDescription = StudyDescription';
 
 %%
-T = table(Numero,GivenName,FamilyName,PatientID,Nombre_carpeta,PixelSpacing,SliceThickness,PatientBirthDate,PatientWeight,PatientAge,PatientSex,InstanceCreationDate);
+T = table(Numero,Nombre_carpeta,GivenName,FamilyName,PatientID,PixelSpacing,SliceThickness,PatientBirthDate,PatientWeight,PatientAge,PatientSex,InstanceCreationDate, InstitutionName, StudyDescription);
 
 %%
+cd;
+cd(folder);
 writetable(T,'Rodillas.xls')
