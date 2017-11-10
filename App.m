@@ -117,7 +117,7 @@ for m=1:.5:30
         for ii=1:size(handles.V,3)
             Im = handles.V(:,:,ii);
             Im = Im + m.*(imtophat(Im,se) - imbothat(Im,se));
-            handles.V_preFilt(:,:,ii) =  medfilt2(adapthisteq(Im),[7 7]);
+            handles.V_preFilt(:,:,ii) =  medfilt2(adapthisteq(Im),[5 5]);
         end
         
         break
@@ -128,6 +128,11 @@ for m=1:.5:30
 end
 
 waitbar(2/3)
+
+f1 = figure('units', 'normalize', 'outerposition',[0 0 1 1]);
+plot_MRI(handles.V_preFilt); title('Kmeans');
+uiwait(msgbox({'caca'},'Informacion','modal'));
+close(f1)
 
 % Kmeans
 rng(1)
@@ -298,7 +303,9 @@ else
             end
         end
     end
-
+    
+    sigma = 0.5;
+    handles.V = imgaussfilt3(handles.V,sigma);
     %info
     n = round(p/2);
     infor = dicominfo([DIM(n).folder '/' DIM(n).name]);

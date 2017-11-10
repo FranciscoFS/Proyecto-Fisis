@@ -34,21 +34,21 @@ coordenada = [];
 btn1 = uicontrol('Style', 'pushbutton', 'String', 'Esta',...
         'Position', [20 20 50 20],...
         'Callback', 'elegida = 1');
-while (i > 0 && elegida == 0)
+while (i > 0 & elegida == 0)
 imshow(X(:,:,i),[]) 
-k = waitforbuttonpress;
+k = waitforbuttonpress
 
 if elegida == 1
     uiwait(msgbox('Ponga UN punto en el borde del hueso donde desea hacer la perforacion.'));
     [x,y]= getpts();
-    coordenada = [x,y,i];
-    close all
-elseif (k == 0 && elegida == 0)
+    coordenada = [x,y,i]
+    elegida = 0
+elseif (k == 0 & elegida == 0)
     i = i+1;
     if i > size(X,3)
         i =size(X,3);
     end
-elseif (k == 1 && elegida == 0)
+elseif (k == 1 & elegida == 0)
     i= i-1;
     if i < 1
         i = 1;
@@ -63,18 +63,18 @@ slice = V_seg.info{2,1};
 pixel = V_seg.info{1,1};
 bien = 0;
 
-while bien == 0
+while bien == 0;
 prompt = {'Ingrese angulo con respecto a z:','Ingrese angulo con respecto a x:', 'Ingrese profundidad en mm:'};
 dlg_title = 'Input';
 num_lines = 1;
 defaultans = {'90','90','10'};
 answer1 = inputdlg(prompt,dlg_title,num_lines,defaultans);
-answer1 = str2double(answer1);
+answer1 = str2double(answer1)
 if (answer1(3)/slice) > size(V_seg.vol.orig,3)
-    bien = 0;
+    bien = 0
     uiwait(msgbox('Las medidas sobrepasan las de la rodilla'));
 else
-    bien = 1;
+    bien = 1
 end
 
 end
@@ -88,16 +88,11 @@ else
 end
 
 if (coordenada(1) - fix(coordenada(1))) >= 0.5
-    coordenada(1) = ceil(coordenada(1));
+    mm = ceil(mm);
 else
-    coordenada(1) = floor(coordenada(1));
+    mm = floor(mm);
 end
 
-if (coordenada(2) - fix(coordenada(2))) >= 0.5
-    coordenada(2) = ceil(coordenada(2));
-else
-    coordenada(2) = floor(coordenada(2));
-end
 %Entonces mm es cuantas slice perforar
 
 
@@ -115,32 +110,24 @@ end
 %%
 %4. funcion perforar
 
-dist_a_fisis = Perforar(answer1(1), answer1(2), mm, hueso_usar, fisis_usar, V_seg, coordenada)
+dist_a_fisis = Perforar(answer1(1), answer1(2), mm, hueso_usar, fisis_usar, V_seg, coordenada);
 
 %%
 %5. Graficar
-% str = {"Arriba","Abajo","Izquierda","Derecha"};
-% v = 0;
-% while v == 0
-% [s,v] = listdlg('PromptString','Seleccione la distancia en que direccion hacia la fisis',...
-%                 'SelectionMode','single',...
-%                 'ListSize', [300,300],...
-%                 'ListString',str);
-% end
+str = {"Arriba","Abajo","Izquierda","Derecha"};
+v = 0;
+while v == 0
+[s,v] = listdlg('PromptString','Seleccione la distancia en que direccion hacia la fisis',...
+                'SelectionMode','single',...
+                'ListSize', [300,300],...
+                'ListString',str);
+end
 
-x = 0:mm;
-y = dist_a_fisis.arriba;
-subplot(2,2,1)
-plot(x,y)
+dist_a_fisis.(s)
 
-y = dist_a_fisis.abajo;
-subplot(2,2,2)
-plot(x,y)
 
-y = dist_a_fisis.der;
-subplot(2,2,3)
-plot(x,y)
+%x = size(hoyo);
+x = 0:answer1(3);
+y = 0:0.1:dist_a_fisis.(s);
 
-y = dist_a_fisis.izq;
-subplot(2,2,4)
 plot(x,y)
