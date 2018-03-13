@@ -1,14 +1,28 @@
 % Scrip para realizar comparaci�n entre ayudantes para una Rodilla X
 
-N = 2; %Numero de Participantes
+N = 1; %Numero de Participantes
 Pacientes = struct();
+Datos = [];
 
 for k = 1:N
     
-    [FileName,PathName,~] = uigetfile();
-    Pacientes(k).Rodillas = load([PathName FileName]);
+    [FileName,PathName,FilterIndex] = uigetfile('MultiSelect','on');
+    
+    for i = 1:length(FileName)
+        
+        Pacientes(k).Rodilla(i) = load([PathName FileName{i}]);
+        
+    end
+    
+    Datos(:,k) = Med(Pacientes(k).Rodilla)';
     
 end
+
+Tabla = array2table(Datos);
+Tabla.Properties.VariableNames = {'Observador1','Observador2','Observador3','Observador4','Observador5'};
+
+
+%%
 
 Matriz_comparacion = [];
 

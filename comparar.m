@@ -1,4 +1,6 @@
 function [Diff] = comparar(V_seg1,V_seg2)
+
+    %Diferencias entre los volumenes
     
     Diferencias = zeros(1,7);
     
