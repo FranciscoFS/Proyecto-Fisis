@@ -22,7 +22,7 @@ function varargout = App(varargin)
 
 % Edit the above text to modify the response to help App
 
-% Last Modified by GUIDE v2.5 17-Oct-2017 16:19:44
+% Last Modified by GUIDE v2.5 12-Mar-2018 22:30:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -466,6 +466,7 @@ function Rotula_Callback(hObject, eventdata, handles)
 % hObject    handle to Rotula (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 if get(hObject,'Value')
     handles.Indice(7) = 1;
 else
@@ -473,20 +474,6 @@ else
 end
 guidata(hObject,handles)
 % Hint: get(hObject,'Value') returns toggle state of Rotula
-
-
-% --- Executes on button press in Ver_3D.
-function Ver_3D_Callback(hObject, eventdata, handles)
-% hObject    handle to Ver_3D (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-if handles.Prefiltrado
-    isosurf_todos(handles.V_seg)
-else
-    msgbox('Aun no hay nada que modelar, usar EMPEZAR y luego segmentar algo')
-end
-
 
 % --- Executes on button press in pushbutton8.
 function pushbutton8_Callback(hObject, eventdata, handles)
@@ -557,3 +544,11 @@ if handles.inicio
 end
 
 % Hint: get(hObject,'Value') returns toggle state of cambiar
+
+
+% --- Executes on button press in pushbutton9.
+function pushbutton9_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+isosurf_2(handles.V_seg.femur.fisis,handles.V_seg.femur.bones,handles.V_seg.info)
