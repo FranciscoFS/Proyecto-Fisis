@@ -129,10 +129,10 @@ end
 
 waitbar(2/3)
 
-f1 = figure('units', 'normalize', 'outerposition',[0 0 1 1]);
-plot_MRI(handles.V_preFilt); title('Kmeans');
-uiwait(msgbox({'caca'},'Informacion','modal'));
-close(f1)
+%f1 = figure('units', 'normalize', 'outerposition',[0 0 1 1]);
+%plot_MRI(handles.V_preFilt); title('Kmeans');
+%uiwait(msgbox({'caca'},'Informacion','modal'));
+%close(f1)
 
 % Kmeans
 rng(1)
@@ -162,9 +162,9 @@ end
 % Aplicar FiltroG
 handles.V_filt = zeros(size(handles.V));
 
-alfa = 2;
+alfa = 1.5;
 beta = 1.2;
-
+    
 for k=1:size(handles.V,3)
 	handles.V_filt(:,:,k) = filtro_gabriel(handles.V_preFilt(:,:,k), not(Maskf(:,:,k)),alfa,beta);
 end
