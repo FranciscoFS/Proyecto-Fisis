@@ -4,8 +4,7 @@ close all
 uiwait(msgbox('Seleccione la Rodilla a anlizar'));
 
 [filename, pathname, filterindex] = uigetfile();
-cd;
-cd(pathname);
+addpath(pathname)
 load(filename)
 
 fisis_usar = V_seg.femur.fisis;
@@ -23,14 +22,22 @@ btn1 = uicontrol('Style', 'pushbutton', 'String', 'Esta',...
         'Position', [20 20 50 20],...
         'Callback', 'elegida = 1');
 while (i > 0 && elegida == 0)
-imshow(V(:,:,i)) 
+i
+%imshow(V(:,:,i),[])
+imshow(V_seg.femur.bones(:,:,i),[])
+
 k = waitforbuttonpress;
 
 if elegida == 1
+    i= i-1;
+    if i < 1
+        i = 1;
+    end
+    imshow(V(:,:,i),[]) 
     uiwait(msgbox('Ponga UN punto en el borde del hueso donde desea hacer la perforacion.'));
     [x,y]= getpts();
     coordenada = [y,x,i];
-    close all
+    elegida = 1;
 elseif (k == 0 && elegida == 0)
     i = i+1;
     if i > size(V,3)
@@ -41,22 +48,23 @@ elseif (k == 1 && elegida == 0)
     if i < 1
         i = 1;
     end
-end
 
 end
 
+end
+close all
 coordenada(1) = Aproximar(coordenada(1));
 coordenada(2) = Aproximar(coordenada(2));
 
 %%
 %2. Elegir una dirección y distancia
-
+%coordenada = coord_3D
 slice = V_seg.info{2,1};
 pixel = V_seg.info{1,1};
 bien = 0;
 
 while bien == 0
-prompt = {'Ingrese angulo con respecto a z:','Ingrese angulo con respecto a x:', 'Ingrese profundidad en mm:', 'Ingrese el diametro de la perforacion'};
+prompt = {'Ingrese angulo con respecto a x:','Ingrese angulo con respecto a z:', 'Ingrese profundidad [mm]:', 'Ingrese el diametro de la perforacion [mm]:'};
 dlg_title = 'Input';
 num_lines = 1;
 defaultans = {'0','0','30','2'};
@@ -87,7 +95,7 @@ end
 % fisis_usar < answer2;
 
 
-%% Crear Cilindro
+%% Crear Linea
 %[X,Y,Z] = cylinder(r,lados);
 
 dz = V_seg.info{2,1};
@@ -95,64 +103,97 @@ dx = V_seg.info{1,1};
 
 a1 = answer1(1);
 a2 = answer1(2);
-
 mm = answer1(3);
 
-%traslacion
-d1 = cos(a2)*mm;
-tras = sin(a1)*d1;
-pixeles_x = tras/dx;
+%profundidad
+prof = cosd((a2))*mm;
+pixeles_z = prof/dz;
 
 %elevacion
-elevacion = sin(a2)*mm;
+elevacion = sind((a2))*mm;
 pixeles_y = elevacion/dx;
 
-%profundidad
-prof = cos(a1)*d1;
-pixeles_z = prof/dz;
+%traslacion
+tras = tand((a1))*prof;
+pixeles_x = tras/dx;
+
 
 P1 = coordenada;
 P2 = [P1(1)+pixeles_x, P1(2) + pixeles_y, P1(3) + pixeles_z];
+P2 = Aproximar(P2);
 
 [X Y Z] = bresenham_line3d(P1, P2);
 
-radio = answer1(4);
-radio_pix = radio/dx;
+% Cilindro
+radio = answer1(4)/2;
+radio_pix = Aproximar(radio/dx);
 
 contador = 0;
 
 total_de_1s = sum(fisis_usar(:) == 1);
 
+
 f = figure;
 hold on
+
+fu= smooth3(fisis_usar);
+hu = smooth3(hueso_usar);
+
+p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
+p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+reducepatch(p2,0.01)
+pixeles_ya_sumados = zeros(size(fisis_usar));
+ax = gca;
+c = ax.DataAspectRatio;
+ax.DataAspectRatio= [dz,dz,dx];
+
 
 for i = 1:size(Z,2)
     im = fisis_usar(:,:,Z(i));
 
-    x = X(i);
-    y = Y(i);
-        
+    x = Aproximar(X(i));
+    y = Aproximar(Y(i));
+   
     p = x - radio_pix : x + radio_pix;
     q = y - radio_pix : y + radio_pix;
-    
-    p = Aproximar(p);
-    q = Aproximar(q);
-    
+
     for j = 1:size(p,2)
     for t = 1:size(p,2)
     if (x-p(j)).^2 + (y-q(t)).^2 <= radio_pix.^2
-        plot3(p(j),q(t),Z(i),'s','markerface','b')
-        if im(p(j),q(t)) == 1  
-            contador = contador + 1;
-        end        
+        if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
+            plot3(q(t),p(j),Z(i),'s','markerface','b','MarkerSize', 10)
+            pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
+            if (im(p(j),q(t)) == 1)
+                contador = contador + 1;
+            end 
+        end
+               
     end 
     end
     end
-
 end
 
+view(3)
+axis tight
+l = camlight('headlight');
+lighting gouraud
+material dull
+title('Fisis')
 
-isosurface(fisis_usar)
+porc = (contador/total_de_1s)*100;
+uiwait(msgbox({'Se ha perforado un' num2str(porc) '% de la fisis'}));
+
+% while true
+% camlight(l,'headlight')
+% pause(0.05);
+% end
+
+
+
+%%
+
 plot3(X,Y,Z,'s','markerface','b');
+
+
 
 

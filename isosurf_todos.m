@@ -4,8 +4,8 @@ info = V.info;
 
 %Proporciones RM
 if exist('info')
-    dxdy = info{1,1};
-    dz = info{2,1};
+    dxdy = info{1};
+    dz = info{2};
 else
     dxdy = inputdlg('Ingrese dxdy');
     dxdy = str2double(dxdy);
@@ -14,9 +14,9 @@ else
 end   
 
 pace = (1/(dz/dxdy));
-[m,n,k] = size(V.femur.fisis);
+[m,n,k] = size(fisis);
 [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
-Box_size = [3 3 3];
+Box_size = 3;
 
 %Patch femur fisis
 ff =interp3(V.femur.fisis,Xq,Yq,Zq,'cubic');

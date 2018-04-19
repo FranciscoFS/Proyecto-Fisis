@@ -117,7 +117,7 @@ for i=1:size(rodillas,1)
     rodillas{i,5} = padarray(rodillas{i,5},[d1 d1 d2],0,'post');
     rodillas{i,6} = padarray(rodillas{i,6},[d1 d1 d2],0,'post');
     rodillas{i,7} = padarray(rodillas{i,7},[d1 d1 d2],0,'post');
-
+    
 end
 %% 3 GIRARODILLAS (a partir de imagen central y eje mecanico)
 
