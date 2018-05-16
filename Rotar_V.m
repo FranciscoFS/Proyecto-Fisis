@@ -8,9 +8,9 @@ function [V_rotado] = Rotar_V(V_seg)
         pace = (1/(dz/dxdy));
         [n,m,k] = size(V_seg.femur.bones);
         [Xx,Yy,Zz] = meshgrid(1:n,1:m,1:pace:k);
-        femur = interp3(V.femur.bones,Xx,Yy,Zz,'cubic');
-        tibia = interp3(V.femur.bones,Xx,Yy,Zz,'cubic');
-        perone = interp3(V.femur.bones,Xx,Yy,Zz,'cubic');
+        femur = interp3(V_seg.femur.bones,Xx,Yy,Zz,'cubic');
+        tibia = interp3(V_seg.femur.bones,Xx,Yy,Zz,'cubic');
+        perone = interp3(V_seg.femur.bones,Xx,Yy,Zz,'cubic');
         
         [~,~,v1] = ind2sub(size(V_seg.perone.bones),find(V_seg.perone.bones > 0));
         [~,~,v2] = ind2sub(size(V_seg.femur.bones),find(V_seg.femur.bones > 0));
