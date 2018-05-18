@@ -2,7 +2,7 @@ function V_seg = Rotar_3D(V_seg)
 
 tam = size(V_seg.femur.bones,3);
 
-%Esta comentado el giro en el eje largo porque sería redundante con
+%Esta comentado el giro en el eje largo porque serï¿½a redundante con
 %sthephen
 
 % %Giro 1: Eje largo
@@ -92,11 +92,19 @@ end
 %Rotar deje metodo libre para que usara el default
 eje = 'Y';%respecto al eje largo del femur
 
+<<<<<<< HEAD
 V_seg.vol.orig = imrotate3_fast(V_seg.vol.orig,{b eje});
 V_seg.vol.filt = imrotate3_fast(V_seg.vol.filt,{b eje});
 V_seg.mascara = imrotate3_fast(V_seg.mascara,{b eje});
 V_seg.femur.fisis = imrotate3_fast(V_seg.femur.fisis,{b eje});
 V_seg.femur.bones = imrotate3_fast(V_seg.femur.bones,{b eje});
+=======
+V_seg.vol.orig = imrotate3_fast(V_seg.vol.orig,{b eje},metodo);
+V_seg.vol.filt = imrotate3_fast(V_seg.vol.filt,{b eje},metodo);
+V_seg.mascara = imrotate3_fast(V_seg.mascara,{b eje},metodo);
+V_seg.femur.fisis = imrotate3_fast(V_seg.femur.fisis,{b eje},metodo);
+V_seg.femur.bones = imrotate3_fast(V_seg.femur.bones,{b eje},metodo);
+>>>>>>> d321500572cd5497345981c364c498e59ee0ffd8
 V_seg.info{7,2} = b;
 %Rotar SliceThickness  (PixelSpacing se mantiene igual)
 
