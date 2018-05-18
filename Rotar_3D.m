@@ -2,7 +2,7 @@ function V_seg = Rotar_3D(V_seg)
 
 tam = size(V_seg.femur.bones,3);
 
-%Esta comentado el giro en el eje largo porque sería redundante con
+%Esta comentado el giro en el eje largo porque serï¿½a redundante con
 %sthephen
 
 % %Giro 1: Eje largo
@@ -88,6 +88,7 @@ end
 
 %Rotar
 eje = 'Y';%respecto al eje largo del femur
+
 V_seg.vol.orig = imrotate3_fast(V_seg.vol.orig,{b eje},metodo);
 V_seg.vol.filt = imrotate3_fast(V_seg.vol.filt,{b eje},metodo);
 V_seg.mascara = imrotate3_fast(V_seg.mascara,{b eje},metodo);
