@@ -34,6 +34,7 @@ tam = size(V_seg.femur.bones,3);
 % 
 
 % Giro 2: los condilos
+
 fila_atras1 = 0;
 fila_atras2 = 0;
 x_atras = [];
@@ -69,7 +70,8 @@ for i=1:tam
         end
     end
 end
-plot(x_atras,1:tam)
+
+%plot(x_atras,1:tam)
 
 m2 = (coord2(2)-coord1(2))/(coord2(1)-coord1(1));
 
@@ -78,6 +80,7 @@ b = atand(m2);
 c= 90-b;
 
 %plot(x_atras,1:tam)
+
 dif_n = n_im2-n_im1;
 dif_fila = fila_atras2-fila_atras1;
 
@@ -86,17 +89,18 @@ if dif_fila == 0
 end
 
 
-%Rotar
+%Rotar deje metodo libre para que usara el default
 eje = 'Y';%respecto al eje largo del femur
-V_seg.vol.orig = imrotate3_fast(V_seg.vol.orig,{b eje},metodo);
-V_seg.vol.filt = imrotate3_fast(V_seg.vol.filt,{b eje},metodo);
-V_seg.mascara = imrotate3_fast(V_seg.mascara,{b eje},metodo);
-V_seg.femur.fisis = imrotate3_fast(V_seg.femur.fisis,{b eje},metodo);
-V_seg.femur.bones = imrotate3_fast(V_seg.femur.bones,{b eje},metodo);
+
+V_seg.vol.orig = imrotate3_fast(V_seg.vol.orig,{b eje});
+V_seg.vol.filt = imrotate3_fast(V_seg.vol.filt,{b eje});
+V_seg.mascara = imrotate3_fast(V_seg.mascara,{b eje});
+V_seg.femur.fisis = imrotate3_fast(V_seg.femur.fisis,{b eje});
+V_seg.femur.bones = imrotate3_fast(V_seg.femur.bones,{b eje});
 V_seg.info{7,2} = b;
 %Rotar SliceThickness  (PixelSpacing se mantiene igual)
 
-V_seg.info{2,1} = nuevo_SliceThickness;
+%V_seg.info{2,1} = nuevo_SliceThickness;
 
 disp('listo!')
 end

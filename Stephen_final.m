@@ -1,4 +1,5 @@
 function V_seg = Stephen_final(V_seg)
+
 %V_seg.info{7,1} es el angulo del eje largo
 %V_seg.info{8,1} es la coordenada
 
@@ -24,6 +25,7 @@ while linea <= 4
 imshow(rx);
 uiwait(msgbox(mensaje(linea)));
 hold on
+
 if linea ==1
     uiwait(msgbox('Ingrese dos puntos para el primer circulo, con el ultimo haga doble click'));
     [Y1,X1] = getpts();
@@ -172,6 +174,7 @@ elseif linea ==4
 
 linea = linea +1;
 elegida = 0;
+
 end
 
 % Encontrar coordenada punto
@@ -179,6 +182,7 @@ end
 v_usar = V_seg.femur.fisis + V_seg.femur.bones;
 encontrado = 0;
 contador = 1;
+
 while (contador <= size(v_usar,3) && encontrado ==0)
     if v_usar(Aproximar(coordenada(1)),Aproximar(coordenada(2)),contador)>0
         coord_3D = [Aproximar(coordenada(1)),Aproximar(coordenada(2)),contador];
@@ -189,6 +193,7 @@ while (contador <= size(v_usar,3) && encontrado ==0)
     end
     contador = contador+1;    
 end
+
 V_seg.info{8,1} = coord_3D;
 
 end

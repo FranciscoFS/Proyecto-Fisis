@@ -559,10 +559,9 @@ function Stephen_Callback(hObject, eventdata, handles)
 % hObject    handle to Stephen (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
 handles.V_seg = Stephen_final(handles.V_seg);
+guidata(
 
-guidata(hObject, handles);
 
 
 
