@@ -1,12 +1,14 @@
 function V_seg = Stephen_final(V_seg)
 
-    %V_seg.info{7,1} es el angulo del eje largo
-    %V_seg.info{8,1} es la coordenada
+    % V_seg.info{7} es el angulo del eje largo
+    % V_seg.info{8} es la coordenada
     
-    %Primero se gira
+    % Primero se gira
+    
     V_seg = Rotar_3D(V_seg);
 
-    %Luego se crea la rx
+    % Luego se crea la rx
+    
     rx = crear_rx(V_seg);
     V_seg.rx = rx;
 
@@ -21,7 +23,9 @@ function V_seg = Stephen_final(V_seg)
     lineas = {};
 
     while linea <= 4 
+        
     imshow(rx);
+    
     uiwait(msgbox(mensaje(linea)));
     hold on
 
@@ -194,7 +198,7 @@ function V_seg = Stephen_final(V_seg)
         contador = contador+1;    
     end
 
-    V_seg.info{8,1} = coord_3D;
+    V_seg.info{9} = coord_3D;
 
 end
 
