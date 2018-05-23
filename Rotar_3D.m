@@ -1,5 +1,4 @@
 function V_out = Rotar_3D(V_seg)
-
     %Enderezar en Z podemos obtener el angulo con regionprops3
     
     V_seg.mascara = (V_seg.mascara < 8).*(V_seg.mascara);
