@@ -31,16 +31,21 @@ h = waitbar(0.5,'Modelando en 3D.....');
     %Vista y Luz
     
     figure()
+    hold on
 
     p1= patch(isosurface(Y),'FaceColor','green','EdgeColor','none','FaceAlpha','0.95');
+    isonormals(Y,p1)
     p2= patch(isosurface(W),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+    isonormals(W,p2)
     reducepatch(p2,0.01)
+    
+    p3
 
     view(3)
     axis equal
     %daspect([1 1 0.8])
     l = camlight('headlight');
-    lighting gouraud
+    %lighting gouraud
     material dull
     title('Fisis')
     

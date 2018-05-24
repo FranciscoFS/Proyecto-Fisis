@@ -21,6 +21,7 @@ StudyDescription = {};
 for k=1:numel(DIM)
     
     if DIM(k).isdir && not(isempty(str2num(DIM(k).name)))
+        
         MRIS = dir([DIM(k).folder '/' DIM(k).name '/*.dcm']);
         fprintf('Saving..... %s \n', DIM(k).name);
         
