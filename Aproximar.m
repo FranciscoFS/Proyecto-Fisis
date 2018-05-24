@@ -1,4 +1,4 @@
-    function [x] = Aproximar(x)
+function [x] = Aproximar(x)
     
     if (x - fix(x)) >= 0.5
         x = ceil(x);
@@ -6,4 +6,4 @@
         x = floor(x);
     end
     
-    end
+end

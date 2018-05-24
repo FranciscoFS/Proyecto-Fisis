@@ -22,7 +22,7 @@ function V_seg = Stephen_final(V_seg)
     mensaje = {'Primero crearemos el eje mecanico', 'Ponga el punto 1(mas anterior) para crear la linea 1', 'Ponga el punto 2 (mas posterior) para crear la linea 2', 'Ponga el punto 3 (mas distal) para crear la linea 3'};
     lineas = {};
 
-    while linea <= 4 
+while linea <= 4 
         
     imshow(rx);
     
@@ -179,7 +179,7 @@ function V_seg = Stephen_final(V_seg)
     linea = linea +1;
     elegida = 0;
 
-    end
+end
 
     % Encontrar coordenada punto
 

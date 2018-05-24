@@ -24,9 +24,10 @@ function rx = crear_rx(V_seg)
     end
 
     rx1 = rx_orig/max(rx_orig(:));
-    rx2 = rx_filt/max(rx_filt(:));
+   % rx2 = rx_filt/max(rx_filt(:));
     rx3 = rx_masc/max(rx_masc(:));
-    rx = (rx3 < 3).*rx1;
+    rx = (rx3 > 0).*rx1;
+    imshow([(rx3>0).*rx1 rx1 rx]) 
 
 end
 
