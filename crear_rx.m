@@ -1,4 +1,4 @@
-function rx = crear_rx(V_seg)
+function [rx,rx1] = crear_rx(V_seg)
 
     orig = V_seg.vol.orig;
     filt = V_seg.vol.filt;
@@ -8,14 +8,6 @@ function rx = crear_rx(V_seg)
     rx_filt = zeros(size(orig,1),size(orig,2));
     rx_masc = zeros(size(orig,1),size(orig,2));
 
-    % prompt = {'Mascara:'};
-    % dlg_title = 'Input';
-    % num_lines = 1;
-    % defaultans = {'3'};
-    % answer1 = inputdlg(prompt,dlg_title,num_lines,defaultans);
-    % answer1 = str2double(answer1);
-    %answer1= 3;
-    %masc = masc<answer1;
 
     for i = 1:size(orig,3)
         rx_orig =  rx_orig + orig(:,:,i);
@@ -24,10 +16,9 @@ function rx = crear_rx(V_seg)
     end
 
     rx1 = rx_orig/max(rx_orig(:));
-   % rx2 = rx_filt/max(rx_filt(:));
     rx3 = rx_masc/max(rx_masc(:));
     rx = (rx3 > 0).*rx1;
-    imshow([(rx3>0).*rx1 rx1 rx]) 
+    %imshow([(rx3>0).*rx1 rx1 rx]) 
 
 end
 

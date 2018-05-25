@@ -1,5 +1,5 @@
 function porc = Cilindro_fx_final(V_seg,alpha,beta)
-    %Direcci�n y distancia
+    %Direccion y distancia
 
     coordenada = V_seg.info{9};
 

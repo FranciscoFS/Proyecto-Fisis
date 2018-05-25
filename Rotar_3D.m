@@ -2,6 +2,10 @@ function V_out = Rotar_3D(V_seg)
     %Enderezar en Z podemos obtener el angulo con regionprops3
     
     V_seg.mascara = (V_seg.mascara < 8).*(V_seg.mascara);
+    femur1 = (V_seg.mascara == 1).*(V_seg.mascara); 
+    femur2 = (V_seg.mascara == 2).*(V_seg.mascara);
+    V_seg.mascara = femur1+femur2;
+    
 %   Angulos = regionprops3(V_seg.femur.bones,'Orientation');
     Theta_Z = Angulo_Z(V_seg);
     eje_Z = 'Z';
@@ -16,7 +20,8 @@ function V_out = Rotar_3D(V_seg)
     Mid = round((max(v1)+min(v1))/2);
    
     % Mi forma para endezar en Y
-
+    %(NUESTRA)
+    
     z_atras = zeros(1,tam);
 
     for i=1:tam
@@ -37,7 +42,8 @@ function V_out = Rotar_3D(V_seg)
     z2 = find(z_atras(Mid+1:end) == max(z_atras(Mid+1:end)),1,'first') + Mid;
 
     y1 = z_atras(z1);
-    y2 = z_atras(z2); plot(z_atras,1:tam);
+    y2 = z_atras(z2);
+    subplot(1,2,1); plot(z_atras,1:tam);title('Antes') 
     
     m = ((y2 -y1)*dx)/((z2 -z1)*dz);
     Theta_Y = atand(m);
@@ -47,6 +53,8 @@ function V_out = Rotar_3D(V_seg)
     
     eje_Y = 'Y';
     V_out = Rotar(V_out,Theta_Y,eje_Y);
+    [x_atras,tam] = comprobar_condilos(V_seg);
+    subplot(1,2,2); plot(x_atras,1:tam);title('Despues') 
     
 end
 
