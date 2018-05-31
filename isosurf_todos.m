@@ -1,4 +1,4 @@
-function isosurf_todos(V)
+function F = isosurf_todos(V)
 
     info = V.info;
 
@@ -16,7 +16,7 @@ function isosurf_todos(V)
     pace = (1/(dz/dxdy));
     [m,n,k] = size(V.femur.bones);
     [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
-    Box_size = 3;
+    Box_size = 9;
 
     %Patch femur fisis
     ff =interp3(V.femur.fisis,Xq,Yq,Zq,'cubic');
@@ -42,29 +42,30 @@ function isosurf_todos(V)
 
     %Vista y Luz
 
+    fig = figure();
+    
     %Patch femur
-    p1= patch(isosurface(ff),'FaceColor','red','EdgeColor','none');
-    isonormals(ff,p1)
-    p1
+    p1= patch(isosurface(ff,0.35),'FaceColor','red','EdgeColor','none');
+    %isonormals(ff,p1)
     p2= patch(isosurface(fh),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-    isonormals(fh,p2)
+    %isonormals(fh,p2)
     reducepatch(p2,0.01)
     %Patch tibia
-    p3= patch(isosurface(tf),'FaceColor','red','EdgeColor','none');
+    p3= patch(isosurface(tf,0.35),'FaceColor','red','EdgeColor','none');
     p4= patch(isosurface(th),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-    isonormals(tf,p3)
-    isonormals(th,p4)
+    %isonormals(tf,p3)
+    %isonormals(th,p4)
     reducepatch(p4,0.01)
     %Patch perone
     p5= patch(isosurface(pf,0.3),'FaceColor','red','EdgeColor','none');
     p6= patch(isosurface(ph),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-    isonormals(pf,p5)
-    isonormals(ph,p6)
+    %isonormals(pf,p5)
+    %isonormals(ph,p6)
     reducepatch(p6,0.01)
     %Patch rotula
     p7= patch(isosurface(r),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-    reducepatch(p7,0.01)
-    isonormals(r,p7)
+    %reducepatch(p7,0.01)
+    %isonormals(r,p7)
 
     view(3)
     axis off
@@ -74,9 +75,17 @@ function isosurf_todos(V)
     material dull
     %title('Fisis')
 
-    while true
-    camlight(l,'headlight')
-    pause(0.05);
+    F = struct();
+    i = 0;
+    T = 0.05;
+    angulo = 0;
+    while i <= 5/T
+        camlight(l,'headlight')
+        pause(T);
+        view(angulo + (i/T)*100,-90);
+        i = i+1;
+        F.Frames(i) = getframe(fig);
+        
     end
 
 end

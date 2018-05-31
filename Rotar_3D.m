@@ -1,14 +1,10 @@
 function V_out = Rotar_3D(V_seg)
     %Enderezar en Z podemos obtener el angulo con regionprops3
     
-    V_seg.mascara = (V_seg.mascara < 8).*(V_seg.mascara);
-    femur1 = (V_seg.mascara == 1).*(V_seg.mascara); 
-    femur2 = (V_seg.mascara == 2).*(V_seg.mascara);
-    V_seg.mascara = femur1+femur2;
-    
 %   Angulos = regionprops3(V_seg.femur.bones,'Orientation');
     Theta_Z = Angulo_Z(V_seg);
     eje_Z = 'Z';
+    %eje_Z = [0 0 1];
     V_out = Rotar(V_seg,Theta_Z, eje_Z);
     V_out.info{8} = Theta_Z;
 %   V_out.Angulos = Angulos;
@@ -43,19 +39,42 @@ function V_out = Rotar_3D(V_seg)
 
     y1 = z_atras(z1);
     y2 = z_atras(z2);
-    subplot(1,2,1); plot(z_atras,1:tam);title('Antes') 
     
-    m = ((y2 -y1)*dx)/((z2 -z1)*dz);
+    %subplot(1,2,1); plot(z_atras,1:tam);title('Antes') 
+    
+    m = ((y2 -y1))/((z2 -z1));
+    m2 = ((y2 -y1)*dx)/((z2 -z1)*dz);
     Theta_Y = atand(m);
-    V_out.info{7} = Theta_Y;
+    Theta_Y_2 = atand(m2);
+    V_out.info{7,1} = Theta_Y;
+    V_out.info{7,2} = Theta_Y_2;
     
     % Respecto al eje largo del femur
     
     eje_Y = 'Y';
+    %eje_Y = [0 1 0];
     V_out = Rotar(V_out,Theta_Y,eje_Y);
-    [x_atras,tam] = comprobar_condilos(V_seg);
-    subplot(1,2,2); plot(x_atras,1:tam);title('Despues') 
-    
+%     
+%     tam_after = size(V_out.femur.bones,3);
+%     z_atras_after = zeros(1,tam_after);
+% 
+%     for i=1:tam_after
+% 
+%         im = V_out.femur.bones(:,:,i);
+%         [~, col] = find(im);
+%         topcol1 = max(col);
+% 
+%         if isempty(topcol1) == 0
+%             
+%             z_atras_after(i) = topcol1;
+%             
+%         end
+% 
+%     end
+%     
+%     %[x_atras,tam] = comprobar_condilos(V_seg);
+%     subplot(1,2,2); plot(z_atras_after,1:tam_after);title('Despues') 
+%     
 end
 
 

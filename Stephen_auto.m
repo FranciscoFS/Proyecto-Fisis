@@ -1,17 +1,20 @@
 function V_seg = Stephen_auto(V_seg)
 
     % Primero se gira
+    V_seg.mascara = (V_seg.mascara < 8).*(V_seg.mascara); %Guardemos la mascara más liviana
+    
     V_seg = Rotar_3D(V_seg);
 
     % Luego se crea la rx
     
-    [rx,rx1] = crear_rx(V_seg);
-    V_seg.rx = rx;
-    V_seg.rx1 = rx1;
+    [rx,rx_femur] = crear_rx(V_seg);
+    V_seg.rx.rx = rx;
+    V_seg.rx.rx1 = rx_femur;
+    V_seg.rx.rx_femur = rx_femur;
     
     %1. Poner los puntos
 
-    [row, col] = find(rx);
+    [row, col] = find(rx_femur);
     x_ant = min(col);
     x_post = max(col);
     y_distal = max(row);
@@ -25,12 +28,13 @@ function V_seg = Stephen_auto(V_seg)
 
     P3 = [x_ant + d_ant,y_distal];
     P4 = [x_ant + d_ant,y_distal - d_distal];
-    %imshow(rx)
+    imshow(rx)
+    hold on
 
-%     scatter(P1(1),P1(2),100,'d','filled')
-%     scatter(P2(1),P2(2),100,'d','filled')
-%     scatter(P3(1),P3(2),100,'d','filled')
-%     scatter(P4(1),P4(2),100,'d','filled')
+    scatter(P1(1),P1(2),100,'d','filled')
+    scatter(P2(1),P2(2),100,'d','filled')
+    scatter(P3(1),P3(2),100,'d','filled')
+    scatter(P4(1),P4(2),100,'d','filled')
     coordenada = P4;
  
     % Encontrar coordenada punto

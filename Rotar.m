@@ -30,6 +30,11 @@ function [V_out] = Rotar(V_in,Omega,eje)
     V_out.femur.fisis = imrotate3_fast(V_in.femur.fisis,{Omega eje});
     V_out.femur.bones = imrotate3_fast(V_in.femur.bones,{Omega eje});
     
-    
+%     V_out.vol.orig = imrotate3(V_in.vol.orig,Omega,eje);
+%     V_out.vol.filt = imrotate3(V_in.vol.filt,Omega, eje);
+%     V_out.mascara = imrotate3(V_in.mascara,Omega, eje);
+%     V_out.femur.fisis = imrotate3(V_in.femur.fisis,Omega, eje);
+%     V_out.femur.bones = imrotate3(V_in.femur.bones,Omega,eje);
+% %     
 
 end
