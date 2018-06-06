@@ -6,23 +6,23 @@ function Value = func_obj(omega)
     % Cargar la base de datos primero 
     
     %load('Base_datos.m','Datos')
-    %regulador = 0.5;  %Peso para la varianza
     
-    global V_r
+    regulador = 0.5;  %Peso para la varianza
     
-    Value = Cilindro_fx_final(V_r,alpha,beta);
+    global Rodillas
     
-    %Recorrer la base de datos y calcular el % para alpha y beta
     
-%     Destruccion = zeros(1,numel(Datos));
-%     
-%     for k=1:numel(Base_datos)
-%         
-%         Destruccion(k) = Cilindro(Datos(k),alpha,beta);
-%         
-%     end
-%     
-%     Value = mean(Destruccion) + regulador*var(Destruccion);
-%         
+   % Recorrer la base de datos y calcular el % para alpha y beta
+    
+    Destruccion = zeros(1,numel(Rodillas));
+    
+    for k=1:numel(Rodillas)
+        
+        Destruccion(k) = Cilindro_fx_final(Rodillas(k).Rodilla,alpha,beta);
+        
+    end
+    
+    Value = mean(Destruccion) + regulador*var(Destruccion);
+        
 end
     

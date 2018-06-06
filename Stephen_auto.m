@@ -3,8 +3,11 @@ function V_seg = Stephen_auto(V_seg)
     % Primero se gira
     V_seg.mascara = (V_seg.mascara < 8).*(V_seg.mascara); %Guardemos la mascara más liviana
     
-    V_seg = Rotar_3D(V_seg);
-
+    %V_seg = Rotar_3D(V_seg);
+    Az = Angulo_Z(V_seg);
+    Eje = 'Z';
+    V_seg = Rotar(V_seg,Az,Eje);
+    
     % Luego se crea la rx
     
     [rx,rx_femur] = crear_rx(V_seg);
@@ -28,13 +31,13 @@ function V_seg = Stephen_auto(V_seg)
 
     P3 = [x_ant + d_ant,y_distal];
     P4 = [x_ant + d_ant,y_distal - d_distal];
-    imshow(rx)
-    hold on
-
-    scatter(P1(1),P1(2),100,'d','filled')
-    scatter(P2(1),P2(2),100,'d','filled')
-    scatter(P3(1),P3(2),100,'d','filled')
-    scatter(P4(1),P4(2),100,'d','filled')
+%   imshow(rx)
+%     hold on
+% 
+%     scatter(P1(1),P1(2),100,'d','filled')
+%     scatter(P2(1),P2(2),100,'d','filled')
+%     scatter(P3(1),P3(2),100,'d','filled')
+%     scatter(P4(1),P4(2),100,'d','filled')
     coordenada = P4;
  
     % Encontrar coordenada punto
@@ -47,7 +50,8 @@ function V_seg = Stephen_auto(V_seg)
         if v_usar(Aproximar(coordenada(2)),Aproximar(coordenada(1)),contador)>0
             coord_3D = [Aproximar(coordenada(2)),Aproximar(coordenada(1)),contador];
             coord_3D = double(coord_3D);
-            uiwait(msgbox('PUNTO ENCONTRADO'));
+            %uiwait(msgbox('PUNTO ENCONTRADO'));
+            fprintf('Punto encontrado \n');
             encontrado =1;
             contador = contador-1;
         end

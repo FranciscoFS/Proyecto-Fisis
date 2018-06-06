@@ -2,8 +2,11 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
     %Direccion y distancia
 
     coordenada = V_seg.info{9};
-
-    fisis_usar = V_seg.femur.fisis;
+    
+    % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
+    
+   % fisis_usar = V_seg.femur.fisis;
+    fisis_usar = V_seg.mascara == 2;
     %hueso_usar = V_seg.femur.bones;
 
     dz = V_seg.info{2,1};
