@@ -75,16 +75,15 @@ function F = isosurf_todos(V)
     material dull
     %title('Fisis')
 
-    F = struct();
+
     i = 0;
     T = 0.05;
     angulo = 0;
     while i <= 5/T
         camlight(l,'headlight')
         pause(T);
-        view(angulo + (i/T)*100,-90);
         i = i+1;
-        F.Frames(i) = getframe(fig);
+
         
     end
 
