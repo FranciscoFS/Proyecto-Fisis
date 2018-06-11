@@ -74,7 +74,8 @@ function F = isosurf_todos(V)
     lighting gouraud
     material dull
     %title('Fisis')
-    
+
+    F = struct();
     i = 0;
     T = 0.05;
     angulo = 0;
@@ -83,6 +84,7 @@ function F = isosurf_todos(V)
         pause(T);
         view(angulo + (i/T)*100,-90);
         i = i+1;
+        F.Frames(i) = getframe(fig);
         
     end
 
