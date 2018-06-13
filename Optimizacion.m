@@ -12,6 +12,6 @@ options = optimoptions('ga','MaxGenerations',1000,...
 
 %%
 
-options2 = optimoptions('PlotFcn'
+%options2 = optimoptions('PlotFcn'
 [x2,fval2] = simulannealbnd(@func_obj,[0,0],LB,UB);
 
