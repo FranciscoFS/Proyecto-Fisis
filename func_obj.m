@@ -7,7 +7,7 @@ function Value = func_obj(omega)
     
     %load('Base_datos.m','Datos')
     
-    regulador = 0.5;  %Peso para la varianza
+    regulador = 0.3;  %Peso para la varianza
     
     global Rodillas
     
