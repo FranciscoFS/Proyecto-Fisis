@@ -60,7 +60,7 @@ t.Properties.VariableNames= Var_names;
 
 folder = uigetdir();
 DIM = dir(folder);
-Dir_out = '/Users/franciscofernandezschlein/Google Drive/Uc/LPFM/Terminadas_finales/';
+%Dir_out = '/Users/franciscofernandezschlein/Google Drive/Uc/LPFM/Terminadas_finales/';
 fields_out = {'femur','perone','tibia','rotula','vol'};
 contador = 0;
 Base_datos = struct('Rodilla',[]);
@@ -77,7 +77,7 @@ for k=1:numel(DIM)
         if Volumenes.femur > 0
             V_out = Stephen_auto(V_out);
             V_out = rmfield(V_out,fields_out);
-            save([Dir_out DIM(k).name],'V_out')
+            %save([Dir_out DIM(k).name],'V_out')
             %fprintf('Saved..... %s \n', DIM(k).name);
             contador = contador + 1;
             Base_datos(contador).Rodilla = V_out;
