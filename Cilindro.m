@@ -81,22 +81,8 @@ else
 end    
 end
 
-%%
-%3. Elegir el % de datos a los que se le quiere "no achuntar"
-% 
-% prompt = {'¿Sobre que % de los datos quiere trabajar?'};
-% dlg_title = 'Input';
-% num_lines = 1;
-% defaultans = {100};
-% answer2 = inputdlg(prompt,dlg_title,num_lines,defaultans);
-% answer2 = str2double(answer2);
-% 
-% hueso_usar < answer2;
-% fisis_usar < answer2;
-
 
 %% Crear Linea
-%[X,Y,Z] = cylinder(r,lados);
 
 dz = V_seg.info{2,1};
 dx = V_seg.info{1,1};
@@ -146,7 +132,8 @@ pixeles_ya_sumados = zeros(size(fisis_usar));
 ax = gca;
 c = ax.DataAspectRatio;
 ax.DataAspectRatio= [dz,dz,dx];
-
+[X, Y, Z] = cylinder2P(radio_pix, 50,P1,P2);
+surf(X, Y, Z);
 
 for i = 1:size(Z,2)
     im = fisis_usar(:,:,Z(i));
@@ -161,7 +148,7 @@ for i = 1:size(Z,2)
     for t = 1:size(p,2)
     if (x-p(j)).^2 + (y-q(t)).^2 <= radio_pix.^2
         if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
-            plot3(q(t),p(j),Z(i),'s','markerface','b','MarkerSize', 10)
+            %plot3(q(t),p(j),Z(i),'s','markerface','b','MarkerSize', 10)
             pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
             if (im(p(j),q(t)) == 1)
                 contador = contador + 1;
@@ -173,6 +160,9 @@ for i = 1:size(Z,2)
     end
 end
 
+
+
+
 view(3)
 axis tight
 l = camlight('headlight');
@@ -183,16 +173,6 @@ title('Fisis')
 porc = (contador/total_de_1s)*100;
 uiwait(msgbox({'Se ha perforado un' num2str(porc) '% de la fisis'}));
 
-% while true
-% camlight(l,'headlight')
-% pause(0.05);
-% end
-
-
-
-%%
-
-plot3(X,Y,Z,'s','markerface','b');
 
 
 

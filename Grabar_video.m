@@ -19,9 +19,9 @@ for j = 1:frame_total
     drawnow
     frame = getframe(gcf);
     writeVideo(v,frame);
-    if j<frame_total/3
+    if j<frame_total/4
         az = az +1;
-    elseif j<(2*frame_total/3)
+    elseif j<(frame_total/2)
         el = el +1;
     else
         az = az +1;
