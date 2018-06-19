@@ -8,8 +8,8 @@ v.Quality = 100;
 open(v);
 
 frame_total = tiempo*30;%30 por los fps = 30
-az= 180;
-el = 90;
+az= 0;
+el = -90;
 l = camlight('headlight');
 lighting gouraud
 material dull
@@ -24,8 +24,8 @@ for j = 1:frame_total
 %     elseif j<(frame_total/2)
 %         el = el +1;
 %     else
-        az = az +1;
-        el = el +1;
+        az = az+0.5;
+        el = el+0.2;
 %     end
 end
 close(v)

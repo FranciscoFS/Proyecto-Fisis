@@ -12,8 +12,8 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
 
-    a1 = alpha;
-    a2 = beta;
+    a1 = alpha;%azimut
+    a2 = beta;%horizontal
     mm = 45;%Profundidad
     diametro = 6;
 
@@ -45,24 +45,6 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
 
     pixeles_ya_sumados = zeros(size(fisis_usar));
 
-    f = figure;
-    hold on
-    fu= smooth3(fisis_usar, 'box', 9);
-    hu = smooth3(hueso_usar,'box', 9);
-    p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
-    p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-    reducepatch(p2,0.01)
-    ax = gca;
-    c = ax.DataAspectRatio;
-    ax.DataAspectRatio= [dz,dz,dx];
-    
-    axis tight
-    l = camlight('headlight');
-    lighting gouraud
-    material dull
-    title('Fisis')
-
-
     for i = 1:size(Z,2)
         im = fisis_usar(:,:,Z(i));
 
@@ -73,22 +55,42 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
         q = y - radio_pix : y + radio_pix;
 
         for j = 1:size(p,2)
-        for t = 1:size(p,2)
+        for t = 1:size(q,2)
         if (x-p(j)).^2 + (y-q(t)).^2 <= radio_pix.^2
             if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
-                plot3(q(t),p(j),Z(i),'s','markerface','b','MarkerSize', 10)
                 pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
-                if (im(p(j),q(t)) > 0)
-                    contador = contador + 1;
-                end 
             end
-
         end 
         end
         end
     end
-
-    porc = (contador/total_de_1s)*100;
-    %uiwait(msgbox({'Se ha perforado un ' num2str(porc) '% de la fisis'}));
+    
+%     f = figure;
+%     hold on
+%     fu= smooth3(fisis_usar, 'box', 9);
+%     hu = smooth3(hueso_usar,'box', 9);
+%     p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
+%     p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+%     p3= patch(isosurface(pixeles_ya_sumados, 0.7),'FaceColor','green','EdgeColor','none');
+%     reducepatch(p2,0.01)
+%     ax = gca;
+%     c = ax.DataAspectRatio;
+%     ax.DataAspectRatio= [dz,dz,dx];
+%     
+%     axis tight
+%     l = camlight('headlight');
+%     lighting gouraud
+%     material dull
+%     title('Fisis')
+    
+    total_de_1s = sum(fisis_usar(:));
+    delta = (fisis_usar - pixeles_ya_sumados) == 1;
+    total_1s_resta = sum(delta(:));
+    porc = ((total_de_1s - total_1s_resta)/total_de_1s)*100;
+    
+%   total_de_1s = sum(fisis_usar(:) == 1);
+%   resta2 = fisis_usar - pixeles_ya_sumados;
+%   total_de_1s_resta2 = sum(resta2(:) == 1);
+%   uiwait(msgbox({'Se ha perforado un ' num2str(porc) '% de la fisis'}));
 
 end
