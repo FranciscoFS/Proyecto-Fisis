@@ -7,15 +7,15 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
     
    % fisis_usar = V_seg.femur.fisis;
     fisis_usar = V_seg.mascara == 2;
-    %hueso_usar = V_seg.femur.bones;
+    hueso_usar = V_seg.mascara == 1;
 
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
 
     a1 = alpha;
     a2 = beta;
-    mm = 30;%Profundidad
-    diametro = 2;
+    mm = 45;%Profundidad
+    diametro = 6;
 
     %profundidad
     prof = cosd((a2))*mm;
@@ -43,20 +43,24 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
     contador = 0;
     total_de_1s = sum(fisis_usar(:) == 1);
 
-
-    % f = figure;
-    % hold on
-    % fu= smooth3(fisis_usar);
-    % hu = smooth3(hueso_usar);
-    % p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
-    % p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-    % reducepatch(p2,0.01)
-    
     pixeles_ya_sumados = zeros(size(fisis_usar));
 
-    % ax = gca;
-    % c = ax.DataAspectRatio;
-    % ax.DataAspectRatio= [dz,dz,dx];
+    f = figure;
+    hold on
+    fu= smooth3(fisis_usar, 'box', 9);
+    hu = smooth3(hueso_usar,'box', 9);
+    p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
+    p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+    reducepatch(p2,0.01)
+    ax = gca;
+    c = ax.DataAspectRatio;
+    ax.DataAspectRatio= [dz,dz,dx];
+    
+    axis tight
+    l = camlight('headlight');
+    lighting gouraud
+    material dull
+    title('Fisis')
 
 
     for i = 1:size(Z,2)
@@ -72,6 +76,7 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
         for t = 1:size(p,2)
         if (x-p(j)).^2 + (y-q(t)).^2 <= radio_pix.^2
             if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
+                plot3(q(t),p(j),Z(i),'s','markerface','b','MarkerSize', 10)
                 pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
                 if (im(p(j),q(t)) > 0)
                     contador = contador + 1;

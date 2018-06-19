@@ -7,15 +7,15 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
     
    % fisis_usar = V_seg.femur.fisis;
     fisis_usar = V_seg.mascara == 2;
-    %hueso_usar = V_seg.femur.bones;
+    hueso_usar = V_seg.mascara == 1;
 
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
 
-    a1 = alpha;
-    a2 = beta;
-    mm = 30;%Profundidad
-    diametro = 2;
+    a2 = alpha;%azimut
+    a1 = beta;%horizontal
+    mm = 45;%Profundidad
+    diametro = 6;
 
     %profundidad
     prof = cosd((a2))*mm;
@@ -40,8 +40,6 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
     radio = diametro/2;
     radio_pix = Aproximar(radio/dx);
 
-
-
     matriz_cilindro = zeros(size(fisis_usar));
     for i = 1:size(Z,2)
         pos_z = Z(i);
@@ -57,20 +55,23 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
         matriz_cilindro(:,:,pos_z) = matriz_cilindro(:,:,pos_z) + im;
     end
 
-
-%     f = figure;
-%     hold on
-%     fu= smooth3(fisis_usar, 'box', 5);
-%     hu = smooth3(hueso_usar,'box', 5);
-%     p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
-%     p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-%     p3= patch(isosurface(matriz_cilindro, 0.7),'FaceColor','green','EdgeColor','none');
-%     reducepatch(p2,0.01)
-%     axis tight
-%     l = camlight('headlight');
-%     lighting gouraud
-%     material dull
-%     title('Fisis')
+    f = figure;
+    hold on
+    fu= smooth3(fisis_usar, 'box', 9);
+    hu = smooth3(hueso_usar,'box', 9);
+    p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
+    p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+    p3= patch(isosurface(matriz_cilindro, 0.7),'FaceColor','green','EdgeColor','none');
+    reducepatch(p2,0.01)
+    ax = gca;
+    c = ax.DataAspectRatio;
+    ax.DataAspectRatio= [dz,dz,dx];
+    
+    axis tight
+    l = camlight('headlight');
+    lighting gouraud
+    material dull
+    title('Fisis')
     
     total_de_1s = sum(fisis_usar(:) == 1);
     resta = zeros(size(fisis_usar,1),size(fisis_usar,1));
@@ -82,5 +83,6 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
     
     porc = ((total_de_1s-total_de_1s_resta)/total_de_1s)*100;
 end
+
     %uiwait(msgbox({'Se ha perforado un ' num2str(porc) '% de la fisis'}));
 
