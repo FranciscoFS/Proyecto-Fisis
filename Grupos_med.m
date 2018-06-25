@@ -1,5 +1,5 @@
 clear all
-total_alumnos = 12;
+total_alumnos = 9;
 n_grupos = total_alumnos/3;
 comb = nchoosek(1:total_alumnos,2);%combinaciones
 

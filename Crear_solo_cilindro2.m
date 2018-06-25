@@ -1,5 +1,5 @@
-function porc = Cilindro_fx_final(V_seg,alpha,beta)
-%Direccion y distancia
+function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta)
+    %Direccion y distancia
 
     coordenada = V_seg.info{9};
     
@@ -7,7 +7,6 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
     
    % fisis_usar = V_seg.femur.fisis;
     fisis_usar = V_seg.mascara == 2;
-   % hueso_usar = V_seg.mascara == 1;
     
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
@@ -41,9 +40,11 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
     radio = diametro/2;
     radio_pix = Aproximar(radio/dx);
 
+
     pixeles_ya_sumados = zeros(size(fisis_usar));
 
     for i = 1:size(Z,2)
+
         x = Aproximar(X(i));
         y = Aproximar(Y(i));
 
@@ -61,27 +62,6 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
         end
     end
     
-%     f = figure;
-%     hold on
-%     fu= smooth3(fisis_usar, 'box', 3);
-%     hu = smooth3(hueso_usar,'box', 3);
-%     p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
-%     p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-%     p3= patch(isosurface(pixeles_ya_sumados, 0.7),'FaceColor','green','EdgeColor','none');
-%     reducepatch(p2,0.01)
-%     ax = gca;
-%     c = ax.DataAspectRatio;
-%     ax.DataAspectRatio= [dz,dz,dx];
-%     
-%     axis tight
-%     l = camlight('headlight');
-%     lighting gouraud
-%     material dull
-%     title('Fisis')
-    
-    total_de_1s = sum(fisis_usar(:));
-    delta = (fisis_usar - pixeles_ya_sumados) == 1;
-    total_1s_resta = sum(delta(:));
-    porc = ((total_de_1s - total_1s_resta)/total_de_1s)*100;
-    
+
+
 end

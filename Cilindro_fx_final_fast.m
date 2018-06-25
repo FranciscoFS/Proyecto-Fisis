@@ -5,42 +5,43 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
     coordenada([1 2]) = coordenada([2 1]);
     % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
     
+    % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
+    
    % fisis_usar = V_seg.femur.fisis;
     fisis_usar = V_seg.mascara == 2;
-    hueso_usar = V_seg.mascara == 1;
-
+    % hueso_usar = V_seg.mascara == 1;
+    
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
 
-    a1 = alpha;%azimut
-    a2 = beta;%horizontal
+    a1 = alpha;% azimut
+    a2 = beta;% elevacion
     mm = 45;%Profundidad
     diametro = 6;
 
-    %profundidad
-    prof = cosd((a2))*mm;
-    pixeles_z = prof/dz;
+    
+    [z,x,y] = sph2cart(deg2rad(a1),deg2rad(a2),mm);
+    
+    
+    %dif_x
+    pixeles_x = x/dx;
 
-    %elevacion
-    elevacion = sind((a2))*mm;
-    pixeles_y = elevacion/dx;
+    %dif_y
+    pixeles_y = y/dx;
 
-    %traslacion
-    tras = tand((a1))*prof;
-    pixeles_x = tras/dx;
-
-
+    %dif_z
+    pixeles_z = z/dz;
+    
+    
     P1 = coordenada;
     P2 = [P1(1)+pixeles_x, P1(2) + pixeles_y, P1(3) + pixeles_z];
     P2 = Aproximar(P2);
 
     [X, Y, Z] = bresenham_line3d(P1, P2);
-    
+
     % Cilindro
     radio = diametro/2;
     radio_pix = Aproximar(radio/dx);
-
-    matriz_cilindro = zeros(size(fisis_usar));
     
     [Xm,Ym] = meshgrid(1:size(fisis_usar,1),1:size(fisis_usar,1));   
     matriz_cilindro = zeros(size(fisis_usar));
@@ -55,8 +56,8 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
     
 %     f = figure;
 %     hold on
-%     fu= smooth3(fisis_usar, 'box', 9);
-%     hu = smooth3(hueso_usar,'box', 9);
+%     fu= smooth3(fisis_usar, 'box', 3);
+%     hu = smooth3(hueso_usar,'box', 3);
 %     p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
 %     p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
 %     p3= patch(isosurface(matriz_cilindro, 0.7),'FaceColor','green','EdgeColor','none');
