@@ -14,8 +14,8 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
 
-    a1 = alpha;% azimut
-    a2 = beta;% elevacion
+    a1 = beta;% azimut (+ hacia posterior)
+    a2 = alpha;% elevacion (+ hacia distal)
     mm = 45;%Profundidad
     diametro = 6;
 
