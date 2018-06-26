@@ -1,4 +1,4 @@
-function Value = func_obj(omega)
+function [Value1,Value2,Value3,Value4] = func_obj(omega,Rodillas)
 
     alpha = omega(1);
     beta = omega(2);
@@ -7,9 +7,9 @@ function Value = func_obj(omega)
     
     %load('Base_datos.m','Datos')
     
-    regulador = 0.3;  %Peso para la varianza
+    regulador = 0.5;  %Peso para la varianza
     
-    global Rodillas
+    %global Rodillas
     
     
    % Recorrer la base de datos y calcular el % para alpha y beta
@@ -22,7 +22,9 @@ function Value = func_obj(omega)
         
     end
     
-    Value = mean(Destruccion) + regulador*var(Destruccion);
-        
+    Value1 = mean(Destruccion) + var(Destruccion);
+    Value2 = mean(Destruccion) + regulador*var(Destruccion);
+    Value3 = norm(Destruccion);
+    Value4 = mean(Destruccion);
 end
     

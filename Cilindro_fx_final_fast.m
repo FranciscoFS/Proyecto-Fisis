@@ -53,7 +53,7 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
         im = (Xm-xl).^2 + (Ym-yl).^2 <= radio_pix^2;
         matriz_cilindro(:,:,pos_z) = (matriz_cilindro(:,:,pos_z) + im);
     end
-    matriz_cilindro = matriz_cilindro>1;
+    matriz_cilindro = matriz_cilindro>0 ;
     
 %     f = figure;
 %     hold on
