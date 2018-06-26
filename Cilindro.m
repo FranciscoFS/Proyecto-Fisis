@@ -22,10 +22,7 @@ btn1 = uicontrol('Style', 'pushbutton', 'String', 'Esta',...
         'Position', [20 20 50 20],...
         'Callback', 'elegida = 1');
 while (i > 0 && elegida == 0)
-i
-%imshow(V(:,:,i),[])
 imshow(V_seg.femur.bones(:,:,i),[])
-
 k = waitforbuttonpress;
 
 if elegida == 1
@@ -108,32 +105,29 @@ P1 = coordenada;
 P2 = [P1(1)+pixeles_x, P1(2) + pixeles_y, P1(3) + pixeles_z];
 P2 = Aproximar(P2);
 
-[X Y Z] = bresenham_line3d(P1, P2);
+[X, Y, Z] = bresenham_line3d(P1, P2);
 
 % Cilindro
 radio = answer1(4)/2;
 radio_pix = Aproximar(radio/dx);
 
 contador = 0;
-
 total_de_1s = sum(fisis_usar(:) == 1);
-
+pixeles_ya_sumados = zeros(size(fisis_usar));
 
 f = figure;
 hold on
-
 fu= smooth3(fisis_usar);
 hu = smooth3(hueso_usar);
-
 p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
 p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
 reducepatch(p2,0.01)
-pixeles_ya_sumados = zeros(size(fisis_usar));
 ax = gca;
 c = ax.DataAspectRatio;
 ax.DataAspectRatio= [dz,dz,dx];
-[X, Y, Z] = cylinder2P(radio_pix, 50,P1,P2);
-surf(X, Y, Z);
+
+%[X, Y, Z] = cylinder2P(radio_pix, 50,P1,P2);
+%surf(X, Y, Z);
 
 for i = 1:size(Z,2)
     im = fisis_usar(:,:,Z(i));
@@ -148,7 +142,7 @@ for i = 1:size(Z,2)
     for t = 1:size(p,2)
     if (x-p(j)).^2 + (y-q(t)).^2 <= radio_pix.^2
         if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
-            %plot3(q(t),p(j),Z(i),'s','markerface','b','MarkerSize', 10)
+            plot3(q(t),p(j),Z(i),'s','markerface','b','MarkerSize', 10)
             pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
             if (im(p(j),q(t)) == 1)
                 contador = contador + 1;
