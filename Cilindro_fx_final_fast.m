@@ -2,7 +2,7 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
     %Direccion y distancia
 
     coordenada = V_seg.info{9};
-    coordenada([1 2]) = coordenada([2 1]);
+    %coordenada([1 2]) = coordenada([2 1]);
     % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
     
     % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
@@ -34,7 +34,7 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
     
     
     P1 = coordenada;
-    P2 = [P1(1)+pixeles_x, P1(2) + pixeles_y, P1(3) + pixeles_z];
+    P2 = [P1(2) + pixeles_y,P1(1)+pixeles_x, P1(3) + pixeles_z];
     P2 = Aproximar(P2);
 
     [X, Y, Z] = bresenham_line3d(P1, P2);

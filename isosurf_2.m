@@ -1,4 +1,7 @@
-function isosurf_2(fisis,cortical,info)
+function isosurf_2(V_seg)
+fisis = V_seg.femur.fisis;
+cortical = V_seg.femur.bones;
+info = V_seg.info;
 
 h = waitbar(0.5,'Modelando en 3D.....');
 
@@ -39,14 +42,18 @@ h = waitbar(0.5,'Modelando en 3D.....');
     isonormals(W,p2)
     reducepatch(p2,0.01)
  
-    view(3)
-    axis equal
-    daspect([1 1 1])
-    l = camlight('headlight');
-    %lighting gouraud
-    material dull
-    title('Fisis')
+    view(3)    
+
+    ax = gca;
+    c = ax.DataAspectRatio;
+    ax.DataAspectRatio= [1,1,1];
     
+    axis off
+    axis tight
+    l = camlight('headlight');
+    lighting gouraud
+    material dull
+    title('Rodilla')
   
 
 close(h)
