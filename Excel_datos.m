@@ -4,8 +4,6 @@
 
 folder = uigetdir();
 DIM = dir(folder);
-%Dir_out = '/Users/franciscofernandezschlein/Google Drive/Uc/LPFM/Terminadas_finales/';
-%fields_out = {'femur','perone','tibia','rotula'};
 
 Vol_femur = [];
 Vol_tibia = [];
@@ -15,20 +13,22 @@ Name = {};
 Status = [];
 Ax_Y = [];
 Ax_Z = [];
+Vol_bajo_fisis = [];
+Dist_FF = [];
+D_Femur = [];
+D_Tibia = [];
+VBF_Total = [];
 
 for k=1:numel(DIM)
 
     if not(DIM(k).isdir) && length(DIM(k).name) > 12
         
-        fprintf('Processing..... %s \n', DIM(k).name);
+        fprintf('Cargando y Calculando..... %s \n', DIM(k).name);
         V_load = load([DIM(k).folder '/' DIM(k).name],'V_seg');
         V_out = V_load.V_seg;
         Ay = Angulos_Y(V_out);
-        %V_out = Stephen_auto(V_out);
-        %V_out = rmfield(V_out,fields_out);
-        %Angulos_Y(end +1) = V_out.info{7};
-        %save([Dir_out DIM(k).name],'V_out')
         [Vols,Check] = Volumenes_fisis(V_out);
+        Volumenes_bajo_fisis = V_bajo_fisis(V_out);
         Info(end+1,1:6) = V_out.info';
         Vol_femur(end+1) = Vols.femur;
         Vol_tibia(end+1) = Vols.tibia;
@@ -37,16 +37,23 @@ for k=1:numel(DIM)
         Status(end+1,1:3) = Check;
         Ax_Y(end+1,:) = Ay;
         Ax_Z(end+1) = Angulo_Z(V_out);
-        fprintf('Saved..... %s \n', DIM(k).name);
+        Vol_bajo_fisis(end+1) = Volumenes_bajo_fisis{1};
+        VBF_Total(end+1) = Volumenes_bajo_fisis{2};
+        Dist_FF(end+1) = Dist_fisis_femur(V_out);
+        D_Femur(end+1) = Diametro_femur(V_out);
+        D_Tibia(end+1) = Diametro_tibia(V_out);
+        
+        fprintf('Procesado..... %s \n', DIM(k).name);
         
     end
     
 end
 
-Var_names = {'Nombre','Vol_femur','Vol_tibia','Vol_perone','Rut','Edad','Sexo','F_femur','F_tibia','F_perone','Ax_Y','Ax_Z'};
+Var_names = {'Nombre','Vol_Ffemur','Vol_Ftibia','Vol_Fperone','Rut','Edad','Peso','Sexo','F_femur','F_tibia','F_perone','Ax_Y','Ax_Z',...
+    'Dist_FF','Vol_bajo_fisis','VBF_Total','D_Femur','D_Tibia'};
 
-t = table(Name',Vol_femur',Vol_tibia',Vol_perone',Info(:,3), Info(:,5) , Info(:,6),Status(:,1),...
-    Status(:,2),Status(:,3),Ax_Y,Ax_Z');
+t = table(Name',Vol_femur',Vol_tibia',Vol_perone',Info(:,3), Info(:,5) ,Info(:,4)', Info(:,6),Status(:,1),...
+    Status(:,2),Status(:,3),Ax_Y,Ax_Z',Dist_FF',Vol_bajo_fisis',VBF_Total',D_Femur',D_Tibia');
 
 t.Properties.VariableNames= Var_names;        
 

@@ -1,7 +1,7 @@
-function [Xx,Yy,Dest] = plot_fcn(Limit_alpha,Limit_beta,pace,Rodilla)
+function [Xx,Yy,Dest] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Rodilla)
 
-    Alpha = -Limit_alpha:pace:Limit_alpha;
-    Beta = -Limit_beta:pace:Limit_beta;
+    Alpha = -Limit_alpha:pace_alpha:Limit_alpha;
+    Beta = -Limit_beta:pace_beta:Limit_beta;
     
     [Xx,Yy] = meshgrid(Alpha,Beta);
     Dest_var = zeros(size(Xx));
