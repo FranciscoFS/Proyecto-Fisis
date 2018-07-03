@@ -1,15 +1,16 @@
 function V_seg = Stephen_auto(V_seg)
 
     % Primero se gira
-    V_seg.mascara = (V_seg.mascara < 8).*(V_seg.mascara); %Guardemos la mascara más liviana
+    %Guardemos la mascara más liviana
     
     %V_seg = Rotar_3D(V_seg);
-    Az = Angulo_Z(V_seg);
+    Az = Angulo_Z_tibia(V_seg);
     Eje = 'Z';
     V_seg = Rotar(V_seg,Az,Eje);
     
     % Luego se crea la rx
-    
+    V_seg.mascara = (V_seg.mascara < 8).*(V_seg.mascara);
+     
     [rx,rx_femur] = crear_rx(V_seg);
     V_seg.rx.rx = rx;
     V_seg.rx.rx1 = rx_femur;
