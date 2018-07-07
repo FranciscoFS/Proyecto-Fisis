@@ -1,20 +1,20 @@
 function V_seg = Stephen_auto(V_seg)
 
+    V_seg.mascara = (V_seg.mascara < 8).*(V_seg.mascara);
+    
     % Primero se gira
-    %Guardemos la mascara más liviana
     
     %V_seg = Rotar_3D(V_seg);
-    Az = Angulo_Z_tibia(V_seg);
+    Az = Angulo_Z(V_seg);
     Eje = 'Z';
     V_seg = Rotar(V_seg,Az,Eje);
     
     % Luego se crea la rx
-    V_seg.mascara = (V_seg.mascara < 8).*(V_seg.mascara);
-     
-    [rx,rx_femur] = crear_rx(V_seg);
-    V_seg.rx.rx = rx;
-    V_seg.rx.rx1 = rx_femur;
-    V_seg.rx.rx_femur = rx_femur;
+    
+    [~,rx_femur,~] = crear_rx(V_seg);
+    %V_seg.rx.rx = rx;
+    %V_seg.rx.rx1 = rx_femur;
+    %V_seg.rx.rx_femur = rx_femur;
     
     %1. Poner los puntos
 
@@ -43,7 +43,7 @@ function V_seg = Stephen_auto(V_seg)
  
     % Encontrar coordenada punto
 
-    v_usar = V_seg.femur.fisis + V_seg.femur.bones;
+    v_usar = (V_seg.mascara == 2) + (V_seg.mascara ==1);
     encontrado = 0;
     contador = 1;
 
@@ -59,6 +59,7 @@ function V_seg = Stephen_auto(V_seg)
         contador = contador+1;    
     end
 
-    V_seg.info{9} = coord_3D;
+    V_seg.info{8} = coord_3D;
+    V_seg.info{7} = Az;
 
 end
