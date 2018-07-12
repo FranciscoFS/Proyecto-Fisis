@@ -1,5 +1,7 @@
 function [Xx,Yy,Dest] = plot_fcn(Limit_alpha,Limit_beta,pace,Rodilla)
 
+    %Alpha = Arriba Abjo, Beta = Horizontal
+
     Alpha = -Limit_alpha:pace:Limit_alpha;
     Beta = -Limit_beta:pace:Limit_beta;
     
