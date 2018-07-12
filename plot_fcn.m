@@ -1,9 +1,14 @@
-function [Xx,Yy,Dest] = plot_fcn(Limit_alpha,Limit_beta,pace,Rodilla)
+function [Xx,Yy,Dest] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Rodilla)
 
+<<<<<<< HEAD
     %Alpha = Arriba Abjo, Beta = Horizontal
 
     Alpha = -Limit_alpha:pace:Limit_alpha;
     Beta = -Limit_beta:pace:Limit_beta;
+=======
+    Alpha = -Limit_alpha:pace_alpha:Limit_alpha;
+    Beta = -Limit_beta:pace_beta:Limit_beta;
+>>>>>>> f46c863655a87dcea83f0683dbfa4564c2f21fb5
     
     [Xx,Yy] = meshgrid(Alpha,Beta);
     Dest_var = zeros(size(Xx));

@@ -1,27 +1,6 @@
-function Grabar_video_perforacion(tiempo,V_seg)%tiempo en segundos
-    %Direccion y distancia
-
-    coordenada = V_seg.info{9};
-    
-    % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
-    
-   % fisis_usar = V_seg.femur.fisis;
-    fisis_usar = V_seg.mascara == 2;
-    hueso_usar = V_seg.mascara == 1;
-
-    dz = V_seg.info{2,1};
-    dx = V_seg.info{1,1};
-    
-    f = figure;
+function Grabar_video_perforacion(tiempo,V_seg,angulo)%tiempo en segundos
     hold on
-    fu= smooth3(fisis_usar, 'box', 9);
-    hu = smooth3(hueso_usar,'box', 9);
-    p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
-    p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-    reducepatch(p2,0.01)
-    ax = gca;
-    c = ax.DataAspectRatio;
-    ax.DataAspectRatio= [dz,dz,dx];
+    isosurf_fast(V_seg)
     
     axis off
     axis tight
@@ -41,8 +20,8 @@ function Grabar_video_perforacion(tiempo,V_seg)%tiempo en segundos
     el = 0;
 
     view(az,el)
-
-theta = -3/4:2/frame_total:3/4;
+angulo = sind(angulo);    
+theta = -angulo:angulo*(2/frame_total):angulo;
 a = (asind(theta));
 
 for j = 1:frame_total

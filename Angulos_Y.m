@@ -2,17 +2,19 @@ function Angulos = Angulos_Y(V_seg)
 
     Angulos = [];
     
-    tam = size(V_seg.femur.bones,3);
+    Femur = V_seg.mascara == 1;
+    
+    tam = size(V_seg.mascara,3);
     dx = V_seg.info{1};
     dz = V_seg.info{2};
-    [~,~,v1] = ind2sub(size(V_seg.femur.bones),find(V_seg.femur.bones > 0));
+    [~,~,v1] = ind2sub(size(Femur),find(Femur > 0));
     Mid = round((max(v1)+min(v1))/2);
     
      z_atras = zeros(1,tam);
 
     for i=1:tam
 
-        im = V_seg.femur.bones(:,:,i);
+        im = Femur(:,:,i);
         [~, col] = find(im);
         topcol1 = max(col);
 
