@@ -8,7 +8,7 @@ Base_datos = Rodillas.Base_datos;
 
 %%
 
-Atlas_n = uiload
+Atlas_n = uiload;
 Target = uiload;
 
 % Hacer una imregistration de Entre las fotos originales.

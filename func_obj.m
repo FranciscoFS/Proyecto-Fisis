@@ -1,4 +1,4 @@
-function [Value1,Value2,Value3,Value4] = func_obj(omega,Rodillas)
+function [Value1,Value2,Value3,Value4] = func_obj(omega,Rodillas,d,p)
 
     alpha = omega(1);
     beta = omega(2);
@@ -18,7 +18,7 @@ function [Value1,Value2,Value3,Value4] = func_obj(omega,Rodillas)
     
     for k=1:numel(Rodillas)
         
-        Destruccion(k) = Cilindro_fx_final(Rodillas(k).Rodilla,alpha,beta);
+        Destruccion(k) = Cilindro_fx_final(Rodillas(k).Rodilla,alpha,beta,d,p);
         
     end
     

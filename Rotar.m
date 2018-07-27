@@ -24,8 +24,8 @@ function [V_out] = Rotar(V_in,Omega,eje)
 %     
 %     [V_rotado,V_ref] = imwarp(V,Rdefault, tMatrix,'nearest');
     
-    V_out.vol.orig = imrotate3_fast(V_in.vol.orig,{Omega eje});
-    V_out.vol.filt = imrotate3_fast(V_in.vol.filt,{Omega eje});
+    %V_out.vol.orig = imrotate3_fast(V_in.vol.orig,{Omega eje});
+    %V_out.vol.filt = imrotate3_fast(V_in.vol.filt,{Omega eje});
     V_out.mascara = imrotate3_fast(V_in.mascara,{Omega eje});
     
 %     V_out.femur.fisis = imrotate3_fast(V_in.femur.fisis,{Omega eje});
