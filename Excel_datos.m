@@ -68,7 +68,7 @@ t.Properties.VariableNames= Var_names;
 for k=1:size(t,1)
     t.Edad{k} = str2double(t.Edad{k}(2:3));
 end
-%% Crear la Base de Datos que se utilizará para la Optimización y para el excel también
+%% Crear la Base de Datos que se utilizará para la Optimización y para el excel tambi�en
 
 % - Se rotará Solo en Z, para poder obtener los puntos de stephen
 %   automáticamente. 

@@ -1,7 +1,7 @@
-function porc = Cilindro_fx_final(V_seg,alpha,beta)
+function porc = Cilindro_fx_final(V_seg,alpha,beta,d,p)
 %Direccion y distancia
 
-    coordenada = V_seg.info{9};
+    coordenada = V_seg.info{8};
     
     % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
     
@@ -14,12 +14,10 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
 
     a1 = beta;% azimut (+ hacia posterior)
     a2 = alpha;% elevacion (+ hacia distal)
-    mm = 45;%Profundidad
-    diametro = 6;
-
+    mm = p;%Profundidad
+    diametro = d;
     
     [z,x,y] = sph2cart(deg2rad(a1),deg2rad(a2),mm);
-    
     
     %dif_x
     pixeles_x = x/dx;
@@ -50,15 +48,20 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta)
         p = x - radio_pix : x + radio_pix;
         q = y - radio_pix : y + radio_pix;
 
-        for j = 1:size(p,2)
-        for t = 1:size(q,2)
-        if (x-p(j))^2 + (y-q(t))^2 <= radio_pix^2
-            if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
-                pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
+            for j = 1:size(p,2)
+                
+                for t = 1:size(q,2)
+                    
+                    if (x-p(j))^2 + (y-q(t))^2 <= radio_pix^2
+                        
+                        if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
+                            
+                        pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
+                        
+                        end
+                    end 
+                end
             end
-        end 
-        end
-        end
     end
     
 %     f = figure;
