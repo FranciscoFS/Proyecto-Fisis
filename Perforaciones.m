@@ -1,5 +1,5 @@
-% Pruebas de Perforación
-% Ángulos, ambos entre -45 a 45+
+% Pruebas de Perforaciï¿½n
+% Angulos, ambos entre -45 a 45+
 % Diametros, de 5 a 7 mm
 % Se fija la profundidad en 30 mm y 25 mm
 
