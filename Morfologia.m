@@ -76,7 +76,7 @@ P4 = {[num2str(muHat_P4(1)) '- [' num2str(muCI_P4(1,1)) ' -' num2str(muCI_P4(2,1
 Tabla_2 = table(F1,F2,P2,P4);
 Var_names = {'Ajuste_Proyeccion_AP_Fourier_1','Ajuste_Proyeccion_AP_Fourier_2',...
     'Ajuste_Proyeccion_SG_Pol_orden_2','Ajuste_Proyeccion_SG_Pol_orden_4'};
-Tabla.Properties.VariableNames= Var_names;
+Tabla_2.Properties.VariableNames= Var_names;
 
 %%
 
@@ -98,6 +98,7 @@ imshow(Proyeccion_SG,[]);
 %scatter(Columnas_SG,Fisis_SG_mean,5,'red');axis equal;title('SG mean');
 p2 = plot(Fit_SG_Pol_2,'r--',Columnas_SG,Fisis_SG_mean,'m:');axis equal;title('AP');
 p3 = plot(Fit_SG_Pol_4,'b--',Columnas_SG,Fisis_SG_mean,'m:');axis equal;title('AP');
+
 
 %% Hacer los fit
 

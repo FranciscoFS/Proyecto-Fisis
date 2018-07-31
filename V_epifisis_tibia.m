@@ -49,9 +49,9 @@ function [Vol_out] = V_epifisis_tibia(V_seg)
 %     altura_prom = mean(row_f);
 %     indice_pixeles_hueso = (row_h >= altura_prom);
 
-    Vol_out{1} = sum(contador)*Vol_pixel;
-    Vol_out{2} = ((Vol_out{1})/(Vol_femur_total))*100;
-    Vol_out{3} = Vol_epifisiario;
+    Vol_out = sum(contador)*Vol_pixel;
+    %Vol_out{2} = ((Vol_out{1})/(Vol_femur_total))*100;
+    %Vol_out{3} = Vol_epifisiario;
 
 
     %Vol_bajo_fisis = contador*Vol_pixel;

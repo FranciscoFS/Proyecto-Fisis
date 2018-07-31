@@ -15,6 +15,7 @@ for k=1:numel(Base_datos)
     info = Base_datos(k).Rodilla.info;
     Edad(k) = str2num(info{5}(2:3));
     Sexo{k} = info{6};
+     
     
 end
 
@@ -168,14 +169,14 @@ Base_datos_M = Base_datos(strcmp(Sexo,'F'));
 
 for k=1:numel(Base_datos_H)
     
-    Rodilla = Base_datos_H(k).Rodilla;
-    Caso_hombres(k) = Cilindro_fx_final(Rodilla,alpha_hombre,beta_hombre,7,30);
+    Rodilla = Base_datos_H(k);
+    Caso_4(k) = Cilindro_fx_final(Rodilla,alpha_hombre,beta_hombre,7,30);
 end
 
 for k=1:numel(Base_datos_M)
     
-    Rodilla = Base_datos_M(k).Rodilla;
-    Caso_mujeres(k) = Cilindro_fx_final(Rodilla,alpha_mujer,beta_mujer,7,30);
+    Rodilla = Base_datos_M(k);
+    Caso_4(k) = Cilindro_fx_final(Rodilla,alpha_mujer,beta_mujer,7,30);
 end
 %%
 
@@ -230,6 +231,8 @@ Caso_1_min = zeros(numel(Base_datos),1);
 Caso_2_min = zeros(numel(Base_datos),1);
 Caso_3_min = zeros(numel(Base_datos),1);
 Caso_4_min = zeros(numel(Base_datos),1);
+Caso_hombres_min = zeros(numel(Base_datos),1);
+Caso_mujeres_min = zeros(numel(Base_datos),1);
 
 for k = 1:numel(Base_datos)
     
@@ -238,23 +241,9 @@ for k = 1:numel(Base_datos)
     Caso_2_min(k) = Cilindro_fx_final(Rodilla,alpha_min,Beta_min,6,30);
     Caso_3_min(k) = Cilindro_fx_final(Rodilla,alpha_min,Beta_min,7,30);
     Caso_4_min(k) = Cilindro_fx_final(Rodilla,alpha_min,Beta_min,7,25);
-end
-
-%%
-Caso_hombres_min = zeros(sum(strcmp(Sexo,'M')),1);
-Caso_mujeres_min = zeros(sum(strcmp(Sexo,'F')),1);
-
-
-for k=1:numel(Base_datos_H)
-    
-    Rodilla = Base_datos_H(k).Rodilla;
     Caso_hombres_min(k) = Cilindro_fx_final(Rodilla,alpha_min,Beta_min,7,30);
-end
-
-for k=1:numel(Base_datos_M)
-    
-    Rodilla = Base_datos_M(k).Rodilla;
     Caso_mujeres_min(k) = Cilindro_fx_final(Rodilla,alpha_min,Beta_min,7,30);
+
 end
 
 %%

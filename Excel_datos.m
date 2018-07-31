@@ -14,13 +14,16 @@ Status = [];
 Ax_Y = [];
 Ax_X = [];
 Ax_Z = [];
-Vol_bajo_fisis = [];
+Vol_epifisiario_F = [];
 Dist_FF = [];
 D_Femur = [];
 D_Tibia = [];
 VBF_Total = [];
 D_Fisis_Stephen = [];
 Dist_FF_Proy_S = [];
+Dist_FisisT = [];
+Dist_FisisT_Proy_S = [];
+Vol_epifisiario_T = [];
 
 for k=1:numel(DIM)
 
@@ -32,8 +35,9 @@ for k=1:numel(DIM)
         Ay = Angulos_Y(V_out);
         Ax = Angulo_X(V_out);
         [Vols,Check] = Volumenes_fisis(V_out);
-        Volumenes_bajo_fisis = V_bajo_fisis(V_out);
+        Volumenes_bajo_fisis = V_epifisis_femur(V_out);
         Dist_Fisis_Femur = Dist_fisis_femur(V_out);
+        Dist_Fisis_Tibia = Dist_fisis_tibia(V_out);
         Info(end+1,1:6) = V_out.info(1:6);
         Vol_femur(end+1) = Vols.femur;
         Vol_tibia(end+1) = Vols.tibia;
@@ -43,13 +47,17 @@ for k=1:numel(DIM)
         Ax_Y(end+1,:) = Ay;
         Ax_X(end+1,:) = Ax;
         Ax_Z(end+1) = V_out.info{7};
-        Vol_bajo_fisis(end+1) = Volumenes_bajo_fisis{1};
+        Vol_epifisiario_F(end+1) = Volumenes_bajo_fisis{1};
         VBF_Total(end+1) = Volumenes_bajo_fisis{2};
         Dist_FF(end+1) = Dist_Fisis_Femur{1};
         Dist_FF_Proy_S(end+1) = Dist_Fisis_Femur{2};
         D_Femur(end+1) = Diametro_femur(V_out);
         D_Tibia(end+1) = Diametro_tibia(V_out);
         D_Fisis_Stephen(end+1) = Dist_Fisis_Stephen(V_out);
+        Dist_FisisT(end+1) = Dist_Fisis_Tibia{1};
+        Dist_FisisT_Proy_S(end+1) = Dist_Fisis_Tibia{2};
+        Vol_epifisiario_T(end+1) = V_epifisis_tibia(V_out);
+        Rodilla{end+1} = V_out;
         
         fprintf('Procesado..... %s \n', DIM(k).name);
         
@@ -58,17 +66,30 @@ for k=1:numel(DIM)
 end
 
 Var_names = {'Nombre','Vol_Ffemur','Vol_Ftibia','Vol_Fperone','Rut','Edad','Peso','Sexo','F_femur','F_tibia','F_perone','Ax_Y','Ax_X','Ax_Z',...
-    'Dist_FF','Dist_FF_Proy_S','Vol_bajo_fisis','VBF_Total','D_Femur','D_Tibia','Dist_Fisis_Stephen'};
+    'Dist_FF','Dist_FF_Proy_S','Vol_bajo_fisis','VBF_Total','D_Femur','D_Tibia','Dist_Fisis_Stephen'...
+   ,'Dist_Fisis_tibia', 'Dist_Fisis_tibia_Proy_S','Vol_epifisiario_Tibia'};
+
+Var_names2 = {'Nombre','Vol_Ffemur','Vol_Ftibia','Vol_Fperone','Rut','Edad','Peso','Sexo','F_femur','F_tibia','F_perone','Ax_Y','Ax_X','Ax_Z',...
+    'Dist_FF','Dist_FF_Proy_S','Vol_bajo_fisis','VBF_Total','D_Femur','D_Tibia','Dist_Fisis_Stephen'...
+   ,'Dist_Fisis_tibia', 'Dist_Fisis_tibia_Proy_S','Vol_epifisiario_Tibia','Datos'};
 
 t = table(Name',Vol_femur',Vol_tibia',Vol_perone',Info(:,3), Info(:,5) ,Info(:,4), Info(:,6),Status(:,1),...
-    Status(:,2),Status(:,3),Ax_Y,Ax_X,Ax_Z',Dist_FF',Dist_FF_Proy_S',Vol_bajo_fisis',VBF_Total',D_Femur',D_Tibia',D_Fisis_Stephen');
+    Status(:,2),Status(:,3),Ax_Y,Ax_X,Ax_Z',Dist_FF',Dist_FF_Proy_S',Vol_epifisiario_F',VBF_Total',D_Femur',D_Tibia',D_Fisis_Stephen'...
+    ,Dist_FisisT',Dist_FisisT_Proy_S',Vol_epifisiario_T');
+
+t2 = table(Name',Vol_femur',Vol_tibia',Vol_perone',Info(:,3), Info(:,5) ,Info(:,4), Info(:,6),Status(:,1),...
+    Status(:,2),Status(:,3),Ax_Y,Ax_X,Ax_Z',Dist_FF',Dist_FF_Proy_S',Vol_epifisiario_F',VBF_Total',D_Femur',D_Tibia',D_Fisis_Stephen'...
+    ,Dist_FisisT',Dist_FisisT_Proy_S',Vol_epifisiario_T',Rodilla');
+
 
 t.Properties.VariableNames= Var_names;
+t2.Properties.VariableNames = Var_names2;
 
 for k=1:size(t,1)
     t.Edad{k} = str2double(t.Edad{k}(2:3));
+    t2.Edad{k} = str2double(t2.Edad{k}(2:3));
 end
-%% Crear la Base de Datos que se utilizará para la Optimización y para el excel tambi�en
+%% Crear la Base de Datos que se utilizará para la Optimización y para el excel tambi�en
 
 % - Se rotará Solo en Z, para poder obtener los puntos de stephen
 %   automáticamente. 
