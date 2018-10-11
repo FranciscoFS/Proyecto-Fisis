@@ -1,4 +1,4 @@
-function matriz_cilindro = Crear_solo_cilindro(V_seg,alpha,beta,p,d)
+function matriz_cilindro = Crear_solo_cilindro(V_seg,alpha,beta,p)
    %Direccion y distancia
 
     coordenada = V_seg.info{8};
@@ -14,7 +14,7 @@ function matriz_cilindro = Crear_solo_cilindro(V_seg,alpha,beta,p,d)
     a1 = beta;% azimut
     a2 = alpha;% elevacion
     mm = p;%Profundidad
-    diametro = d;
+    diametro = 7;
     
     [z,x,y] = sph2cart(deg2rad(a1),deg2rad(a2),mm);
     
