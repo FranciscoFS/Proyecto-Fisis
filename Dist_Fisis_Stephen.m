@@ -6,6 +6,8 @@ function Altura = Dist_Fisis_Stephen(V_seg)
 
         Fisis = V_seg.mascara == 2;
         Stephen_P = V_seg.info{8};
+        
+        
 
         Proy_S_fisis = sum(Fisis,3);
         [row,col] = ind2sub(size(Proy_S_fisis),find(Proy_S_fisis>0));
@@ -19,7 +21,7 @@ function Altura = Dist_Fisis_Stephen(V_seg)
 
         end
 
-        Altura = (mean(Alturas_fisis_distal - Stephen_P(1))*dx);
+        Altura = (mean(Alturas_fisis_distal - Stephen_P(2))*dx);
         
     else
         

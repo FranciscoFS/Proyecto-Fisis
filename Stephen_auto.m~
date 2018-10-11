@@ -40,7 +40,6 @@ function V_seg = Stephen_auto(V_seg)
 %     scatter(P2(1),P2(2),100,'d','filled')
 %     scatter(P3(1),P3(2),100,'d','filled')
 %     scatter(P4(1),P4(2),100,'d','filled')
-
     coordenada = P4;
  
     % Encontrar coordenada punto

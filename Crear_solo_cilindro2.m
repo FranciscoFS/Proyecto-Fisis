@@ -1,7 +1,7 @@
 function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta)
     %Direccion y distancia
 
-    coordenada = V_seg.info{9};
+    coordenada = V_seg.info{8};
     
     % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
     
@@ -11,9 +11,9 @@ function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta)
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
 
-    a1 = alpha;% azimut
-    a2 = beta;% elevacion
-    mm = 45;%Profundidad
+    a1 = beta;% azimut
+    a2 = alpha;% elevacion
+    mm = 30;%Profundidad
     diametro = 6;
 
     

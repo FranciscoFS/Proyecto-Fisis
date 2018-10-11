@@ -11,9 +11,9 @@ function matriz_cilindro = Crear_solo_cilindro(V_seg,alpha,beta)
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
 
-    a1 = alpha;% azimut
-    a2 = beta;% elevacion
-    mm = 45;%Profundidad
+    a1 = beta;% azimut
+    a2 = alpha;% elevacion
+    mm = 30;%Profundidad
     diametro = 6;
 
     

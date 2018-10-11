@@ -1,4 +1,5 @@
 function V_out = Rotar_3D(V_seg)
+
     %Enderezar en Z podemos obtener el angulo con regionprops3
     
 %   Angulos = regionprops3(V_seg.femur.bones,'Orientation');
