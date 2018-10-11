@@ -19,7 +19,8 @@ Dist_FF = [];
 D_Femur = [];
 D_Tibia = [];
 VBF_Total = [];
-D_Fisis_Stephen = [];
+D_Fisis_Stephen_proximal = [];
+D_Fisis_Stephen_distal = [];
 Dist_FF_Proy_S = [];
 Dist_FisisT = [];
 Dist_FisisT_Proy_S = [];
@@ -38,6 +39,7 @@ for k=1:numel(DIM)
         Volumenes_bajo_fisis = V_epifisis_femur(V_out);
         Dist_Fisis_Femur = Dist_fisis_femur(V_out);
         Dist_Fisis_Tibia = Dist_fisis_tibia(V_out);
+        Dist_Fisis_stephen = Dist_Fisis_Stephen(V_out,5);
         Info(end+1,1:6) = V_out.info(1:6);
         Vol_femur(end+1) = Vols.femur;
         Vol_tibia(end+1) = Vols.tibia;
@@ -53,7 +55,8 @@ for k=1:numel(DIM)
         Dist_FF_Proy_S(end+1) = Dist_Fisis_Femur{2};
         D_Femur(end+1) = Diametro_femur(V_out);
         D_Tibia(end+1) = Diametro_tibia(V_out);
-        D_Fisis_Stephen(end+1) = Dist_Fisis_Stephen(V_out);
+        D_Fisis_Stephen_proximal(end+1) = Dist_Fisis_stephen{2};
+        D_Fisis_Stephen_distal(end+1) = Dist_Fisis_stephen{1};
         Dist_FisisT(end+1) = Dist_Fisis_Tibia{1};
         Dist_FisisT_Proy_S(end+1) = Dist_Fisis_Tibia{2};
         Vol_epifisiario_T(end+1) = V_epifisis_tibia(V_out);
@@ -66,11 +69,11 @@ for k=1:numel(DIM)
 end
 
 Var_names = {'Nombre','Vol_Ffemur','Vol_Ftibia','Vol_Fperone','Rut','Edad','Peso','Sexo','F_femur','F_tibia','F_perone','Ax_Y','Ax_X','Ax_Z',...
-    'Dist_FF','Dist_FF_Proy_S','Vol_bajo_fisis','VBF_Total','D_Femur','D_Tibia','Dist_Fisis_Stephen'...
+    'Dist_FF','Dist_FF_Proy_S','Vol_bajo_fisis','VBF_Total','D_Femur','D_Tibia','Dist_Fisis_Stephen_proximal','Dist_Fisis_Stephen_distal'...
    ,'Dist_Fisis_tibia', 'Dist_Fisis_tibia_Proy_S','Vol_epifisiario_Tibia'};
 
 Var_names2 = {'Nombre','Vol_Ffemur','Vol_Ftibia','Vol_Fperone','Rut','Edad','Peso','Sexo','F_femur','F_tibia','F_perone','Ax_Y','Ax_X','Ax_Z',...
-    'Dist_FF','Dist_FF_Proy_S','Vol_bajo_fisis','VBF_Total','D_Femur','D_Tibia','Dist_Fisis_Stephen'...
+    'Dist_FF','Dist_FF_Proy_S','Vol_bajo_fisis','VBF_Total','D_Femur','D_Tibia','Dist_Fisis_Stephen_proximal','Dist_Fisis_Stephen_distal'...
    ,'Dist_Fisis_tibia', 'Dist_Fisis_tibia_Proy_S','Vol_epifisiario_Tibia','Datos'};
 
 t = table(Name',Vol_femur',Vol_tibia',Vol_perone',Info(:,3), Info(:,5) ,Info(:,4), Info(:,6),Status(:,1),...
