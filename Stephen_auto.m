@@ -33,7 +33,7 @@ function V_seg = Stephen_auto(V_seg)
     P3 = [x_ant + d_ant,y_distal];
     P4 = [x_ant + d_ant,y_distal - d_distal];
     
-%   imshow(rx)
+%   imshow(rx_femur,[])
 %     hold on
 % 
 %     scatter(P1(1),P1(2),100,'d','filled')

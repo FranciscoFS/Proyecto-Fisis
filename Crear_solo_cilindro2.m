@@ -1,4 +1,4 @@
-function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta)
+function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta,p,d)
     %Direccion y distancia
 
     coordenada = V_seg.info{8};
@@ -13,8 +13,8 @@ function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta)
 
     a1 = beta;% azimut
     a2 = alpha;% elevacion
-    mm = 30;%Profundidad
-    diametro = 6;
+    mm = p;%Profundidad
+    diametro = d;
 
     
     [z,x,y] = sph2cart(deg2rad(a1),deg2rad(a2),mm);
@@ -30,7 +30,7 @@ function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta)
     pixeles_z = z/dz;
     
     
-    P1 = coordenada;
+    P1 = [coordenada(2),coordenada(1),coordenada(3)];
     P2 = [P1(1)+pixeles_x, P1(2) + pixeles_y, P1(3) + pixeles_z];
     P2 = Aproximar(P2);
 
