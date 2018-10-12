@@ -1,7 +1,7 @@
 function [rx,rx_femur,rx1] = crear_rx(V_seg)
 
     orig = V_seg.vol.orig;
-  % filt = V_seg.vol.filt;
+    filt = V_seg.vol.filt;
     masc = V_seg.mascara;
     Femur = V_seg.mascara == 1;
     Fisis = V_seg.mascara == 2;

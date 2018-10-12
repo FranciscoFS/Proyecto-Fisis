@@ -30,7 +30,7 @@ function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta,p,d)
     pixeles_z = z/dz;
     
     
-    P1 = coordenada;
+    P1 = [coordenada(2),coordenada(1),coordenada(3)];
     P2 = [P1(1)+pixeles_x, P1(2) + pixeles_y, P1(3) + pixeles_z];
     P2 = Aproximar(P2);
 
