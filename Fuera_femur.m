@@ -8,7 +8,7 @@ function [porc_fuera] = Fuera_femur(V_seg,pixeles_ya_sumados)
     
     taladro = pixeles_ya_sumados;
     vol_con_taladro = ((vol>0)+(taladro>0))>0;
-    %vol_con_taladro2 = ((vol)+2*(taladro)); %variable que hice para
+    vol_con_taladro2 = ((vol)+2*(taladro)); %variable que hice para
     %comprobar que el punto de stephen y el cilindro calzaran
     queda_afuera = (vol_con_taladro-vol)>0;
 
