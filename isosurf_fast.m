@@ -9,11 +9,10 @@ function isosurf_fast(V_seg)
     hold on
     fu= smooth3(fisis_usar, 'box', 9);
     hu = smooth3(hueso_usar,'box', 9);
-    p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
+    p1= patch(isosurface(fu),'FaceColor','none','EdgeColor','red','LineWidth',0.1,'EdgeAlpha','0.4');
     p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+    reducepatch(p1,0.2)
     reducepatch(p2,0.01)
- 
-    view(3)    
 
     ax = gca;
     c = ax.DataAspectRatio;
