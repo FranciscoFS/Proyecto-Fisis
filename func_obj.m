@@ -19,8 +19,13 @@ function [Value1,Value2,Value3,Value4] = func_obj(omega,Rodillas,d,p)
     for k=1:numel(Rodillas)
 
         Destruccion(k) = Cilindro_fx_final(Rodillas(k).Rodilla,alpha,beta,d,p);
+<<<<<<< HEAD
+        
+        
+=======
 
 
+>>>>>>> 08cfd00dd74e174bc5e48b448aca9ac3ed8776f9
     end
     
     Value1 = mean(Destruccion,'omitnan') + var(Destruccion);
