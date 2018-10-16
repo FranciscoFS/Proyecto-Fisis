@@ -106,7 +106,8 @@ end
 
 folder = uigetdir();
 DIM = dir(folder);
-Dir_out = '/Users/franciscofernandezschlein/Google Drive/Uc/LPFM/Base_datos_procesada/';
+%Dir_out = '/Users/franciscofernandezschlein/Google Drive/Uc/LPFM/Base_datos_procesada/';
+Dir_out = '/Users/franciscofernandezschlein/Google Drive/Uc/LPFM/Base_datos_procesada2/';
 fields_out = {'femur','perone','tibia','rotula','vol'};
 contador = 0;
 Base_datos = struct('Rodilla',[]);

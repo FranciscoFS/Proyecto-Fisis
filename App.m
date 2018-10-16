@@ -370,7 +370,6 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 clc
-clear all
 close all
 
 
@@ -551,7 +550,7 @@ function pushbutton9_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton9 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-isosurf_2(handles.V_seg.femur.fisis,handles.V_seg.femur.bones,handles.V_seg.info)
+isosurf_2(handles.V_seg)
 
 
 % --- Executes on button press in Stephen.

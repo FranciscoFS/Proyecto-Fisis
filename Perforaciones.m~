@@ -26,9 +26,9 @@ Edad_sexo.Properties.VariableNames= names;
 %% Parametros fijos para todos los test
 
 Limit_alpha = 45;
-pace_alpha = 1;
+pace_alpha = 5;
 Limit_beta = 45;
-pace_beta = 1;
+pace_beta = 5;
 
 %% Test 1
 % D = 5
@@ -277,7 +277,6 @@ Var_names = {'Caso1','Caso2','Caso3','Caso4','Caso_hombres','Caso_mujeres'};
 Tabla_min.Properties.VariableNames= Var_names;
 
 %%
-
 Alpha = -Limit_alpha:pace_alpha:Limit_alpha;
 Beta = -Limit_beta:pace_beta:Limit_beta;
 
@@ -290,7 +289,9 @@ for k=1:length(Alpha)
     for i = 1:length(Beta)
         
         Cilindro = Crear_solo_cilindro2(V_out,Alpha(k),Beta(i),D,P);
-        Is_in(k,i) = Fuera_femur(V_out,Cilindro);
+        Is_in(k,i) = Fuera_femur(V-
+        
+        
     end 
 
     fprintf('Angulo actual %d \n',k)

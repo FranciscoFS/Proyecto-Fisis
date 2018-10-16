@@ -32,8 +32,7 @@ function V_seg = Stephen_auto(V_seg)
 
     P3 = [x_ant + d_ant,y_distal];
     P4 = [x_ant + d_ant,y_distal - d_distal];
-    
-<<<<<<< HEAD
+     
 %     figure;
 %     imshow(rx_femur,[])
 %     hold on
@@ -42,15 +41,6 @@ function V_seg = Stephen_auto(V_seg)
 %     scatter(P2(1),P2(2),100,'d','filled')
 %     scatter(P3(1),P3(2),100,'d','filled')
 %     scatter(P4(1),P4(2),100,'d','filled')
-=======
-  imshow(rx_femur,[])
-    hold on
-
-    scatter(P1(1),P1(2),100,'d','filled')
-    scatter(P2(1),P2(2),100,'d','filled')
-    scatter(P3(1),P3(2),100,'d','filled')
-    scatter(P4(1),P4(2),100,'d','filled')
->>>>>>> 04e68cb8a01a17eeb8bf74b3c31e7184b85de276
 
     coordenada = P4;
  
@@ -71,7 +61,7 @@ function V_seg = Stephen_auto(V_seg)
         end
         contador = contador+1;  
     end
-
+    
     V_seg.info{8} = coord_3D;
     V_seg.info{7} = Az;
 
