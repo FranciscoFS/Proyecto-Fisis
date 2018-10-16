@@ -18,6 +18,12 @@ Y = smooth3(Y,'box',Box_size);
 %Patch Cortical
 W =interp3(cortical,Xq,Yq,Zq,'cubic');
 W = smooth3(W,'box',Box_size);
+
+[~,~,z] = ind2sub(size(W),find(W>0));
+New_Pto = [Pto(1),Pto(2),min(z(:))];
+
+
+
 %%
 
 alpha = 0;
