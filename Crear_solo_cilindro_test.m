@@ -1,4 +1,4 @@
-function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta,d,p)
+function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,fisis,alpha,beta,d,p)
     %Direccion y distancia
 
     coordenada = V_seg.info{8};
@@ -6,10 +6,11 @@ function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta,d,p)
     % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
     
    % fisis_usar = V_seg.femur.fisis;
-    fisis_usar = V_seg.mascara == 2;
+    fisis_usar = fisis;
     
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
+    pace = dx/dz;
 
     a1 = beta;% + hacia distal
     a2 = alpha;% + hacia posterior
@@ -23,29 +24,15 @@ function pixeles_ya_sumados = Crear_solo_cilindro2(V_seg,alpha,beta,d,p)
     %dif_y
     pixeles_y = y/dx;
     %dif_z
-    pixeles_z = z/dz;
-<<<<<<< HEAD
+    pixeles_z = z/dx;
     
     % Cambiar 1 por 2, si el pto que entrega Stephen auto está
     % correctamente ordenado (X,Y,Z), en este caso llega Y,X,Z
     
-    P1 = [coordenada(2),coordenada(1),coordenada(3)];
+    P1 = [coordenada(2),coordenada(1),(coordenada(3)-pace)/pace];
     P2 = [coordenada(2)+pixeles_x, coordenada(1) + pixeles_y, P1(3) + pixeles_z];
     P2 = round(P2);
 
-=======
-   
-%Prueba
-%   Francisco  
-    P1 = [coordenada(1),coordenada(2),coordenada(3)];
-    P2 = [P1(1)+pixeles_x, P1(2) + pixeles_y, P1(3) + pixeles_z];
-    P2 = Aproximar(P2);
-
-   %Tomas 
-%     P1 = [coordenada(2),coordenada(1),coordenada(3)];
-%     P2 = [coordenada(2)+pixeles_x, coordenada(1) + pixeles_y, P1(3) + pixeles_z];
-%     P2 = Aproximar(P2);
->>>>>>> acaf8aa0798e01e3e3df65f1e1181e9e20ac0a70
 
     [X, Y, Z] = bresenham_line3d(P1, P2);
 

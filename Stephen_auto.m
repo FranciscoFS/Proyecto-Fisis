@@ -32,35 +32,47 @@ function V_seg = Stephen_auto(V_seg)
 
     P3 = [x_ant + d_ant,y_distal];
     P4 = [x_ant + d_ant,y_distal - d_distal];
-    
-%   imshow(rx_femur,[])
+<<<<<<< HEAD
+     
+%     figure;
+%     imshow(rx_femur,[])
 %     hold on
 % 
 %     scatter(P1(1),P1(2),100,'d','filled')
 %     scatter(P2(1),P2(2),100,'d','filled')
 %     scatter(P3(1),P3(2),100,'d','filled')
 %     scatter(P4(1),P4(2),100,'d','filled')
+=======
+    
+    figure;
+    imshow(rx_femur,[])
+    hold on
+
+    scatter(P1(1),P1(2),100,'d','filled')
+    scatter(P2(1),P2(2),100,'d','filled')
+    scatter(P3(1),P3(2),100,'d','filled')
+    scatter(P4(1),P4(2),100,'d','filled')
+>>>>>>> acaf8aa0798e01e3e3df65f1e1181e9e20ac0a70
 
     coordenada = P4;
  
     % Encontrar coordenada punto
-
-    v_usar = (V_seg.mascara == 2) + (V_seg.mascara ==1);
+    v_usar = (V_seg.mascara == 2)+(V_seg.mascara ==1)>0;
     encontrado = 0;
     contador = 1;
-
+  
     while (contador <= size(v_usar,3) && encontrado ==0)
+        
         if v_usar(Aproximar(coordenada(2)),Aproximar(coordenada(1)),contador)>0
-            coord_3D = [Aproximar(coordenada(2)),Aproximar(coordenada(1)),contador];
+            coord_3D = [Aproximar(coordenada(1)),Aproximar(coordenada(2)),contador];
             coord_3D = double(coord_3D);
             %uiwait(msgbox('PUNTO ENCONTRADO'));
             fprintf('Punto encontrado \n');
             encontrado =1;
-            contador = contador-1;
         end
-        contador = contador+1;    
+        contador = contador+1;  
     end
-
+    
     V_seg.info{8} = coord_3D;
     V_seg.info{7} = Az;
 

@@ -37,10 +37,10 @@ h = waitbar(0.5,'Modelando en 3D.....');
     hold on
 
     p1= patch(isosurface(Y),'FaceColor','green','EdgeColor','none','FaceAlpha','0.95');
-    isonormals(Y,p1)
-    p2= patch(isosurface(W),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
-    isonormals(W,p2)
-    reducepatch(p2,0.01)
+    %isonormals(Y,p1)
+    %p2= patch(isosurface(W),'FaceColor','blue','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+    %isonormals(W,p2)
+    %reducepatch(p2,0.01)
  
     view(3)    
 

@@ -26,9 +26,9 @@ Edad_sexo.Properties.VariableNames= names;
 %% Parametros fijos para todos los test
 
 Limit_alpha = 45;
-pace_alpha = 1;
+pace_alpha = 5;
 Limit_beta = 45;
-pace_beta = 1;
+pace_beta = 5;
 
 %% Test 1
 % D = 5
@@ -37,9 +37,9 @@ tic;
 D = 5;
 P = 30;
 [Xx,Yy,Dest_test1] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
+toc;
 
-
-% Test 2
+%% Test 2
 % D = 6 mm
 % P = 30 mm
 
@@ -47,16 +47,16 @@ D = 6;
 P = 30;
 [~,~,Dest_test2] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
 
-% Test 3
+%% Test 3
 % D = 7 mm
 % P = 30 mm
 
 D = 7;
 P = 30;
-[Xx,Yy,Dest_test3] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
-toc;
-%P = 25;
-%[~,~,Dest_test4] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
+[~,~,Dest_test3] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
+
+P = 25;
+[~,~,Dest_test4] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
 
 %% Interpolacion
 
@@ -65,9 +65,9 @@ Pace = 1;
 Test1_interp = interp2(Xx,Yy,Dest_test1{4},Xeq,Yeq);
 Test2_interp = interp2(Xx,Yy,Dest_test2{4},Xeq,Yeq);
 Test3_interp = interp2(Xx,Yy,Dest_test3{4},Xeq,Yeq);
-%Test4_interp = interp2(Xx,Yy,Dest_test4{4},Xeq,Yeq);
-%Test_hombres_interp = interp2(Xx,Yy,Dest_test_hombres{4},Xeq,Yeq);
-%Test_mujeres_interp = interp2(Xx,Yy,Dest_test_mujeres{4},Xeq,Yeq);
+Test4_interp = interp2(Xx,Yy,Dest_test4{4},Xeq,Yeq);
+Test_hombres_interp = interp2(Xx,Yy,Dest_test_hombres{4},Xeq,Yeq);
+Test_mujeres_interp = interp2(Xx,Yy,Dest_test_mujeres{4},Xeq,Yeq);
 
 
 %% Test para comparar Hombres vs Mujeres
@@ -101,10 +101,10 @@ subplot(2,2,4); surf(Xx,Yy,Dest_test3{4}); title('Mean -- D=7mm y P=30 mm');
 
 figure;
 
-subplot(2,2,1); surf(Xx,Yy,Dest_test1{2}); title(' D=5mm y P=30 mm');
-subplot(2,2,2); surf(Xx,Yy,Dest_test2{2}); title(' D=6mm y P=30 mm');
-subplot(2,2,3); surf(Xx,Yy,Dest_test3{2}); title(' D=7mm y P=30 mm');
-%subplot(2,2,4); surf(Xx,Yy,Dest_test4{4}); title(' D=7mm y P=25 mm');
+subplot(2,2,1); surf(Xx,Yy,Dest_test1{4}); title(' D=5mm y P=30 mm');
+subplot(2,2,2); surf(Xx,Yy,Dest_test2{4}); title(' D=6mm y P=30 mm');
+subplot(2,2,3); surf(Xx,Yy,Dest_test3{4}); title(' D=7mm y P=30 mm');
+subplot(2,2,4); surf(Xx,Yy,Dest_test4{4}); title(' D=7mm y P=25 mm');
 
 %%
 figure;
@@ -277,7 +277,6 @@ Var_names = {'Caso1','Caso2','Caso3','Caso4','Caso_hombres','Caso_mujeres'};
 Tabla_min.Properties.VariableNames= Var_names;
 
 %%
-
 Alpha = -Limit_alpha:pace_alpha:Limit_alpha;
 Beta = -Limit_beta:pace_beta:Limit_beta;
 
@@ -290,7 +289,9 @@ for k=1:length(Alpha)
     for i = 1:length(Beta)
         
         Cilindro = Crear_solo_cilindro2(V_out,Alpha(k),Beta(i),D,P);
-        Is_in(k,i) = Fuera_femur(V_out,Cilindro);
+        Is_in(k,i) = Fuera_femur(V-
+        
+        
     end 
 
     fprintf('Angulo actual %d \n',k)

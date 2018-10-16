@@ -17,15 +17,20 @@ function [Value1,Value2,Value3,Value4] = func_obj(omega,Rodillas,d,p)
     Destruccion = zeros(1,numel(Rodillas));
     
     for k=1:numel(Rodillas)
-        
+
         Destruccion(k) = Cilindro_fx_final(Rodillas(k).Rodilla,alpha,beta,d,p);
+<<<<<<< HEAD
         
         
+=======
+
+
+>>>>>>> 08cfd00dd74e174bc5e48b448aca9ac3ed8776f9
     end
     
-    Value1 = mean(Destruccion) + var(Destruccion);
-    Value2 = mean(Destruccion) + regulador*var(Destruccion);
-    Value3 = norm(Destruccion);
-    Value4 = mean(Destruccion);
+    Value1 = mean(Destruccion,'omitnan') + var(Destruccion);
+    Value2 = mean(Destruccion,'omitnan') + regulador*var(Destruccion);
+    Value3 = norm(Destruccion(not(isnan(Destruccion))));
+    Value4 = mean(Destruccion,'omitnan');
 end
     
