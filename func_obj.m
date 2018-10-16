@@ -20,6 +20,7 @@ function [Value1,Value2,Value3,Value4] = func_obj(omega,Rodillas,d,p)
         
         Destruccion(k) = Cilindro_fx_final(Rodillas(k).Rodilla,alpha,beta,d,p);
         
+        
     end
     
     Value1 = mean(Destruccion) + var(Destruccion);
