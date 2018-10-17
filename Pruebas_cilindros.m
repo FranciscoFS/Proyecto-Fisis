@@ -19,8 +19,13 @@ Y = smooth3(Y,'box',Box_size);
 W =interp3(cortical,Xq,Yq,Zq,'cubic');
 W = smooth3(W,'box',Box_size);
 
+<<<<<<< HEAD
 [~,~,z] = ind2sub(size(W),find(W>0.2));
 New_Pto = [Pto(1),Pto(2),min(z(:))];
+=======
+%[~,~,z] = ind2sub(size(W),find(W>0));
+%New_Pto = [Pto(1),Pto(2),min(z(:))];
+>>>>>>> ca9f420637aaec027be31c4881712e8a3f1d91ff
 
 
 
@@ -35,7 +40,11 @@ D =  6;
 % Z2 =interp3(Taladro2,Xq,Yq,Zq,'cubic');
 % Z2 = smooth3(Z2,'box',Box_size);
 
+<<<<<<< HEAD
 Z3 = Crear_solo_cilindro_test(V_out,Y,alpha,Beta,D,p,New_Pto);
+=======
+Z3 = Crear_solo_cilindro_test(V_out,W,alpha,Beta,D,p);
+>>>>>>> ca9f420637aaec027be31c4881712e8a3f1d91ff
 Z3 = smooth3(Z3,'box',Box_size);
 
 % figure; hold on;
@@ -56,7 +65,7 @@ p2= patch(isosurface(W,0.5),'FaceColor','none','EdgeColor','blue','LineWidth',0.
 p3 = patch(isosurface(Z3,0.5),'FaceColor','green','EdgeColor','none');
 isonormals(Z3,p3);
 reducepatch(p2,0.01);
-scatter3(Pto(1),Pto(2),(Pto(3)-pace)/pace,'black','filled');
+%scatter3(Pto(1),Pto(2),(Pto(3)-pace)/pace,'black','filled');
 axis off; daspect([1 1 1]);
 lighting gouraud
 material dull

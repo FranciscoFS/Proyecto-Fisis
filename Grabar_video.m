@@ -1,15 +1,15 @@
-function Grabar_video(tiempo)%tiempo en segundos
+function Grabar_video(tiempo,Name)%tiempo en segundos
 axis off
 axis tight manual
 ax = gca;
 ax.NextPlot = 'replaceChildren';
-v = VideoWriter('Rodilla_girando');
+v = VideoWriter(Name);
 v.Quality = 100;
 open(v);
 
 frame_total = tiempo*30;%30 por los fps = 30
 az= 0;
-el = -90;
+el = 0;
 l = camlight('headlight');
 lighting gouraud
 material dull
