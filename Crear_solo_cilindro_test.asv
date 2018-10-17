@@ -1,4 +1,4 @@
-function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,cortical,alpha,beta,d,p)
+function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,fisis,alpha,beta,d,p)
     %Direccion y distancia
 
     coordenada = V_seg.info{8};
@@ -6,8 +6,8 @@ function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,cortical,alpha,beta
     % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
     
    % fisis_usar = V_seg.femur.fisis;
-    fisis_usar = cortical;
-    [~,~,z] = ind2sub(size(cortical),find(cortical>0));
+    fisis_usar = fisis;
+    [~,~,z] = ind2sub(size(fisis),find(fisis>0));
     coordenada = [coordenada(1),coordenada(2),min(z(:))];
     
     dz = V_seg.info{2,1};
