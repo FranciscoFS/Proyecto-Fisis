@@ -1,7 +1,7 @@
 function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,fisis,alpha,beta,d,p)
     %Direccion y distancia
 
-    coordenada = V_seg.info{8};
+    coordenada = New_pto;
     
     % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
     
@@ -29,7 +29,7 @@ function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,fisis,alpha,beta,d,
     % Cambiar 1 por 2, si el pto que entrega Stephen auto está
     % correctamente ordenado (X,Y,Z), en este caso llega Y,X,Z
     
-    P1 = [coordenada(2),coordenada(1),(coordenada(3)-pace)/pace];
+    P1 = [coordenada(2),coordenada(1),coordenada(3)];
     P2 = [coordenada(2)+pixeles_x, coordenada(1) + pixeles_y, P1(3) + pixeles_z];
     P2 = round(P2);
 
