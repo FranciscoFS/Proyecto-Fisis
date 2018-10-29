@@ -1,10 +1,11 @@
 %pixeles_ya_sumados=Crear_solo_cilindro2(V_seg,alpha,beta,p,d)
 
-function [porc_fuera] = Fuera_femur(V_seg,taladro)
+function [porc_fuera] = Fuera_femur(V_seg,taladro,S)
 
     a = V_seg.mascara ==1; %hueso
     b = V_seg.mascara ==2; %fisis
     vol = (a + b) >0; %todo el femur
+    vol = imclose(vol,S);
     
     [~,~,k] = ind2sub(size(taladro),find(taladro>0));
     pos = min(k(:));
