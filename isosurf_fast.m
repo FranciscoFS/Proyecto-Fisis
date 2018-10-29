@@ -12,7 +12,7 @@ function isosurf_fast(V_seg)
     p1= patch(isosurface(fu),'FaceColor','none','EdgeColor','red','LineWidth',0.1,'EdgeAlpha','0.4');
     p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
     reducepatch(p1,0.2)
-    reducepatch(p2,0.01)
+    reducepatch(p2,0.05)
 
     ax = gca;
     c = ax.DataAspectRatio;

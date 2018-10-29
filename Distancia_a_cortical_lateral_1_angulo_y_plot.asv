@@ -1,4 +1,4 @@
-function [mm_dist_cada_angulo] = Distancia_a_crotical_lateral(V_seg,ang)
+function [mm_dist_cada_angulo] = Distancia_a_cortical_lateral_1_angulo_y_plot(V_seg,ang)
 
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
@@ -13,6 +13,8 @@ function [mm_dist_cada_angulo] = Distancia_a_crotical_lateral(V_seg,ang)
     Femur = V_seg.mascara == 1;
     Fisis = V_seg.mascara == 2;
     Femur_total = (Femur + Fisis)>0;
+    
+    posicion_final_cada_angulo = [];
 
     for i = 1:length(angulos)
 
@@ -36,10 +38,17 @@ function [mm_dist_cada_angulo] = Distancia_a_crotical_lateral(V_seg,ang)
             if Z(y)<= size(Femur_total,3)
                 if Femur_total(X(y),Y(y),Z(y))>0
                     ultimo_punto = [X(y),Y(y),Z(y)];
+                    posicion_final_cada_angulo(i,1) = ultimo_punto(1);
+                    posicion_final_cada_angulo(i,2) = ultimo_punto(2);
+                    posicion_final_cada_angulo(i,3) = ultimo_punto(3);
                     mm_dist_cada_angulo(i) = sqrt(((ultimo_punto(3)-P1(3))*dz)^2 +((ultimo_punto(2)-P1(2))*dx)^2);
                     break
                 end
             end
         end
     end
+    
+	
+ 
+
 end
