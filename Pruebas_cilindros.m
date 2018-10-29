@@ -19,32 +19,27 @@ Y = smooth3(Y,'box',Box_size);
 W =interp3(cortical,Xq,Yq,Zq,'cubic');
 W = smooth3(W,'box',Box_size);
 
-<<<<<<< HEAD
+
 [~,~,z] = ind2sub(size(W),find(W>0.2));
 New_Pto = [Pto(1),Pto(2),min(z(:))];
-=======
 %[~,~,z] = ind2sub(size(W),find(W>0));
 %New_Pto = [Pto(1),Pto(2),min(z(:))];
->>>>>>> ca9f420637aaec027be31c4881712e8a3f1d91ff
 
 
 
 %%
 
 alpha = 0;
-Beta = 0';
-p = 20 ;
-D =  6;
+Beta = 45';
+p = 30 ;
+D =  5;
 
 % Taladro2 = Crear_solo_cilindro2(V_out,alpha,Beta,D,p);
 % Z2 =interp3(Taladro2,Xq,Yq,Zq,'cubic');
 % Z2 = smooth3(Z2,'box',Box_size);
 
-<<<<<<< HEAD
-Z3 = Crear_solo_cilindro_test(V_out,Y,alpha,Beta,D,p,New_Pto);
-=======
+
 Z3 = Crear_solo_cilindro_test(V_out,W,alpha,Beta,D,p);
->>>>>>> ca9f420637aaec027be31c4881712e8a3f1d91ff
 Z3 = smooth3(Z3,'box',Box_size);
 
 % figure; hold on;
@@ -104,4 +99,16 @@ for p=2:20
     p3 = patch(isosurface(Z3,0.5),'FaceColor','green','EdgeColor','none');
     
 end
+%%
 
+data.alpha = 5;
+data.Beta = -30';
+data.p = 30 ;
+data.D =  6;
+
+isosurf_todos(V_out,[1 0 0 0 1 1],data);
+
+
+% Z3 = Crear_solo_cilindro_test(V_out,cortical,alpha,Beta,D,p);
+% Z3 = smooth3(Z3,'box',Box_size);
+% Z3 = imrotate3_fast(Z3,{90 'X'});

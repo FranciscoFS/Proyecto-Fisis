@@ -1,9 +1,9 @@
-function fh = isosurf_todos(V_out,check)
+function fh = isosurf_todos(V_out,check,data)
 
     info = V_out.info;
 
     %Proporciones RM
-    if check(5)
+    if check(6)
         V_out.mascara = imrotate3_fast(V_out.mascara,{90 'X'});
         dxdy = info{1};
         dz = info{2};
@@ -31,9 +31,9 @@ function fh = isosurf_todos(V_out,check)
         %fh =interp3(im2double(V_out.mascara==1),Xq,Yq,Zq,'cubic');
         fh = smooth3(interp3(im2double(V_out.mascara==1),Xq,Yq,Zq,'cubic')...
             ,'box',Box_size);
-        p1= patch(isosurface(ff,0.2),'FaceColor','red','EdgeColor','none');
+        p1= patch(isosurface(ff,0.3),'FaceColor','red','EdgeColor','none');
         isonormals(ff,p1)
-        p2= patch(isosurface(fh),'FaceColor','none','EdgeColor','blue','LineWidth',...
+        p2= patch(isosurface(fh,0.2),'FaceColor','none','EdgeColor','blue','LineWidth',...
         0.1,'EdgeAlpha','0.4');
         reducepatch(p2,0.01)
     end
@@ -77,33 +77,25 @@ function fh = isosurf_todos(V_out,check)
         p7= patch(isosurface(r),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
          reducepatch(p7,0.01)
     end
+    
+    if check(5) && check(6)
+        Z3 = Crear_solo_cilindro_test(V_out,fh,data.alpha,data.beta,data.d,data.p);
+        Z3 = smooth3(Z3,'box',Box_size);
+        Z3 = imrotate3_fast(Z3,{90 'X'});
+        p3 = patch(isosurface(Z3,0.5),'FaceColor','green','EdgeColor','none');
+        isonormals(Z3,p3);
+        
+    elseif check(5) && not(check(6))
+        Z3 = Crear_solo_cilindro_test(V_out,fh,data.alpha,data.beta,data.d,data.p);
+        Z3 = smooth3(Z3,'box',Box_size);
+        p3 = patch(isosurface(Z3,0.5),'FaceColor','green','EdgeColor','none');
+        isonormals(Z3,p3);
+        
+    end
+    
 
     %Vista y Luz
-
     
-%     %Patch femur
-%     p1= patch(isosurface(ff),'FaceColor','red','EdgeColor','none');
-%     isonormals(ff,p1)
-%     p2= patch(isosurface(fh),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-%     %isonormals(fh,p2)
-%     reducepatch(p2,0.01)
-%     %Patch tibia
-%     p3= patch(isosurface(tf),'FaceColor','green','EdgeColor','none');
-%     isonormals(tf,p3)
-%     p4= patch(isosurface(th),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-%     isonormals(tf,p3)
-%     %isonormals(th,p4)
-%     reducepatch(p4,0.01)
-%     %Patch perone
-%     p5= patch(isosurface(pf),'FaceColor','red','EdgeColor','none');
-%     p6= patch(isosurface(ph),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-%     isonormals(pf,p5)
-%     reducepatch(p6,0.01)
-%     %Patch rotula
-%     p7= patch(isosurface(r),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-%     reducepatch(p7,0.01)
-%     %isonormals(r,p7)
-
     view(3)
     axis off
     set(gcf,'color','white')
@@ -111,8 +103,9 @@ function fh = isosurf_todos(V_out,check)
     l = camlight('headlight');
     lighting gouraud
     material dull
+    
 %     title('Rodilla')
-% 
+
 %     while true
 %         camlight(l,'headlight')
 %         pause(0.05);  

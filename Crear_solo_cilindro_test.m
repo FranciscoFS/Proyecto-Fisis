@@ -1,14 +1,27 @@
 function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,cortical,alpha,beta,d,p)
     %Direccion y distancia
+    % Este solo sirve para cuando los volumenes están interpolados
+    % Permite analizar variaciones pequeñas de la profundidad.
 
-    coordenada = New_pto;
+    coordenada = V_seg.info{8};
     
     % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
     
    % fisis_usar = V_seg.femur.fisis;
+   
     fisis_usar = cortical;
-    [~,~,z] = ind2sub(size(cortical),find(cortical>0));
-    coordenada = [coordenada(1),coordenada(2),min(z(:))];
+    [m,~,k] = size(cortical);
+    [row,~,z] = ind2sub(size(cortical),find(cortical>0));
+
+    if k < m
+        coordenada = [coordenada(1),coordenada(2),min(z(:))];
+        pixeles_ya_sumados = zeros(size(fisis_usar));
+    else
+        coordenada = [coordenada(1),coordenada(2),min(row(:))];
+        pixeles_ya_sumados = zeros(size(fisis_usar,2),size(fisis_usar,2),size(fisis_usar,1));
+        
+    end
+
     
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
@@ -26,24 +39,25 @@ function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,cortical,alpha,beta
     %dif_y
     pixeles_y = y/dx;
     %dif_z
-    pixeles_z = z/dx;
+    if k < 40
+        pixeles_z = z/dz;
+    else
+        pixeles_z = z/dx;
+    end
     
     % Cambiar 1 por 2, si el pto que entrega Stephen auto está
     % correctamente ordenado (X,Y,Z), en este caso llega Y,X,Z
     
-    P1 = [coordenada(2),coordenada(1),coordenada(3)];
-    P2 = [coordenada(2)+pixeles_x, coordenada(1) + pixeles_y, P1(3) + pixeles_z];
+    P1 = [coordenada(1),coordenada(2),coordenada(3)];
+    P2 = [coordenada(1)+pixeles_x, coordenada(2) + pixeles_y, P1(3) + pixeles_z];
     P2 = round(P2);
-
 
     [X, Y, Z] = bresenham_line3d(P1, P2);
 
     % Cilindro
     radio = diametro/2;
     radio_pix = round(radio/dx);
-
-    pixeles_ya_sumados = zeros(size(fisis_usar));
-
+    
     for i = 1:size(Z,2)
 
         x = Aproximar(X(i));

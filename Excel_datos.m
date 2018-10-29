@@ -3,8 +3,8 @@
 
 
 %folder = uigetdir();
-%DIM = dir('/Users/franciscofernandezschlein/Google Drive/Uc/LPFM/Base_datos_procesada/');
-DIM = dir('G:\GoogleDrive\Uc\LPFM\Base_datos_procesada\');
+DIM = dir('/Users/franciscofernandezschlein/Google Drive/Uc/LPFM/Base_datos_procesada/');
+%DIM = dir('G:\GoogleDrive\Uc\LPFM\Base_datos_procesada\');
 
 Vol_femur = [];
 Vol_tibia = [];

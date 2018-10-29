@@ -78,28 +78,139 @@ Var_names = {'Ajuste_Proyeccion_AP_Fourier_1','Ajuste_Proyeccion_AP_Fourier_2',.
     'Ajuste_Proyeccion_SG_Pol_orden_2','Ajuste_Proyeccion_SG_Pol_orden_4'};
 Tabla_2.Properties.VariableNames= Var_names;
 
+%% Graficar algunos ejemplos Femur
+
+%V_seg = Base_datos(45).Rodilla;
+
+[AP,SG] = Proyecciones(V_seg);
+
+dx = V_seg.info{1}; 
+dz = V_seg.info{2};
+pace = dx/dz;
+Fisis = V_seg.mascara == 2;
+Proyeccion_SG = sum(Fisis > 0,3);
+Proyeccion_AP = squeeze(sum(Fisis > 0,2));
+[n,z] = size(Proyeccion_AP);
+[Xq,Zq] = meshgrid(1:pace:z,1:n);
+Proyeccion_AP = interp2(Proyeccion_AP,Xq,Zq);
+
+[Fit_AP_Fourier1,GOF_AP_F1] = fit(AP.Columnas,AP.Filas,'fourier1');
+[Fit_AP_Lineal,GOF_AP_Lineal] = fit(AP.Columnas,AP.Filas,'poly1');
+[Fit_SG_Pol_2, GOF_P2] = fit(SG.Columnas,SG.Filas,'poly2');
+[Fit_SG_Pol_3, GOF_P2] = fit(SG.Columnas,SG.Filas,'poly3');
+[Fit_SG_Pol_1, GOF_P4] = fit(SG.Columnas,SG.Filas,'poly1');
+
+Femur = 0.8*(V_seg.mascara==1) + 7*(V_seg.mascara==2);
+
+
+Proyeccion_SG_Femur = sum(Femur,3);
+Proyeccion_AP_Femur = squeeze(sum(Femur,2));
+[n,z] = size(Proyeccion_AP_Femur);
+[Xq,Zq] = meshgrid(1:pace:z,1:n);
+Proyeccion_AP_Femur = interp2(Proyeccion_AP_Femur,Xq,Zq);
+
 %%
-
-[Fit_AP_Fourier2,GOF_AP_F2] = fit(Columnas_AP,Fisis_AP_mean,'fourier1');
-[Fit_AP_Lineal,GOF_AP_Lineal] = fit(Columnas_AP,Fisis_AP_mean,'poly1');
-[Fit_SG_Pol_2, GOF_P2] = fit(Columnas_SG,Fisis_SG_mean,'poly2');
-[Fit_SG_Pol_4, GOF_P4] = fit(Columnas_SG,Fisis_SG_mean,'poly4');
-
-
 %subplot(2,2,1);scatter(Columnas_AP,Fisis_AP_mean);axis equal; title('Proyeecion Antero-Posterior');
-subplot(2,1,1);hold on;
-imshow(Proyeccion_AP,[]);
+F1 = figure;
+F1.Color = 'white';
+%imshow(Proyeccion_AP,[]);
+imshow(1-Proyeccion_AP_Femur,[]);hold on;
+p1 = plot(Fit_AP_Lineal,'r-');axis equal; title('AP');
+
+F2 = figure;
+F2.Color = 'white';
+imshow(1-Proyeccion_AP_Femur,[]);hold on;
+p4 = plot(Fit_AP_Fourier1,'r-');axis equal; title('AP');
+%%
+F3 = figure;
+F3.Color = 'white';
+%imshow(Proyeccion_SG,[]);
+imshow(1-Proyeccion_SG_Femur,[]);hold on;
+%scatter(Columnas_SG,Fisis_SG_mean,5,'red');axis equal;title('SG mean');
+p2 = plot(Fit_SG_Pol_2,'r',SG.Columnas,SG.Filas,'black');axis equal;
+title('Fit Polinomial n=2 Proyeccion Sagital','FontSize',16);
+
+F4 = figure;
+F4.Color = 'white';
+imshow(1-Proyeccion_SG_Femur,[]);hold on;
+p3 = plot(Fit_SG_Pol_1,'r',SG.Columnas,SG.Filas,'black');axis equal;
+title('Fit Polinomial n=1 Proyeccion Sagital','FontSize',16);
+
+F5 = figure;
+F5.Color = 'white';
+imshow(1-Proyeccion_SG_Femur,[]);hold on;
+p4 = plot(Fit_SG_Pol_3,'r',SG.Columnas,SG.Filas,'black');axis equal;
+title('Fit Polinomial n=3 Proyeccion Sagital','FontSize',16);
+%% Tibia
+
+[AP,SG] = Proyecciones_tibia(V_seg);
+
+dx = V_seg.info{1}; 
+dz = V_seg.info{2};
+pace = dx/dz;
+
+Fisis = V_seg.mascara == 4;
+Tibia = 0.7*(V_seg.mascara==3) + 6*(V_seg.mascara==4);
+
+Proyeccion_SG_Fisis = sum(Fisis,3);
+Proyeccion_AP_Fisis = squeeze(sum(Fisis,2));
+[n,z] = size(Proyeccion_AP_Fisis);
+[Xq,Zq] = meshgrid(1:pace:z,1:n);
+Proyeccion_AP_Fisis = interp2(Proyeccion_AP_Fisis,Xq,Zq);
+
+Proyeccion_SG_Tibia = sum(Tibia,3);
+Proyeccion_AP_Tibia = squeeze(sum(Tibia,2));
+[n,z] = size(Proyeccion_AP_Tibia);
+[Xq,Zq] = meshgrid(1:pace:z,1:n);
+Proyeccion_AP_Tibia = interp2(Proyeccion_AP_Tibia,Xq,Zq);
+
+[Fit_AP_Fourier1,GOF_AP_F1] = fit(AP.Columnas,AP.Filas,'fourier1');
+[Fit_AP_Lineal,GOF_AP_Lineal] = fit(AP.Columnas,AP.Filas,'poly1');
+
+[Fit_SG_Pol_2, GOF_SG_P2] = fit(SG.Columnas,SG.Filas,'poly2');
+[Fit_SG_Pol_1, GOF_P4] = fit(SG.Columnas,SG.Filas,'poly1');
+[Fit_SG_Exp2, GOF_SG_E2] = fit(SG.Columnas,SG.Filas,'exp2');
+
+
+F1 = figure;
+F1.Color = 'white';
+%imshow(Proyeccion_AP,[]);
+imshow(1-Proyeccion_AP_Tibia,[]);hold on;
 %scatter(Columnas_AP,Fisis_AP_mean,8,'red');axis equal;title('AP');
-p1 = plot(Fit_AP_Fourier2,Columnas_AP,Fisis_AP_mean,8,'y');axis equal;title('AP');
+p1 = plot(Fit_AP_Fourier1,AP.Columnas,AP.Filas,'black');axis equal;
+title('Proyeccion AP con fit Sinusal orden 1','FontSize',16);
+saveas(F1,'Proyeccion AP con fit Sinusal orden 1','jpg')
+
+F2 = figure;
+F2.Color = 'white';
+imshow(1-Proyeccion_AP_Tibia,[]);hold on;
+p4 = plot(Fit_AP_Lineal,AP.Columnas,AP.Filas,'black');axis equal;
+title('Proyeccion AP con fit Polinomial n=1','FontSize',16);
+saveas(F2,'Proyeccion AP con fit Polinomial n=1','jpg')
 
 %subplot(2,2,3);scatter(Columnas_SG,Fisis_SG_mean);axis equal;title('Proyeccion Sagital');
-subplot(2,1,2);hold on; 
-imshow(Proyeccion_SG,[]);
-%scatter(Columnas_SG,Fisis_SG_mean,5,'red');axis equal;title('SG mean');
-p2 = plot(Fit_SG_Pol_2,'r--',Columnas_SG,Fisis_SG_mean,'m:');axis equal;title('AP');
-p3 = plot(Fit_SG_Pol_4,'b--',Columnas_SG,Fisis_SG_mean,'m:');axis equal;title('AP');
+F3 = figure;
+F3.Color = 'white';
+%imshow(Proyeccion_SG,[]);
+imshow(1-Proyeccion_SG_Tibia,[]);hold on;
+p2 = plot(Fit_SG_Pol_2,'r-',SG.Columnas,SG.Filas,'black');axis equal;
+title('Proyeccion SG con fit Polinomial n=2','FontSize',16);
+saveas(F3,'Proyeccion AP con fit Polinomial n=2','jpg')
 
+F4 = figure;
+F4.Color = 'white';
+imshow(1-Proyeccion_SG_Tibia,[]);hold on;
+p3 = plot(Fit_SG_Pol_1,'r-',SG.Columnas,SG.Filas,'black');axis equal;
+title('Proyeccion SG con fit Polinomial n=1','FontSize',16);
+saveas(F4,'Proyeccion SG con fit Polinomial n=1','jpg')
 
-%% Hacer los fit
+F5 = figure;
+F5.Color = 'white';
+%imshow(Proyeccion_SG,[]);
+imshow(1-Proyeccion_SG_Tibia,[]);hold on;
+p3 = plot(Fit_SG_Exp2,'r-',SG.Columnas,SG.Filas,'black');axis equal;
+title('Proyeccion SG con Exponencial','FontSize',16);
+saveas(F5,'Proyeccion SG con fit Exponencial','jpg')
+
 
 

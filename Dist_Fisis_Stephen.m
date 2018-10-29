@@ -17,9 +17,9 @@ function Altura = Dist_Fisis_Stephen(V_seg,r)
         Lim_posterior = Stephen_P(2) + Radio_pixeles;
         
         [~,~,v1] = ind2sub(size(Fisis),find(Fisis > 0));
-        mid = round((max(v1)+min(v1))/2);
-    
-        Fisis_usar = Fisis(:,Lim_anterior:Lim_posterior,1:mid);
+        z_usar = min(v1);
+
+        Fisis_usar = Fisis(:,Lim_anterior:Lim_posterior,z_usar);
         
         Proy_S_fisis = sum(Fisis_usar,3);
         [row,col] = ind2sub(size(Proy_S_fisis),find(Proy_S_fisis>0));
@@ -46,7 +46,7 @@ function Altura = Dist_Fisis_Stephen(V_seg,r)
     end
     
 %     figure;
-   % imshow(sum(V_seg.mascara(:,:,1:mid),3),[]);
+%     imshow(sum(V_seg.mascara(:,:,1:mid),3),[]);
 %      imshow(sum(V_seg.mascara(:,:,:),3),[]);
 %   %  imshow(Proy_S_fisis,[])
 %     hold on;

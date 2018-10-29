@@ -22,7 +22,7 @@ function [Xx,Yy,Dest] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Rod
             
             Omega = [Alpha(k) Beta(i)];
 %           Temp(i) = func_obj(Omega,Rodilla); 
-%            [Value_var, Value_reg,Value_norm,Value_mean] = func_obj(Omega,Rodilla,d,p); 
+            [Value_var, Value_reg,Value_norm,Value_mean] = func_obj(Omega,Rodilla,d,p); 
             Dest_var(k,i) = Value_var;
             Dest_reg(k,i) = Value_reg;
             Dest_norm(k,i) = Value_norm;
