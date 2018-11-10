@@ -1,8 +1,13 @@
 function Plot_circulos_y_lineas(V_seg,posicion_final)
 
     %Antes de esta funcion tiene que haberse corrido:
+<<<<<<< HEAD
     isosurf_fast(V_seg)
     %fh = isosurf_todos(V_out,[1 0 0 0 0 0],0);
+=======
+%     isosurf_fast(V_seg)
+%         hold on
+>>>>>>> 1974f181ae0a72a87a20826aa8607c27a52ef828
 %         scatter3(coordenada(2),coordenada(1),coordenada(3),300,...
 %         'MarkerEdgeColor','k',...
 %             'MarkerFaceColor',[0 1 0]);
