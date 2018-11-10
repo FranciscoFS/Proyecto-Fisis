@@ -1,4 +1,5 @@
 function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,cortical,alpha,beta,d,p)
+
     %Direccion y distancia
     % Este solo sirve para cuando los volumenes están interpolados
     % Permite analizar variaciones pequeñas de la profundidad.
@@ -67,13 +68,19 @@ function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,cortical,alpha,beta
         q = y - radio_pix : y + radio_pix;
 
         for j = 1:size(p,2)
-        for t = 1:size(q,2)
-        if (x-p(j))^2 + (y-q(t))^2 <= radio_pix^2
-            if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
-                pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
+            for t = 1:size(q,2)
+                
+                if (x-p(j))^2 + (y-q(t))^2 <= radio_pix^2
+                    try
+                        if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
+                            pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
+                        end
+                    catch
+                        continue
+                    end
+                end 
+              
             end
-        end 
-        end
         end
     end
     

@@ -26,12 +26,12 @@ function Grabar_video_perforacion_rotando(V_seg,data,tiempo,Name)%tiempo en segu
     Angulos_total =45;
 
 
-    theta = az_o:(-1*(((Angulos_total)*2)/frame_total)):(az_o - Angulos_total);
+    theta = az_o:(1*(((Angulos_total))/frame_total)):(az_o + Angulos_total);
     theta_2 = (az_o- Angulos_total)+1:(((90)*2)/frame_total):90;
-    omega = el_o:(((Angulos_total)*2)/frame_total):(el_o + Angulos_total);
+    omega = el_o:(((Angulos_total))/frame_total):(el_o + Angulos_total);
     view(az_o,el_o)
-    theta = [theta theta_2];
-    omega = [omega repmat(90,size(omega))];
+    %theta = [theta theta_2];
+    %omega = [omega repmat(90,size(omega))];
     
     for j = 1:frame_total
         %pixeles_ya_sumados = Crear_solo_cilindro3(V_seg,angulo1,angulo2,p,d);

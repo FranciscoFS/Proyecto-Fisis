@@ -1,24 +1,22 @@
-function [mm_dist_cada_angulo] = Distancia_a_cortical_lateral_1_angulo(V_seg,ang)
+function [mm_dist_cada_angulo,posicion_final_cada_angulo]...
+    = Distancia_a_cortical_lateral_1_angulo(V_seg,angulos)
 
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
     
-    inicio = ang.min;
-    fin = ang.max;
-   
-    angulos = inicio:fin;
-    
-    mm = 200; %asegurarse que atraviese (podria ser cualquier cosa)
+    mm = 100; %asegurarse que atraviese (podria ser cualquier cosa)
     coordenada = V_seg.info{8};
     Femur = V_seg.mascara == 1;
     Fisis = V_seg.mascara == 2;
     Femur_total = (Femur + Fisis)>0;
     
     posicion_final_cada_angulo = [];
+    
+    %Angulo 1 Elevación y 2 horizontal
 
     for i = 1:length(angulos)
 
-        [z,x,y] = sph2cart(0,deg2rad(angulos(i)),mm);
+        [z,x,y] = sph2cart(deg2rad(angulos(i)),0,mm);
         %dif_x
         pixeles_x = x/dx;
         %dif_y
@@ -41,7 +39,7 @@ function [mm_dist_cada_angulo] = Distancia_a_cortical_lateral_1_angulo(V_seg,ang
                     posicion_final_cada_angulo(i,1) = ultimo_punto(1);
                     posicion_final_cada_angulo(i,2) = ultimo_punto(2);
                     posicion_final_cada_angulo(i,3) = ultimo_punto(3);
-                    mm_dist_cada_angulo(i) = sqrt(((ultimo_punto(3)-P1(3))*dz)^2 +((ultimo_punto(2)-P1(2))*dx)^2);
+                    mm_dist_cada_angulo(i) = sqrt(((ultimo_punto(3)-P1(3))*dz)^2 +((ultimo_punto(1)-P1(1))*dx)^2);
                     break
                 end
             end

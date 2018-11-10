@@ -40,14 +40,14 @@ Edad_sexo.Properties.VariableNames= names;
 
 %% Edad< 13;
 % Indice = Edad_sexo.Edad >=13;
- Indice = Edad_sexo.Edad < 20;
-% Indice = Edad_sexo.Sexo == 'F';
+ %Indice = Edad_sexo.Edad > 14;
+ Indice = Edad_sexo.Sexo == 'F';
 %Indice = strcmp(Edad_sexo.Sexo, 'F');
 
 %%
 
 tic;
-p=10:30;
+p=15:30;
 alfa = 0;
 beta = 45;
 D = 6;
@@ -62,7 +62,7 @@ for i=1:length(p)
         
         Rodilla = Base_datos_usar(k).Rodilla;
         Taladro = Crear_solo_cilindro_test(Rodilla, Rodilla.mascara==1,alfa,beta,D,Profundidad);
-        Contenido(k) = Fuera_femur(Rodilla,Taladro);
+        Contenido(k,p) = Fuera_femur(Rodilla,Taladro,S);
         
     end
     
@@ -70,7 +70,7 @@ for i=1:length(p)
     Union(1,i) = mean(Contenido);
     Union(2,i) = muCI_1(1);
     Union(3,i) = muCI_1(2);
-
+    k
 end
 toc;  
 
@@ -81,6 +81,11 @@ subplot(2,2,1);plot(flip(10:30),Hombres(1,:));hold on;scatter(flip(10:30),Hombre
 subplot(2,2,2);plot(flip(10:30),Mujeres(1,:));hold on;scatter(flip(10:30),Mujeres(2,:),'red');scatter(flip(10:30),Mujeres(3,:),'red');title('Mujeres');
 subplot(2,2,3);plot(flip(10:30),Edad_13(1,:));hold on;scatter(flip(10:30),Edad_13(2,:),'red');scatter(flip(10:30),Edad_13(3,:),'red');title('Edad<13');
 subplot(2,2,4);plot(flip(10:30),Edad_14(1,:));hold on;scatter(flip(10:30),Edad_14(2,:),'red');scatter(flip(10:30),Edad_14(3,:),'red');title('Edad>=13');
+%%
+
+Todos = Union;
+
+
 
 %% Errores
 

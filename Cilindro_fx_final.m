@@ -13,7 +13,7 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta,d,p)
     dx = V_seg.info{1,1};
 
     a1 = beta;% azimut (+ hacia distal)
-    a2 = alpha;% elevacion (+ hacia posterior)
+    a2 = alpha;% horizontal (+ hacia posterior)
     mm = p;%Profundidad
     diametro = d;
     
@@ -54,10 +54,12 @@ function porc = Cilindro_fx_final(V_seg,alpha,beta,d,p)
                     
                     if (x-p(j))^2 + (y-q(t))^2 <= radio_pix^2
                         
-                        if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
-                            
-                        pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
-                        
+                        try
+                            if (pixeles_ya_sumados(p(j),q(t),Z(i)) == 0)
+                                pixeles_ya_sumados(p(j),q(t),Z(i)) = 1;
+                            end
+                        catch
+                            continue
                         end
                     end 
                 end
