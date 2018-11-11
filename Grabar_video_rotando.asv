@@ -9,10 +9,11 @@ function Grabar_video_rotando(tiempo,V_seg)%tiempo en segundos
         
     fisis_usar = V_seg.mascara == 2;
     hueso_usar = V_seg.mascara == 1;
+    femur_total = (fisis_usar + hueso_usar)>0;
         
     hold on
-    pixeles_ya_sumados=Crear_segmento_esfera(V_seg,[-20,20],[-20,20],55);
-
+    pixeles_ya_sumados=Crear_segmento_esfera(V_seg,[-20,20],[-20,20],50);
+    pixeles_ya_sumados = (pixeles_ya_sumados.*femur_total)>0;
     Box_size = 3;
     Cono = smooth3(pixeles_ya_sumados,'box',Box_size);
     p3= patch(isosurface(Cono),'FaceColor','green','EdgeColor','none');

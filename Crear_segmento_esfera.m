@@ -36,6 +36,12 @@ for n = rango_ang_2(1,1):0.1:rango_ang_2(1,2)
 
 end
 end
+    fisis_usar = V_seg.mascara == 2;
+    hueso_usar = V_seg.mascara == 1;
+    femur_total = (fisis_usar + hueso_usar)>0;
+    pixeles_ya_sumados = (pixeles_ya_sumados.*femur_total)>0;
+
+
 %     isosurf_fast(V_seg)
 %         hold on
 %         scatter3(coordenada(2),coordenada(1),coordenada(3),300,...
