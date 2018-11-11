@@ -7,9 +7,9 @@ dz = V_seg.info{2,1};
 dx = V_seg.info{1,1};
 
 %Rango de angulos
-for i= rango_ang_1(1,1):rango_ang_1(1,2)
+for i= rango_ang_1(1,1):0.1:rango_ang_1(1,2)
     
-for n = rango_ang_2(1,1):rango_ang_2(1,2)
+for n = rango_ang_2(1,1):0.1:rango_ang_2(1,2)
     
     [z,x,y] = sph2cart(deg2rad(i),deg2rad(n),mm);
     
@@ -36,17 +36,16 @@ for n = rango_ang_2(1,1):rango_ang_2(1,2)
 
 end
 end
-    isosurf_fast(V_seg)
-        hold on
-        scatter3(coordenada(2),coordenada(1),coordenada(3),300,...
-        'MarkerEdgeColor','k',...
-            'MarkerFaceColor',[0 1 0]);
-        
-    %Box_size = 9;
-    %Cono = smooth3(pixeles_ya_sumados,'box',Box_size);
-    %p3= patch(isosurface(Cono),'FaceColor','green','EdgeColor','none');
-    p3= patch(isosurface(pixeles_ya_sumados),'FaceColor','green','EdgeColor','none');
-   camlight('headlight')
+%     isosurf_fast(V_seg)
+%         hold on
+%         scatter3(coordenada(2),coordenada(1),coordenada(3),300,...
+%         'MarkerEdgeColor','k',...
+%             'MarkerFaceColor',[0 1 0]);
+%         
+%     Box_size = 9;
+%     Cono = smooth3(pixeles_ya_sumados,'box',Box_size);
+%     p3= patch(isosurface(Cono),'FaceColor','green','EdgeColor','none');
+%     %p3= patch(isosurface(pixeles_ya_sumados),'FaceColor','green','EdgeColor','none');
+%    camlight('headlight')
 end
-%%
 
