@@ -159,12 +159,13 @@ Out_Cruzando_Todos_int = interp2(Xx,Yy,mean(Out_Cruzando_Todos,3),Xeq,Yeq,'cubic
 %%
 
 %Indice_Seguros = (Yeq <0) & (Out_interp < 2) & (Test3_interp < 3);
-Indice_Seguros_Cruzando = (Yeq <0) & (Out_Cruzando_Todos_int < 5) & (Dest_Cruzando_Todos_int < 5);
+Indice_Seguros_Cruzando = (Yeq <0) & (Out_Cruzando_Todos_int < 5) & (Dest_Cruzando_Todos_int < 3)...
+    & (Xeq < 25) & (Yeq > -30);
 Angulos_seguros_final = [Xeq(Indice_Seguros_Cruzando),Yeq(Indice_Seguros_Cruzando)];
 %Puntos = zeros(size(Angulos_seguros_final,1),3);
 
 subplot(1,2,1);surf(Xeq,Yeq,Out_Cruzando_Todos_int);hold on; surf(Xeq,Yeq,20*Indice_Seguros_Cruzando,'EdgeColor','red');
-subplot(1,2,2);surf(Xeq,Yeq,Dest_Cruzando_Todos_int);hold on; surf(Xeq,Yeq,20*Indice_Seguros_Cruzando,'EdgeColor','red');
+subplot(1,2,2);surf(Xeq,Yeq,Dest_Cruzando_Todos_int);hold on; surf(Xeq,Yeq,2*Indice_Seguros_Cruzando,'EdgeColor','red');
 
 %% X = beta
 
@@ -172,13 +173,47 @@ Angulos_seguros_final = [Xeq(Indice_Seguros_Cruzando),Yeq(Indice_Seguros_Cruzand
 Puntos = zeros(size(Angulos_seguros_final,1),3);
 Rodilla = V_out;
 
+
 for k=1:size(Angulos_seguros_final,1)
     k
-    [~ ,Puntos(k,:)] = Distancia_a_cortical_lateral_dos_angulos(Rodilla,Angulos_seguros_final(k,1),Angulos_seguros_final(k,2));
+    [~ ,Puntos(k,:)] = Distancia_a_cortical_lateral_dos_angulos...
+        (Rodilla,Angulos_seguros_final(k,1),Angulos_seguros_final(k,2));
     
 end
 
-Plot_circulos_y_lineas(V_out,Puntos)
+%%
+
+Indice_Seguros_Cruzando = (Yeq <0) & (Out_Cruzando_Todos_int < 5) & (Dest_Cruzando_Todos_int < 3)...
+    & (Xeq < 25) & (Yeq > -30);
+Angulos_seguros_final = [Xeq(Indice_Seguros_Cruzando),Yeq(Indice_Seguros_Cruzando)];
+Puntos_interp = zeros(size(Angulos_seguros_final,1),3);
+
+Femur = Rodilla.mascara ==1;
+Fisis = Rodilla.mascara ==2;
+dxdy = V_out.info{1};
+dz = V_out.info{2};
+pace = (dxdy/dz);
+[m,n,k] = size(V_out.mascara);
+[Xq,Yq,Zq] = meshgrid(1:n,1:m,1:pace:k);
+Femur = interp3(im2double(Femur),Xq,Yq,Zq,'cubic');
+Fisis = interp3(im2double(Fisis),Xq,Yq,Zq,'cubic');
+Info = V_out.info;
+[~,~,z] = ind2sub(size(Femur>0), find(Femur>0));
+pos = min(z);
+Pto = Info{8};
+New_Pto = [Pto(1) Pto(2) pos];
+Info{8} = New_Pto;
+
+%%
+for k=1:size(Angulos_seguros_final,1)
+    k
+    [Puntos(k,:)] = Distancia_a_cortical_lateral_dos_angulos_2...
+        (Fisis, Femur,Info,Angulos_seguros_final(k,1),Angulos_seguros_final(k,2));
+    
+end
+
+
+%Plot_circulos_y_lineas(V_out,Puntos)
 
 %%
 

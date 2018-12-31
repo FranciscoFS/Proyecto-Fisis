@@ -13,17 +13,18 @@ function Altura = Dist_Fisis_Stephen2(V_seg)
         dx = V_seg.info{1};
 
         Fisis = V_seg.mascara == 2;
+        %plot_MRI(Fisis)
         Stephen_P = V_seg.info{8};
         Radio_pixeles = round(Radio/dx);
         Lim_anterior = Stephen_P(2) - Radio_pixeles;
         Lim_posterior = Stephen_P(2) + Radio_pixeles;
         
         [~,~,v1] = ind2sub(size(Fisis),find(Fisis > 0));
-        Mid = round((max(v1)+min(v1))/2);
+        %Mid = round((max(v1)+min(v1))/2);
         z_usar = min(v1);
         
         Fisis_usar = Fisis(:,Lim_anterior:Lim_posterior,z_usar);
-        
+        %imshow(Fisis_usar)
         [row,col,z] = ind2sub(size(Fisis_usar),find(Fisis_usar>0));
         
         Columnas = unique(col);

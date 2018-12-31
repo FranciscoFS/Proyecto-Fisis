@@ -31,7 +31,7 @@ function fh = isosurf_todos(V_out,check,data)
         %fh =interp3(im2double(V_out.mascara==1),Xq,Yq,Zq,'cubic');
         fh = smooth3(interp3(im2double(V_out.mascara==1),Xq,Yq,Zq,'cubic')...
             ,'box',Box_size);
-        p1= patch(isosurface(ff,0.3),'FaceColor','red','EdgeColor','none');
+        p1= patch(isosurface(ff,0.4),'FaceColor','red','EdgeColor','none');
         isonormals(ff,p1)
         p2= patch(isosurface(fh,0.2),'FaceColor','none','EdgeColor','blue','LineWidth',...
         0.1,'EdgeAlpha','0.4');
