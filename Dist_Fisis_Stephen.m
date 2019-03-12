@@ -13,8 +13,8 @@ function Altura = Dist_Fisis_Stephen(V_seg,r)
         Stephen_P = V_seg.info{8};
         
         Radio_pixeles = round(Radio/dx);
-        Lim_anterior = Stephen_P(2) - Radio_pixeles;
-        Lim_posterior = Stephen_P(2) + Radio_pixeles;
+        Lim_anterior = Stephen_P(1) - Radio_pixeles;
+        Lim_posterior = Stephen_P(1) + Radio_pixeles;
         
         [~,~,v1] = ind2sub(size(Fisis),find(Fisis > 0));
         z_usar = min(v1);
@@ -35,8 +35,8 @@ function Altura = Dist_Fisis_Stephen(V_seg,r)
 
         end
 
-        Altura{1} = (mean(Alturas_fisis_distal - Stephen_P(1))*dx);
-        Altura{2} = (mean(Alturas_fisis_proximal - Stephen_P(1))*dx);
+        Altura{1} = (mean(Alturas_fisis_distal - Stephen_P(2))*dx);
+        Altura{2} = (mean(Alturas_fisis_proximal - Stephen_P(2))*dx);
 
     else
         
@@ -46,9 +46,10 @@ function Altura = Dist_Fisis_Stephen(V_seg,r)
     end
     
 %     figure;
-%     imshow(sum(V_seg.mascara(:,:,1:mid),3),[]);
-%      imshow(sum(V_seg.mascara(:,:,:),3),[]);
-%   %  imshow(Proy_S_fisis,[])
+%     %imshow(sum(V_seg.mascara(:,:,1:mid),3),[]);
+%     imshow(sum(V_seg.mascara(:,:,:),3),[]);
+%     %imshow(Proy_S_fisis,[])
+%     %imshow(V_seg.mascara(:,:,z_usar),[]);
 %     hold on;
 %     plot(Columnas + (Lim_anterior -1) ,Alturas_fisis_distal,'-r')
 %     plot(Columnas + (Lim_anterior -1) ,Alturas_fisis_proximal,'-b')

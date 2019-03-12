@@ -29,22 +29,25 @@ Limit_alpha = 45;
 pace_alpha = 5;
 Limit_beta = 45;
 pace_beta = 5;
+P = 30;
 
 %% Test 1
 % D = 5
 % Profundidad = 30 mm
 tic;
 D = 5;
-P = 30;
-[Xx,Yy,Dest_test1] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
+[Xx,Yy,Dest_test1_30] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
 
+%
 
 % Test 2
 % D = 6 mm
 % P = 30 mm
+%%
+tic;
 
 D = 6;
-P = 30;
+
 [~,~,Dest_test2] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
 
 % Test 3
@@ -52,10 +55,10 @@ P = 30;
 % P = 30 mm
 
 D = 7;
-P = 30;
+
 [Xx,Yy,Dest_test3] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
 toc;
-%P = 25;
+
 %[~,~,Dest_test4] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos,D,P);
 
 %% Interpolacion
@@ -76,8 +79,8 @@ Test_mujeres_interp = interp2(Xx,Yy,Dest_test_mujeres{4},Xeq,Yeq);
 Hombres = strcmp(Edad_sexo.Sexo, 'M');
 Mujeres = strcmp(Edad_sexo.Sexo, 'F');
 
-D = 7;
-P = 30;
+D = 6;
+P = 20;
 
 [~,~,Dest_test_hombres] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos(Hombres),D,P);
 [~,~,Dest_test_mujeres] = plot_fcn(Limit_alpha,Limit_beta,pace_alpha,pace_beta,Base_datos(Mujeres),D,P);
@@ -101,9 +104,9 @@ subplot(2,2,4); surf(Xx,Yy,Dest_test3{4}); title('Mean -- D=7mm y P=30 mm');
 
 figure;
 
-subplot(2,2,1); surf(Xx,Yy,Dest_test1{2}); title(' D=5mm y P=30 mm');
-subplot(2,2,2); surf(Xx,Yy,Dest_test2{2}); title(' D=6mm y P=30 mm');
-subplot(2,2,3); surf(Xx,Yy,Dest_test3{2}); title(' D=7mm y P=30 mm');
+subplot(2,2,1); surf(Xx,Yy,Dest_test1{2}); title(' D=5mm y P=20 mm');
+subplot(2,2,2); surf(Xx,Yy,Dest_test2{2}); title(' D=6mm y P=20 mm');
+subplot(2,2,3); surf(Xx,Yy,Dest_test3{2}); title(' D=7mm y P=20 mm');
 %subplot(2,2,4); surf(Xx,Yy,Dest_test4{4}); title(' D=7mm y P=25 mm');
 
 %%
@@ -118,7 +121,7 @@ axis off
 f2 = figure; surf(Xeq,Yeq,Test2_interp,'LineStyle','none');
 title(' D=6mm y P=30 mm'); hold on; f2.Color = 'white'; grid off;
 scatter3(beta_2,alpha_2,Test2_interp(row_2,col_1),50,'red','filled'); 
-scatter3(Beta_2_min,0,Test2_interp(46,row_2_min),50,'red','filled');
+scatter3(Beta_2_min,0,Test2_interp(46,col_2_min),50,'red','filled');
 colorbar
 axis tight
 axis off
@@ -127,7 +130,7 @@ f3 = figure; surf(Xeq,Yeq,Test3_interp,'LineStyle','none');
 %title(' D=7mm y P=30 mm'); 
 hold on; f3.Color = 'white'; grid off;
 scatter3(beta_3,alpha_1,Test3_interp(row_3,col_1),50,'red','filled'); 
-scatter3(Beta_3_min,0,Test3_interp(46,row_3_min),50,'red','filled');
+scatter3(Beta_3_min,0,Test3_interp(46,col_3_min),50,'red','filled');
 colorbar
 axis tight
 axis off
@@ -136,7 +139,7 @@ axis off
 f4 = figure; surf(Xeq,Yeq,Test_hombres_interp,'LineStyle','none');
 title(' D=7mm y P=30 mm'); hold on; f4.Color = 'white'; grid off;
 scatter3(beta_3,alpha_1,Test_hombres_interp(row_3,col_1),50,'red','filled'); 
-scatter3(Beta_3_min,0,Test_hombres(46,row_3_min),50,'red','filled');
+scatter3(Beta_3_min,0,Test_hombres(46,col_3_min),50,'red','filled');
 colorbar
 axis tight
 axis off
@@ -144,7 +147,7 @@ axis off
 f4 = figure; surf(Xeq,Yeq,Test3_interp,'LineStyle','none');
 title(' D=7mm y P=30 mm'); hold on; f4.Color = 'white'; grid off;
 scatter3(beta_3,alpha_1,Test3_interp(row_3,col_1),50,'red','filled'); 
-scatter3(Beta_3_min,0,Test3_interp(46,row_3_min),50,'red','filled');
+scatter3(Beta_3_min,0,Test3_interp(46,col_3_min),50,'red','filled');
 colorbar
 axis tight
 axis off
@@ -188,9 +191,9 @@ Caso_4 = zeros(numel(Base_datos),1);
 for k = 1:numel(Base_datos)
     
     Rodilla = Base_datos(k).Rodilla;
-    Caso_1(k) = Cilindro_fx_final(Rodilla,alpha_1_max,beta_1_max,5,30);
-    Caso_2(k) = Cilindro_fx_final(Rodilla,alpha_2_max,beta_2_max,6,30);
-    Caso_3(k) = Cilindro_fx_final(Rodilla,alpha_3_max,beta_3_max,7,30);
+    Caso_1(k) = Cilindro_fx_final(Rodilla,alpha_1_max,beta_1_max,5,20);
+    Caso_2(k) = Cilindro_fx_final(Rodilla,alpha_2_max,beta_2_max,6,20);
+    Caso_3(k) = Cilindro_fx_final(Rodilla,alpha_3_max,beta_3_max,7,20);
     %Caso_4(k) = Cilindro_fx_final(Rodilla,alpha_4,beta_4,7,25);
 
 end
@@ -206,22 +209,22 @@ Base_datos_M = Base_datos(strcmp(Sexo,'F'));
 for k=1:numel(Base_datos_H)
     
     Rodilla = Base_datos_H(k).Rodilla;
-    Caso_hombres(k) = Cilindro_fx_final(Rodilla,alpha_hombre_max,beta_hombre_max,7,30);
+    Caso_hombres(k) = Cilindro_fx_final(Rodilla,alpha_hombre_max,beta_hombre_max,6,20);
 end
 
 for k=1:numel(Base_datos_M)
     
     Rodilla = Base_datos_M(k).Rodilla;
-    Caso_mujeres(k) = Cilindro_fx_final(Rodilla,alpha_mujer_max,beta_mujer_max,7,30);
+    Caso_mujeres(k) = Cilindro_fx_final(Rodilla,alpha_mujer_max,beta_mujer_max,6,20);
 end
 %%
 
-[muHat_1,~,muCI_1,~] = normfit(Caso_1);
-[muHat_2,~,muCI_2,~] = normfit(Caso_2);
-[muHat_3,~,muCI_3,~] = normfit(Caso_3);
+[muHat_1,~,muCI_1,~] = normfit(squeeze(Caso_1(row_1,col_1,:)));
+[muHat_2,~,muCI_2,~] = normfit(squeeze(Caso_2(row_2,col_2,:)));
+[muHat_3,~,muCI_3,~] = normfit(squeeze(Caso_3(row_3,col_3,:)));
 % [muHat_4,~,muCI_4,~] = normfit(Caso_4);
-[muHat_hombres,~,muCI_hombres,~] = normfit(Caso_hombres);
-[muHat_mujeres,~,muCI_mujeres,~] = normfit(Caso_mujeres);
+[muHat_hombres,~,muCI_hombres,~] = normfit(squeeze(Caso_H(row_1,col_hombre,:)));
+[muHat_mujeres,~,muCI_mujeres,~] = normfit(squeeze(Caso_M(row_1,col_mujer,:)));
 
 Caso_1_CI = {[num2str(muHat_1) '- [' num2str(muCI_1(1)) ' -' num2str(muCI_1(2)) ']']};
 Caso_2_CI = {[num2str(muHat_2) '- [' num2str(muCI_2(1)) ' -' num2str(muCI_2(2)) ']']};
@@ -240,30 +243,32 @@ Tabla.Properties.VariableNames= Var_names;
 
 % [p,tbl,stats] = anova1([Caso_1 Caso_2 Caso_3]);
 % c = multcompare(stats);
+[p,tbl,stats_max] = anova1([squeeze(Caso_1(row_1,col_1,:)) squeeze(Caso_2(row_2,col_2,:)) squeeze(Caso_3(row_3,col_3,:))]);
+c = multcompare(stats_max);
 %% Comparacion entre hombres y mujeres
 
 [h,p] = ttest2(Caso_hombres,Caso_mujeres);
 
-%% Cálculo mínimos pero proyectando (asumiendo alpha = 0)
+%% Cálculo Minimo pero proyectando (asumiendo alpha = 0)
 %  X corresponde a Beta (columnas),
 
-[row_1_min] = find(Test1_interp(45,:) == min(Test1_interp(45,:)));
-Beta_1_min = Xeq(1,row_1_min);
+[col_1_min] = find(Test1_interp(45,:) == min(Test1_interp(45,:)));
+Beta_1_min = Xeq(1,col_1_min);
 
-[row_2_min] = find(Test2_interp(45,:) == min(Test2_interp(45,:)));
-Beta_2_min = Xeq(1,row_2_min);
+[col_2_min] = find(Test2_interp(45,:) == min(Test2_interp(45,:)));
+Beta_2_min = Xeq(1,col_2_min);
 
-[row_3_min] = find(Test3_interp(45,:) == min(Test3_interp(45,:)));
-Beta_3_min = Xeq(1,row_3_min);
+[col_3_min] = find(Test3_interp(45,:) == min(Test3_interp(45,:)));
+Beta_3_min = Xeq(1,col_3_min);
 
 % [row_4_min] = find(sum(Test4_interp,2) == min(sum(Test4_interp,2)));
 % alpha_4_min = Yeq(row_4_min,1);
 % 
-% [row_hombre_min] = find(sum(Test_hombres_interp,2) == min(sum(Test_hombres_interp,2)));
-% alpha_hombre_min = Yeq(row_hombre_min,1);
-% 
-% [row_mujer_min] = find(sum(Test_mujeres_interp,2) == min(sum(Test_mujeres_interp,2)));
-% alpha_mujer_min = Yeq(row_mujer_min,1);
+[col_H_min] = find(sum(Test_hombres_interp,2) == min(sum(Test_hombres_interp,2)));
+alpha_hombre_min = Yeq(col_H_min,1);
+
+[col_M_min] = find(sum(Test_mujeres_interp,2) == min(sum(Test_mujeres_interp,2)));
+alpha_mujer_min = Yeq(col_M_min,1);
 
 %% Cálculo de destrucción para los ángulos mínimo
 
@@ -293,22 +298,22 @@ Caso_mujeres_min = zeros(sum(strcmp(Sexo,'F')),1);
 for k=1:numel(Base_datos_H)
     
     Rodilla = Base_datos_H(k).Rodilla;
-    Caso_hombres_min(k) = Cilindro_fx_final(Rodilla,0,45,7,30);
+    Caso_hombres_min(k) = Cilindro_fx_final(Rodilla,0,45,6,20);
 end
 
 for k=1:numel(Base_datos_M)
     
     Rodilla = Base_datos_M(k).Rodilla;
-    Caso_mujeres_min(k) = Cilindro_fx_final(Rodilla,0,45,7,30);
+    Caso_mujeres_min(k) = Cilindro_fx_final(Rodilla,0,45,6,20);
 end
 
 %%
-[muHat_1,~,muCI_1,~] = normfit(Caso_1_min);
-[muHat_2,~,muCI_2,~] = normfit(Caso_2_min);
-[muHat_3,~,muCI_3,~] = normfit(Caso_3_min);
+[muHat_1,~,muCI_1,~] = normfit(squeeze(Caso_1(45,col_1_min,:)));
+[muHat_2,~,muCI_2,~] = normfit(squeeze(Caso_2(45,col_2_min,:)));
+[muHat_3,~,muCI_3,~] = normfit(squeeze(Caso_3(45,col_3_min,:)));
 % [muHat_4,~,muCI_4,~] = normfit(Caso_4_min);
-[muHat_hombres,~,muCI_hombres,~] = normfit(Caso_hombres_min);
-[muHat_mujeres,~,muCI_mujeres,~] = normfit(Caso_mujeres_min);
+[muHat_hombres,~,muCI_hombres,~] = normfit(squeeze(Caso_H(45,col_H_min,:)));
+[muHat_mujeres,~,muCI_mujeres,~] = normfit(squeeze(Caso_M(45,col_M_min,:)));
 
 Caso_1_CI = {[num2str(muHat_1) '- [' num2str(muCI_1(1)) ' -' num2str(muCI_1(2)) ']']};
 Caso_2_CI = {[num2str(muHat_2) '- [' num2str(muCI_2(1)) ' -' num2str(muCI_2(2)) ']']};
@@ -317,13 +322,13 @@ Caso_3_CI = {[num2str(muHat_3) '- [' num2str(muCI_3(1)) ' -' num2str(muCI_3(2)) 
 Caso_hombres_CI = {[num2str(muHat_hombres) '- [' num2str(muCI_hombres(1)) ' -' num2str(muCI_hombres(2)) ']']};
 Caso_mujeres_CI = {[num2str(muHat_mujeres) '- [' num2str(muCI_mujeres(1)) ' -' num2str(muCI_mujeres(2)) ']']};
 
-% Tabla_min = table(Caso_1_CI,Caso_2_CI,Caso_3_CI,Caso_4_CI,Caso_hombres_CI,Caso_mujeres_CI);
-% Var_names = {'Caso1','Caso2','Caso3','Caso4','Caso_hombres','Caso_mujeres'};
-% Tabla_min.Properties.VariableNames= Var_names;
-
-Tabla = table(Caso_1_CI,Caso_2_CI,Caso_3_CI,Caso_hombres_CI,Caso_mujeres_CI);
+Tabla_min = table(Caso_1_CI,Caso_2_CI,Caso_3_CI,Caso_hombres_CI,Caso_mujeres_CI);
 Var_names = {'Caso1','Caso2','Caso3','Caso_hombres','Caso_mujeres'};
-Tabla.Properties.VariableNames= Var_names;
+Tabla_min.Properties.VariableNames= Var_names;
+
+% Tabla = table(Caso_1_CI,Caso_2_CI,Caso_3_CI,Caso_hombres_CI,Caso_mujeres_CI);
+% Var_names = {'Caso1','Caso2','Caso3','Caso_hombres','Caso_mujeres'};
+% Tabla.Properties.VariableNames= Var_names;
 
 %[p,tbl,stats] = anova1([Caso_1_min Caso_2_min Caso_3_min])
 %c = multcompare(stats)
@@ -333,15 +338,20 @@ Alpha = -Limit_alpha:pace_alpha:Limit_alpha;
 Beta = -Limit_beta:pace_beta:Limit_beta;
 
 [Xx,Yy] = meshgrid(Alpha,Beta);
-Is_in = zeros(size(Xx));
+Is_in_1 = zeros(size(Xx));
+Is_in_2 = zeros(size(Xx));
+Is_in_3 = zeros(size(Xx));
 
 
 for k=1:length(Alpha)
 
     for i = 1:length(Beta)
         
-        Cilindro = Crear_solo_cilindro2(V_out,Alpha(k),Beta(i),D,P);
-        Is_in(k,i) = Fuera_femur(V_out,Cilindro);
+        Cilindro1 = Crear_solo_cilindro2(V_out,Alpha(k),Beta(i),D,P);
+        Cilindro2 = Crear_solo_cilindro2(V_out,Alpha(k),Beta(i),D,P);
+        Cilindro3 = Crear_solo_cilindro2(V_out,Alpha(k),Beta(i),D,P);
+
+        Is_in(k,i) = Fuera_femur(V_out,Cilindro1);
     end 
 
     fprintf('Angulo actual %d \n',k)
@@ -455,7 +465,7 @@ xticklabels({'Mujeres','Hombres'})
 
 %% ANOVASN
 
-[p,tbl,stats_max] = anovan(Caso_todos_max,{Edad_sexo.Edad})
+[p,tbl,stats_max] = anovan(squeeze(Caso_3(row_3,col_3,:)),{Edad_sexo.Edad})
 c = multcompare(stats_max)
 %%
 [p,tbl,stats_min] = anovan(Caso_todos_min,{Edad_sexo.Edad});

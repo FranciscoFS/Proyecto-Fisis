@@ -38,7 +38,7 @@ function fh = isosurf_todos(V_out,check,data)
         reducepatch(p2,0.01)
     end
     
-    if check(2)
+    if check(2) 
     %Patch tibia fisis
         % tf =interp3(im2double(V_out.mascara==4),Xq,Yq,Zq,'cubic');
         tf = smooth3(interp3(im2double(V_out.mascara==4),Xq,Yq,Zq,'cubic')...
@@ -47,7 +47,7 @@ function fh = isosurf_todos(V_out,check,data)
         %th =interp3(im2double(V_out.mascara==3),Xq,Yq,Zq,'cubic');
         th = smooth3(interp3(im2double(V_out.mascara==3),Xq,Yq,Zq,'cubic')...
             ,'box',Box_size);
-         p3= patch(isosurface(tf),'FaceColor','green','EdgeColor','none');
+         p3= patch(isosurface(tf),'FaceColor','red','EdgeColor','none');
         isonormals(tf,p3)
         p4= patch(isosurface(th),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
         isonormals(tf,p3)
@@ -104,12 +104,12 @@ function fh = isosurf_todos(V_out,check,data)
     lighting gouraud
     material dull
     
-%     title('Rodilla')
+    title('Rodilla')
 
-%     while true
-%         camlight(l,'headlight')
-%         pause(0.05);  
-%     end
+    while true
+        camlight(l,'headlight')
+        pause(0.05);  
+    end
 
 end
 

@@ -21,7 +21,7 @@ Distacia_Fisis_Stephen_distal = zeros(numel(Base_datos),1);
 
 for k=1:numel(Base_datos)
     
-    Alturas =  Dist_Fisis_Stephen2(Base_datos(k).Rodilla);
+    Alturas =  Dist_Fisis_Stephen(Base_datos(k).Rodilla,5);
     Distacia_Fisis_Stephen_distal(k) = Alturas{1};
 end
 

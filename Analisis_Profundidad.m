@@ -70,7 +70,7 @@ for i=1:length(p)
     Union(1,i) = mean(Contenido);
     Union(2,i) = muCI_1(1);
     Union(3,i) = muCI_1(2);
-    k
+    
 end
 toc;  
 

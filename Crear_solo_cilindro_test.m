@@ -49,8 +49,8 @@ function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,cortical,alpha,beta
     % Cambiar 1 por 2, si el pto que entrega Stephen auto está
     % correctamente ordenado (X,Y,Z), en este caso llega Y,X,Z
     
-    P1 = [coordenada(1),coordenada(2),coordenada(3)];
-    P2 = [coordenada(1)+pixeles_x, coordenada(2) + pixeles_y, P1(3) + pixeles_z];
+    P1 = [coordenada(2),coordenada(1),coordenada(3)];
+    P2 = [coordenada(2)+pixeles_x, coordenada(1) + pixeles_y, P1(3) + pixeles_z];
     P2 = round(P2);
 
     [X, Y, Z] = bresenham_line3d(P1, P2);
