@@ -241,39 +241,14 @@ Coefs3 = mean(Coeficientes.Var3);
 Coefs4 = mean(Coeficientes.Var4);
 
 y1 = Coefs1(1) + Coefs1(2)*cos(x*Coefs1(4)) + Coefs1(3)*sin(x*Coefs1(4));
-y2 = Coefs2(1) + Coefs2(2)*cos(x*Coefs2(6)) + Coefs2(3)*sin(x*Coefs2(6))...
+y2 = Coefs2(1) + Coefs2(2)*cos(x*Coefs1(6)) + Coefs2(3)*sin(x*Coefs2(6))...
      + Coefs2(4)*cos(2*x*Coefs2(6)) + Coefs2(5)*sin(2*x*Coefs2(6));
 y3 = Coefs3(1)*(x.^2) +  Coefs3(2)*x +  Coefs3(3);
 y4 = Coefs4(1)*(x.^4) + Coefs4(2)*(x.^3) + Coefs4(3)*(x.^2) + Coefs4(4)*x +  Coefs4(5);
 
-subplot(2,2,1); plot(x,y1); title('F1');
-subplot(2,2,2); plot(x,y2); title('F2');
-subplot(2,2,3); plot(x,y3); axis equal; title('P2');
-subplot(2,2,4); plot(x,y4); axis equal; title('P4');
+subplot(2,2,1); plot(x,y1); axis equal; title('
+subplot(2,2,2); plot(x,y2); axis equal;
+subplot(2,2,3); plot(x,y3); axis equal;
+subplot(2,2,4); plot(x,y4); axis equal;
 
-%% Analizar R2 para el modelo Promedio
-
-R2 = table();
-
-for k=1:Largo
-    
-    x = Distribucion(k).AP_nom.Columnas;
-    
-    % AP
-    y1 = Coefs1(1) + Coefs1(2)*cos(x*Coefs1(4)) + Coefs1(3)*sin(x*Coefs1(4));
-    y2 = Coefs2(1) + Coefs2(2)*cos(x*Coefs2(6)) + Coefs2(3)*sin(x*Coefs2(6))...
-     + Coefs2(4)*cos(2*x*Coefs2(6)) + Coefs2(5)*sin(2*x*Coefs2(6));
- 
-    R2{k,1} = corr(y1,Distribucion(k).AP_nom.Filas);
-    R2{k,2} = corr(y2,Distribucion(k).AP_nom.Filas);
- 
-    x = Distribucion(k).SG_norm.Columnas;
-    % SG, aqui X es las columnas SG_norm.Columnas
-    y3 = Coefs3(1)*(x.^2) +  Coefs3(2)*x +  Coefs3(3);
-    y4 = Coefs4(1)*(x.^4) + Coefs4(2)*(x.^3) + Coefs4(3)*(x.^2) + Coefs4(4)*x +  Coefs4(5);
-
-    R2{k,3} = corr(y3,Distribucion(k).SG_norm.Filas);
-    R2{k,4} = corr(y4,Distribucion(k).SG_norm.Filas);
- 
-end
 

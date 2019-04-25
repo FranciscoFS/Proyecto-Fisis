@@ -220,33 +220,35 @@ Angulos_seguros_final3 = [Xeq(Indice_Seguros_Cruzando1),Yeq(Indice_Seguros_Cruza
 f1 = figure;
 %subplot(1,2,1);surf(Xeq,Yeq,Out_1);hold on; surf(Xeq,Yeq,20*Indice_Seguros_Cruzando,'EdgeColor','red');view(90,90)
 %subplot(1,2,2);
-surf(Xeq,Yeq,Test1_interp,'LineStyle','none');hold on; surf(Xeq,Yeq,2*Indice_Seguros_Cruzando1,'FaceColor','red','LineStyle','none'); 
+surf(Xeq,Yeq,Test1_interp,'LineStyle','-');hold on; surf(Xeq,Yeq,2*Indice_Seguros_Cruzando1,'FaceColor','red','LineStyle','none'); 
 axis tight; axis equal; title('D = 5 mm');
 view(90,90)
+set(gcf,'color','w');
 
 f2 = figure;
 %subplot(1,2,1);surf(Xeq,Yeq,Out_2);hold on; surf(Xeq,Yeq,20*Indice_Seguros_Cruzando,'EdgeColor','red');view(90,90)
 %subplot(1,2,2);
-surf(Xeq,Yeq,Test2_interp,'LineStyle','none');hold on; surf(Xeq,Yeq,2*Indice_Seguros_Cruzando2,'FaceColor','red','LineStyle','none');
+surf(Xeq,Yeq,Test2_interp,'LineStyle','-');hold on; surf(Xeq,Yeq,2*Indice_Seguros_Cruzando2,'FaceColor','red','LineStyle','none');
 axis tight; axis equal;title('D = 6 mm');
 view(90,90)
+set(gcf,'color','w');
 
 f3 = figure;
 %subplot(1,2,1);surf(Xeq,Yeq,Out_3);hold on; surf(Xeq,Yeq,20*Indice_Seguros_Cruzando,'EdgeColor','red');view(90,90)
 %subplot(1,2,2);
-surf(Xeq,Yeq,Test3_interp,'LineStyle','none');hold on; surf(Xeq,Yeq,2*Indice_Seguros_Cruzando3,'FaceColor','red','LineStyle','none');
+surf(Xeq,Yeq,Test3_interp,'LineStyle','-');hold on; surf(Xeq,Yeq,2*Indice_Seguros_Cruzando3,'FaceColor','red','LineStyle','none');
 axis tight; axis equal;title('D = 7 mm');
 view(90,90)
 
 %% X = beta
 
-Angulos_seguros_final = [Xeq(Indice_Seguros_Cruzando1),Yeq(Indice_Seguros_Cruzando1)];
+Angulos_seguros_final = [Xeq(Indice_Seguros_Cruzando3),Yeq(Indice_Seguros_Cruzando3)];
 Puntos = zeros(size(Angulos_seguros_final,1),3);
 Rodilla = V_out;
 
 
 for k=1:size(Angulos_seguros_final,1)
-    k
+    
     [~ ,Puntos(k,:)] = Distancia_a_cortical_lateral_dos_angulos...
         (Rodilla,Angulos_seguros_final(k,1),Angulos_seguros_final(k,2));
     

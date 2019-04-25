@@ -1,4 +1,4 @@
-function fh = isosurf_todos(V_out,check,data)
+function isosurf_todos(V_out,check,data)
 
     info = V_out.info;
 
@@ -10,7 +10,7 @@ function fh = isosurf_todos(V_out,check,data)
         pace = (dxdy/dz);
         [m,n,k] = size(V_out.mascara);
         [Xq,Yq,Zq] = meshgrid(1:n,1:pace:m,1:k);
-        Box_size = 9;
+        Box_size = [25 25 25];
     else
         dxdy = info{1};
         dz = info{2};
@@ -31,7 +31,7 @@ function fh = isosurf_todos(V_out,check,data)
         %fh =interp3(im2double(V_out.mascara==1),Xq,Yq,Zq,'cubic');
         fh = smooth3(interp3(im2double(V_out.mascara==1),Xq,Yq,Zq,'cubic')...
             ,'box',Box_size);
-        p1= patch(isosurface(ff,0.4),'FaceColor','red','EdgeColor','none');
+        p1= patch(isosurface(ff,0.3),'FaceColor','red','EdgeColor','none');
         isonormals(ff,p1)
         p2= patch(isosurface(fh,0.2),'FaceColor','none','EdgeColor','blue','LineWidth',...
         0.1,'EdgeAlpha','0.4');
@@ -79,11 +79,18 @@ function fh = isosurf_todos(V_out,check,data)
     end
     
     if check(5) && check(6)
+        
         Z3 = Crear_solo_cilindro_test(V_out,fh,data.alpha,data.beta,data.d,data.p);
         Z3 = smooth3(Z3,'box',Box_size);
         Z3 = imrotate3_fast(Z3,{90 'X'});
         p3 = patch(isosurface(Z3,0.5),'FaceColor','green','EdgeColor','none');
         isonormals(Z3,p3);
+        
+%         Z4 = Crear_solo_cilindro_test(V_out,fh,0,45,7,20);
+%         Z4 = smooth3(Z4,'box',Box_size);
+%         Z4 = imrotate3_fast(Z4,{90 'X'});
+%         p4 = patch(isosurface(Z4,0.5),'FaceColor','green','EdgeColor','none');
+%         isonormals(Z4,p4);
         
     elseif check(5) && not(check(6))
         Z3 = Crear_solo_cilindro_test(V_out,fh,data.alpha,data.beta,data.d,data.p);

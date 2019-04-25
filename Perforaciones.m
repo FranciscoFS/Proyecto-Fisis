@@ -470,3 +470,47 @@ c = multcompare(stats_max)
 %%
 [p,tbl,stats_min] = anovan(Caso_todos_min,{Edad_sexo.Edad});
 %c = multcompare(stats_min)
+
+%%
+
+Edades = unique(Edad);
+Datos_edad = table();
+Caso_usar = Caso_1;
+
+for k=1:length(Edades)+1
+     
+    if k <= length(Edades)
+        Indice = Edad == Edades(k);
+        Caso_edad = Caso_usar(:,:,Indice);
+        [alpha,beta,muHat,muCI] = Calculo_angulo(Caso_edad,Xeq,Yeq);
+
+        Datos_edad{k,1} = alpha.max;
+        Datos_edad{k,2} = beta.max;
+        Datos_edad{k,3} = {[num2str(muHat.max) '- [' num2str(muCI.max(1)) ' -' num2str(muCI.max(2)) ']']};
+
+        Datos_edad{k,4} = alpha.min;
+        Datos_edad{k,5} = beta.min;
+        Datos_edad{k,6} = {[num2str(muHat.min) '- [' num2str(muCI.min(1)) ' -' num2str(muCI.min(2)) ']']};
+        Datos_edad{k,7} = {Edades(k)};
+        
+    else
+        
+        Caso_edad = Caso_usar;
+        [alpha,beta,muHat,muCI] = Calculo_angulo(Caso_edad,Xeq,Yeq);
+
+        Datos_edad{k,1} = alpha.max;
+        Datos_edad{k,2} = beta.max;
+        Datos_edad{k,3} = {[num2str(muHat.max) '- [' num2str(muCI.max(1)) ' -' num2str(muCI.max(2)) ']']};
+
+        Datos_edad{k,4} = alpha.min;
+        Datos_edad{k,5} = beta.min;
+        Datos_edad{k,6} = {[num2str(muHat.min) '- [' num2str(muCI.min(1)) ' -' num2str(muCI.min(2)) ']']};
+        Datos_edad{k,7} = {'Todos'};
+    end
+end
+
+Var_names = {'Alpha_max','Beta_max','Mean_Max','Alpha_min','Beta_min','Mean_Min','Edad'};
+Datos_edad.Properties.VariableNames= Var_names;
+Tabla_5mm_Edad = Datos_edad;
+
+writetable(Datos_edad,'Tabla_5mm.xlsx');

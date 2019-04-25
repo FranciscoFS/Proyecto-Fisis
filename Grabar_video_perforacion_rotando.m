@@ -1,4 +1,5 @@
 function Grabar_video_perforacion_rotando(V_seg,data,tiempo,Name)%tiempo en segundos
+
     %hold on
     %,V_seg,angulo1,angulo2,p,d
     %isosurf_todos(V_seg,[1 0 0 0 1 1],data);
