@@ -132,6 +132,8 @@ end
 
 scatter(xSol2(resp),ySol2(resp),200,'o','filled')
 
+
+%Encontrar coordenada 3D
 coordenada = [xSol2(resp),ySol2(resp)];
 
 encontrado = 0;

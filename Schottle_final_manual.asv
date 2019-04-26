@@ -133,6 +133,7 @@ p_medio = [(P8(1)+P10(1))/2;(P8(2)+P10(2))/2];
 scatter(p_medio(1),p_medio(2),100,'o','filled')
 
 
+
 %Encontrar punto schottle en rodilla 3D
 vol2 = (V_seg.mascara == 2)+(V_seg.mascara ==1)>0;
 encontrado = 0;

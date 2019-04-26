@@ -1,4 +1,4 @@
-function V_seg = Schottle_final_manual(V_seg)
+function V_seg = Schottle_final_manual_circulo4mm(V_seg)
 
 vol = V_seg.mascara ==1;
 %Cortar por la mitad el femur (solo 1/2 medial)
@@ -132,9 +132,38 @@ plot([P9(1),P7(1)],[P9(2),P7(2)],'LineWidth',2)
 p_medio = [(P8(1)+P10(1))/2;(P8(2)+P10(2))/2];
 scatter(p_medio(1),p_medio(2),100,'o','filled')
 
+%Circulo, seba de mierda me hizo hacer esto
+%por las puras jaja
+
+circulo = zeros(size(rx_femur));
+
+radio_pix= Aproximar(2.5/dx);
+x = Aproximar(p_medio(1));
+y = Aproximar(p_medio(2));
+
+p = x - radio_pix : x + radio_pix;
+q = y - radio_pix : y + radio_pix;
+
+for j = 1:size(p,2)
+    for t = 1:size(q,2)
+        if (x-p(j))^2 + (y-q(t))^2 <= radio_pix^2
+            if (circulo(p(j),q(t)) == 0)
+                circulo(p(j),q(t)) = 1;
+                %scatter(p(j),q(t),10,'square','filled')
+            end
+        end
+    end
+end
+
+borde_circulo = cell2mat(bwboundaries(circulo));
+
+for i = 1:size(borde_circulo,1)
+    scatter(borde_circulo(i,1),borde_circulo(i,2),40,'square','filled')
+end
 
 %Encontrar punto schottle en rodilla 3D
 vol2 = (V_seg.mascara == 2)+(V_seg.mascara ==1)>0;
+
 encontrado = 0;
 contador = 1;
 
@@ -149,14 +178,31 @@ while (contador <= size(vol2,3) && encontrado ==0)
     contador = contador+1;
 end
 
+%Encontrar puntos circulo en rodilla 3D, seba de mierda me hizo hacer esto
+%por las puras jaja
 
+for i = 1:size(borde_circulo,1)
+    pix_x = borde_circulo(i,1);
+    pix_y = borde_circulo(i,2);
+    encontrado = 0;
+    contador = 1;
+    
+    while (contador <= size(vol2,3) && encontrado ==0)
+        if vol2(Aproximar(pix_y),Aproximar(pix_x),contador)>0
+            coord_3D_circulo{i,1} = double([Aproximar(pix_y),Aproximar(pix_x),contador]);
+            %coord_3D_circulo{i,1} = double(coord_3D_circulo);
+            %uiwait(msgbox('PUNTO ENCONTRADO'));
+            encontrado =1;
+            contador = contador-1;
+        end
+        contador = contador+1;
+    end
+end
 
 %Guardar
-% puntos_shottle = [P8(1),P8(2);P10(1),P10(2)];
-% dist_pixeles = pdist(puntos_shottle,'euclidean');
-% dist_mm = dist_pixeles*dx;
-
-V_seg.info{13} = [coord_3D_punto];%Puntos schottle
-V_seg.info{14} = [P8];
-V_seg.info{15} = [P10];
+puntos_shottle = [P8(1),P8(2);P10(1),P10(2)];
+dist_pixeles = pdist(puntos_shottle,'euclidean');
+dist_mm = dist_pixeles*dx;
+V_seg.info{13} = [coord_3D_punto;P8;P10,dist_mm];%Puntos schottle
+V_seg.info{14} = [coord_3D_circulo;circulo;borde_circulo];%Circulo schottle
 end
