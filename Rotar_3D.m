@@ -2,14 +2,14 @@ function V_out = Rotar_3D(V_seg)
 
     %Enderezar en Z podemos obtener el angulo con regionprops3
     
-%   Angulos = regionprops3(V_seg.femur.bones,'Orientation');
-    Theta_Z = Angulo_Z(V_seg);
-    eje_Z = 'Z';
-    %eje_Z = [0 0 1];
-    V_out = Rotar(V_seg,Theta_Z, eje_Z);
-    V_out.info{8} = Theta_Z;
-%   V_out.Angulos = Angulos;
-    
+% %   Angulos = regionprops3(V_seg.femur.bones,'Orientation');
+%     Theta_Z = Angulo_Z(V_seg);
+%     eje_Z = 'Z';
+%     %eje_Z = [0 0 1];
+%     V_out = Rotar(V_seg,Theta_Z, eje_Z);
+%     V_out.info{8} = Theta_Z;
+% %   V_out.Angulos = Angulos;
+%     
     tam = size(V_out.femur.bones,3);
     dx = V_out.info{1};
     dz = V_out.info{2};
