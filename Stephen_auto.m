@@ -34,18 +34,18 @@ function V_seg = Stephen_auto(V_seg)
     P4 = [x_ant + d_ant,y_distal - d_distal];
 
      
-    figure;
-    imshow(rx_femur,[])
-    hold on
-    scatter(P1(1),P1(2),100,'o','filled')
-    scatter(P2(1),P2(2),100,'o','filled')
-    scatter(P3(1),P3(2),100,'o','filled')
-    scatter(P4(1),P4(2),100,'o','filled','yellow')
-    
-    hold on
-    plot([P1(1),P1(1)],[P1(2)+1000,P1(2)-1000],'LineWidth',3)
-    plot([P2(1),P2(1)],[P2(2)+1000,P2(2)-1000],'LineWidth',3)
-    plot([P3(1)-1000,P3(1)+1000],[P3(2),P3(2)],'LineWidth',3)
+%     figure;
+%     imshow(rx_femur,[])
+%     hold on
+%     scatter(P1(1),P1(2),100,'o','filled')
+%     scatter(P2(1),P2(2),100,'o','filled')
+%     scatter(P3(1),P3(2),100,'o','filled')
+%     scatter(P4(1),P4(2),100,'o','filled','yellow')
+%     
+%     hold on
+%     plot([P1(1),P1(1)],[P1(2)+1000,P1(2)-1000],'LineWidth',3)
+%     plot([P2(1),P2(1)],[P2(2)+1000,P2(2)-1000],'LineWidth',3)
+%     plot([P3(1)-1000,P3(1)+1000],[P3(2),P3(2)],'LineWidth',3)
 %         
     coordenada = P4;
  

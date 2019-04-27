@@ -4,7 +4,11 @@ function V_seg = Punto_LCA_femur_manual(V_seg)
 vol = V_seg.mascara ==1; %hueso femur
 
 %Cortar por la mitad el femur (solo 1/2 lateral)
-vol2 = vol(1:size(vol,1),1:size(vol,1),(size(vol,3)/2): size(vol,3));
+
+[~,~,v1] = ind2sub(size(vol),find(vol > 0));
+Mid = round((max(v1)+min(v1))/2);
+
+vol2 = vol(1:size(vol,1),1:size(vol,1),Mid: size(vol,3));
 %vol3 = V_seg.vol.orig(1:size(vol,1),1:size(vol,1),(size(vol,3)/2): size(vol,3));
 
 %LM: lateral medial
@@ -137,14 +141,13 @@ scatter(xSol2(resp),ySol2(resp),200,'o','filled')
 coordenada = [xSol2(resp),ySol2(resp)];
 
 encontrado = 0;
-contador = 1;
+contador = Mid;
 while (contador <= size(vol2,3) && encontrado ==0)
     if vol2(Aproximar(coordenada(2)),Aproximar(coordenada(1)),contador)>0
-        coord_3D = [Aproximar(coordenada(2)),Aproximar(coordenada(1)),(size(vol,3)/2) + contador];
+        coord_3D = [Aproximar(coordenada(1)),Aproximar(coordenada(2)),contador];
         coord_3D = double(coord_3D);
         uiwait(msgbox('PUNTO ENCONTRADO'));
         encontrado =1;
-        contador = contador-1;
     end
     contador = contador+1;
 end

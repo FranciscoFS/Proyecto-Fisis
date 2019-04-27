@@ -2,7 +2,11 @@ function V_seg = Schottle_final_manual(V_seg)
 
 vol = V_seg.mascara ==1;
 %Cortar por la mitad el femur (solo 1/2 medial)
-%vol = vol(1:size(vol,1),1:size(vol,1),1:(size(vol,3)/2));
+
+[~,~,v1] = ind2sub(size(vol),find(vol > 0));
+Mid = round((max(v1)+min(v1))/2);
+
+vol = vol(1:size(vol,1),1:size(vol,1),1:Mid);
 
 % Luego se crea la rx
 rx_femur = squeeze(sum(vol,3));
@@ -140,11 +144,10 @@ contador = 1;
 
 while (contador <= size(vol2,3) && encontrado ==0)
     if vol2(Aproximar(p_medio(2)),Aproximar(p_medio(1)),contador)>0
-        coord_3D_punto = [Aproximar(p_medio(2)),Aproximar(p_medio(1)),contador];
+        coord_3D_punto = [Aproximar(p_medio(1)),Aproximar(p_medio(2)),contador];
         coord_3D_punto = double(coord_3D_punto);
         uiwait(msgbox('PUNTO ENCONTRADO'));
         encontrado =1;
-        contador = contador-1;
     end
     contador = contador+1;
 end
