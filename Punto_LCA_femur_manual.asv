@@ -20,9 +20,6 @@ hold on
 uiwait(msgbox('Poner dos puntos a lo largo de la linea de Blumensaat (poner primero el punto más anterior/distal)'));
 [x,y] = getpts();
 syms p q
-if x(2) == x(1)
-    x(2) = x(2) +1;
-end
 m1 = (y(2)-y(1))/(x(2)-x(1));
 q = symfun(m1*(p-x(1))+y(1),[p]);
 plot([x(1),x(2)],[y(1),y(2)],'LineWidth',2)
@@ -146,8 +143,9 @@ coordenada = [xSol2(resp),ySol2(resp)];
 encontrado = 0;
 contador = 1;
 while (contador <= size(vol2,3) && encontrado ==0)
+    1
     if vol2(Aproximar(coordenada(2)),Aproximar(coordenada(1)),contador)>0
-        coord_3D = [Aproximar(coordenada(1)),Aproximar(coordenada(2)),Mid + contador-1];
+        coord_3D = [Aproximar(coordenada(1)),Aproximar(coordenada(2)),contador];
         coord_3D = double(coord_3D);
         uiwait(msgbox('PUNTO ENCONTRADO'));
         encontrado =1;

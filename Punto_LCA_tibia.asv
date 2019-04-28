@@ -71,22 +71,27 @@ function V_seg = Punto_LCA_tibia(V_seg)
     y_final2 = y_anterior2 + dy_x2;
     
     scatter(x_final2,y_final2,100,'o','filled')
-    %x en realidad es "z" en imagenes
-    %y en realidad es "x" en imagenes (y en [])
+    %x en realidad es "z"
+    %y en realidad es "x"
     
 encontrado = 0;
 contador = 1;
-while (contador <= size(a,2) && encontrado ==0)
-    if a(contador, Aproximar(y_final2),Aproximar(x_final2))>0
-        coord_3D = [Aproximar(y_final2),contador,Aproximar(x_final2)];
+while (contador <= size(vol2,2) && encontrado ==0)
+    if a(Aproximar(y_final2),contador,Aproximar(x_final2))>0
+        coord_3D = [Aproximar(coordenada(1)),Aproximar(coordenada(2)),co];
         coord_3D = double(coord_3D);
         uiwait(msgbox('PUNTO ENCONTRADO'));
         encontrado =1;
     end
     contador = contador+1;
 end
-
-    V_seg.info{11} = [coord_3D];
+    
+    
+    
+    
+    
+    
+    V_seg.info{11} = [x_final2,y_final2];
     
 
 end
