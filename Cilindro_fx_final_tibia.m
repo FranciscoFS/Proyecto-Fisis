@@ -1,16 +1,30 @@
-function porc = Cilindro_fx_final(V_seg,alpha,beta,d,p)
+function porc = Cilindro_fx_final_tibia(V_seg,alpha,beta,d,p)
 %Direccion y distancia
 
 coordenada = V_seg.info{8};
 
-% 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
+% 3 = Tibia hueso, 4 = Tibia fisis (indices de la mascara)
 
-% fisis_usar = V_seg.femur.fisis;
-fisis_usar = V_seg.mascara == 2;
-hueso_usar = V_seg.mascara == 1;
+fisis_usar = V_seg.mascara == 4;
+hueso_usar = V_seg.mascara == 3;
+
+%Girados
+hueso_usar2 = imrotate3_fast(hueso_usar,{90 'X'});
+fisis_usar = imrotate3_fast(fisis_usar,{Omega eje});
 
 dz = V_seg.info{2,1};
 dx = V_seg.info{1,1};
+pace = (dx/dz);
+hueso_usar = double(hueso_usar);
+%Interpolar antes de girar
+%im = double(aplastado_DP);
+    [m,n,k] = size(hueso_usar);
+    [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
+    Y =interp3(hueso_usar,Xq,Yq,Zq);
+    
+%Interpolar despues
+[Xq,Zq] = meshgrid(1:pace:k,1:m);
+aplastado_DP =interp2(im,Xq,Zq);
 
 a1 = beta;% azimut (+ hacia distal)
 a2 = alpha;% horizontal (+ hacia posterior)
@@ -38,7 +52,7 @@ P2 = Aproximar(P2);
 
 % Cilindro
 radio = diametro/2;
-radio_pix = Aproximar(radio/dx);
+radio_pix = Aproximar(radio/dz);
 
 pixeles_ya_sumados = zeros(size(fisis_usar));
 
@@ -67,23 +81,23 @@ for i = 1:size(Z,2)
     end
 end
 
-%     f = figure;
-%     hold on
-%     fu= smooth3(fisis_usar, 'box', 3);
-%     hu = smooth3(hueso_usar,'box', 3);
-%     p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
-%     p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-%     p3= patch(isosurface(pixeles_ya_sumados, 0.7),'FaceColor','green','EdgeColor','none');
-%     reducepatch(p2,0.01)
-%     ax = gca;
-%     c = ax.DataAspectRatio;
-%     ax.DataAspectRatio= [dz,dz,dx];
-% 
-%     axis tight
-%     l = camlight('headlight');
-%     lighting gouraud
-%     material dull
-%     title('Fisis')
+f = figure;
+hold on
+fu= smooth3(fisis_usar, 'box', 3);
+hu = smooth3(hueso_usar,'box', 3);
+p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
+p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+p3= patch(isosurface(pixeles_ya_sumados, 0.7),'FaceColor','green','EdgeColor','none');
+reducepatch(p2,0.01)
+ax = gca;
+c = ax.DataAspectRatio;
+ax.DataAspectRatio= [dz,dz,dx];
+
+axis tight
+l = camlight('headlight');
+lighting gouraud
+material dull
+title('Fisis')
 
 total_de_1s = sum(fisis_usar(:));
 delta = (fisis_usar - pixeles_ya_sumados) == 1;
