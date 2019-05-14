@@ -27,11 +27,23 @@ if x(2) == x(1)
 end
 m1 = (y(2)-y(1))/(x(2)-x(1));
 q = symfun(m1*(p-x(1))+y(1),[p]);
-plot([x(1),x(2)],[y(1),y(2)],'LineWidth',2)
 
 %Punto más adelante de la linea
-y_ant = y(1);
-x_ant = x(1);
+y_ant = Aproximar(y(1));
+x_ant = Aproximar(x(1));
+
+i = x_ant;
+while i>1
+    x_prueba = i;
+    y_prueba = Aproximar(q(x_prueba));
+    if aplastado_LM(y_prueba,x_prueba) ==0
+        y_ant = y_prueba;
+        x_ant = x_prueba;
+        break
+    end
+    i = i-1;
+end
+plot([x_ant,x(2)],[y_ant,y(2)],'LineWidth',2)
 
 %Crear linea paralela
 uiwait(msgbox('Poner punto mas distal/paralelo'));
