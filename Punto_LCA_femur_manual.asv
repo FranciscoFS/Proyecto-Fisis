@@ -14,7 +14,7 @@ vol = vol(1:size(vol,1),1:size(vol,1),Mid: size(vol,3));
 %vol3 = V_seg.vol.orig(1:size(vol,1),1:size(vol,1),(size(vol,3)/2): size(vol,3));
 
 %LM: lateral medial
-aplastado_LM = squeeze(sum(vol,3));
+aplastado_LM = squeeze(sum(vol2,3));
 
 %Crear linea de Blumensaat
 imshow(aplastado_LM,[])

@@ -1,6 +1,9 @@
 function V_seg = Schottle_final_manual(V_seg)
 
-vol = V_seg.mascara ==1;
+vol_1 = V_seg.mascara ==1; %hueso femur
+vol_2 = V_seg.mascara ==2; %fisis femur
+vol = vol_1 + vol_2;
+
 %Cortar por la mitad el femur (solo 1/2 medial)
 
 [~,~,v1] = ind2sub(size(vol),find(vol > 0));
@@ -134,16 +137,15 @@ plot([P9(1),P7(1)],[P9(2),P7(2)],'LineWidth',2)
 
 %Punto medio:
 p_medio = [(P8(1)+P10(1))/2;(P8(2)+P10(2))/2];
-scatter(p_medio(1),p_medio(2),100,'o','filled')
+scatter(p_medio(1),p_medio(2),100,'d','filled')
 
 
 %Encontrar punto schottle en rodilla 3D
-vol2 = (V_seg.mascara == 2)+(V_seg.mascara ==1)>0;
 encontrado = 0;
 contador = 1;
 
-while (contador <= size(vol2,3) && encontrado ==0)
-    if vol2(Aproximar(p_medio(2)),Aproximar(p_medio(1)),contador)>0
+while (contador <= size(vol,3) && encontrado ==0)
+    if vol(Aproximar(p_medio(2)),Aproximar(p_medio(1)),contador)>0
         coord_3D_punto = [Aproximar(p_medio(1)),Aproximar(p_medio(2)),contador];
         coord_3D_punto = double(coord_3D_punto);
         uiwait(msgbox('PUNTO ENCONTRADO'));
