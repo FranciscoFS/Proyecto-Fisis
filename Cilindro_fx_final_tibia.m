@@ -5,26 +5,32 @@ coordenada = V_seg.info{8};
 
 % 3 = Tibia hueso, 4 = Tibia fisis (indices de la mascara)
 
-fisis_usar = V_seg.mascara == 4;
-hueso_usar = V_seg.mascara == 3;
-
-%Girados
-hueso_usar2 = imrotate3_fast(hueso_usar,{90 'X'});
-fisis_usar = imrotate3_fast(fisis_usar,{Omega eje});
+fisis_usar = double(V_seg.mascara == 4);
+hueso_usar = double(V_seg.mascara == 3);
+fisis_usar= imrotate3_fast(fisis_usar,{90 'X'});
+hueso_usar= imrotate3_fast(hueso_usar,{90 'X'});
+fisis_usar= imrotate3_fast(fisis_usar,{270 'Z'});
+hueso_usar= imrotate3_fast(hueso_usar,{270 'Z'});
 
 dz = V_seg.info{2,1};
 dx = V_seg.info{1,1};
 pace = (dx/dz);
-hueso_usar = double(hueso_usar);
-%Interpolar antes de girar
-%im = double(aplastado_DP);
-    [m,n,k] = size(hueso_usar);
-    [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
-    Y =interp3(hueso_usar,Xq,Yq,Zq);
-    
-%Interpolar despues
+
+fisis_nueva = [];
+hueso_nuevo = [];
+m = size(fisis_usar,1);
+k =size(fisis_usar,2);
 [Xq,Zq] = meshgrid(1:pace:k,1:m);
-aplastado_DP =interp2(im,Xq,Zq);
+
+for i = 1:size(fisis_usar,3)
+h = interp2(hueso_usar(:,:,i),Xq,Zq);
+f = interp2(fisis_usar(:,:,i),Xq,Zq);
+fisis_nueva(:,:,i) = f;
+hueso_nuevo(:,:,i) = h;
+end
+
+vol = fisis_nueva + hueso_nuevo;
+aplastado_DP = squeeze(sum(vol,3));
 
 a1 = beta;% azimut (+ hacia distal)
 a2 = alpha;% horizontal (+ hacia posterior)
