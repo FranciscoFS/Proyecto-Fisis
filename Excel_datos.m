@@ -109,8 +109,9 @@ folder = uigetdir();
 DIM = dir(folder);
 %Dir_out = '/Users/franciscofernandezschlein/Google Drive/Uc/LPFM/Base_datos_procesada/';
 %Dir_out = '/Users/franciscofernandezschlein/Google Drive/Uc/LPFM/Base_datos_procesada2/';
-Dir_out = 'D:\Drive\Uc\LPFM\Base_Datos_Procesada_(Completa)\';
-fields_out = {'femur','perone','tibia','rotula','vol'};
+%Dir_out = 'D:\Drive\Uc\LPFM\Base_Datos_Procesada_(Completa)_2\';
+%fields_out = {'femur','perone','tibia','rotula','vol'};
+fields_out = {'femur','perone','tibia','rotula'};
 contador = 0;
 Base_datos = struct('Rodilla',[]);
 
@@ -125,23 +126,24 @@ for k=1:numel(DIM)
         
         if Volumenes.femur > 0
             
-            V_out = Stephen_auto(V_out);
+            %V_out = Stephen_auto(V_out);
             V_out = rmfield(V_out,fields_out);
-            save([Dir_out DIM(k).name],'V_out')
+            V_out.vol = rmfield(V_out.vol,'filt');
+            %save([Dir_out DIM(k).name],'V_out')
             fprintf('Saved..... %s \n', DIM(k).name);
             contador = contador + 1;
             Base_datos(contador).Rodilla = V_out;
             
         else
             
-            V_out.mascara = (V_out.mascara < 8).*(V_out.mascara);
-            Az = Angulo_Z(V_out);
-            Eje = 'Z';
-            V_out = Rotar(V_out,Az,Eje);
-            V_out.info{7} = Az;
-            V_out = rmfield(V_out,fields_out);
-            save([Dir_out DIM(k).name],'V_out')
-            fprintf('No tenia Fisis, pero....Saved..... %s \n', DIM(k).name);
+%             V_out.mascara = (V_out.mascara < 8).*(V_out.mascara);
+%             Az = Angulo_Z(V_out);
+%             Eje = 'Z';
+%             V_out = Rotar(V_out,Az,Eje);
+%             V_out.info{7} = Az;
+%             V_out = rmfield(V_out,fields_out);
+%             save([Dir_out DIM(k).name],'V_out')
+%             fprintf('No tenia Fisis, pero....Saved..... %s \n', DIM(k).name);
             
         end
         

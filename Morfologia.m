@@ -253,7 +253,7 @@ subplot(2,2,4); plot(x,y4); axis equal; title('P4');
 
 %% Analizar R2 para el modelo Promedio
 
-R2 = table();
+R2 = table('Size',[Largo,4],'VariableTypes',{'double','double','double','double'});
 
 for k=1:Largo
     
@@ -264,16 +264,16 @@ for k=1:Largo
     y2 = Coefs2(1) + Coefs2(2)*cos(x*Coefs2(6)) + Coefs2(3)*sin(x*Coefs2(6))...
      + Coefs2(4)*cos(2*x*Coefs2(6)) + Coefs2(5)*sin(2*x*Coefs2(6));
  
-    R2{k,1} = corr(y1,Distribucion(k).AP_nom.Filas);
-    R2{k,2} = corr(y2,Distribucion(k).AP_nom.Filas);
+    R2{k,1} = corr(y1,Distribucion(k).AP_nom.Filas)^2;
+    R2{k,2} = corr(y2,Distribucion(k).AP_nom.Filas)^2;
  
     x = Distribucion(k).SG_norm.Columnas;
     % SG, aqui X es las columnas SG_norm.Columnas
     y3 = Coefs3(1)*(x.^2) +  Coefs3(2)*x +  Coefs3(3);
     y4 = Coefs4(1)*(x.^4) + Coefs4(2)*(x.^3) + Coefs4(3)*(x.^2) + Coefs4(4)*x +  Coefs4(5);
 
-    R2{k,3} = corr(y3,Distribucion(k).SG_norm.Filas);
-    R2{k,4} = corr(y4,Distribucion(k).SG_norm.Filas);
+    R2{k,3} = corr(y3,Distribucion(k).SG_norm.Filas)^2;
+    R2{k,4} = corr(y4,Distribucion(k).SG_norm.Filas)^2;
  
 end
 

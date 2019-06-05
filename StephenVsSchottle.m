@@ -1,0 +1,222 @@
+% Script para Hacer Puntos Schottle
+
+[file,path] = uigetfile();
+load([path file])
+Base_datos_2 = Base_datos;
+%%
+
+Cantidad_rodillas = 58;
+Contador = 0;
+for k=39:Cantidad_rodillas
+    
+    Base_datos_2(k).Rodilla =  Schottle_final_manual( Base_datos(k).Rodilla);
+    Contador = k;
+end
+
+%%
+
+save('Rodillas_TodasIncluidas_FF_1.mat','Base_datos_2')
+
+%% Comparacion Schottle vs Stephen  (X_SCH,Y_SCH,X_St,Y_St) Distancia(X,Y)
+% La distancia se medirá Stephen respecto a Schottle
+
+Cantidad_rodillas = 58;
+Posiciones = zeros(Cantidad_rodillas,4);
+Distancia = zeros(Cantidad_rodillas,2);
+
+for k=1:Cantidad_rodillas
+    
+    dx = BD_F(k).Rodilla.info{1};
+    pto_Schottle = BD_F(k).Rodilla.info{13};
+    pto_Stephen = BD_F(k).Rodilla.info{8};
+    Posiciones(k,1) = pto_Schottle(1);
+    Posiciones(k,2) = pto_Schottle(2);
+    Posiciones(k,3) = pto_Stephen(1);
+    Posiciones(k,4) = pto_Stephen(2);
+    
+    Distancia(k,1) =  (pto_Stephen(1) - pto_Schottle(1))*dx;  
+    Distancia(k,2) =  (pto_Stephen(2) - pto_Schottle(2))*dx; 
+    Distancia(k,3) = pdist([pto_Schottle; pto_Stephen],'euclidean')*dx;    
+
+    %Distancia(k,1) = pdist([pto_Schottle; pto_Stephen],'euclidean');    
+end
+
+T_distancia = array2table(Distancia,'VariableNames',{'X_Dist','Y_Dist','Dist_T'});
+[muHat,~,muCI,~] = normfit(Distancia);
+
+X_Dist = {[num2str(muHat(1)) '- [' num2str(muCI(1,1)) ' -' num2str(muCI(2,1)) ']']};
+Y_Dist = {[num2str(muHat(2)) '- [' num2str(muCI(1,2)) ' -' num2str(muCI(2,2)) ']']};
+Dist_T = {[num2str(muHat(3)) '- [' num2str(muCI(1,3)) ' -' num2str(muCI(2,3)) ']']};
+
+T_Dist_CI = table(X_Dist,Y_Dist,Dist_T);
+T_Dist_CI.Properties.VariableNames= {'X_Dist','Y_Dist','Dist_T'};
+
+T_Posiciones = array2table(Posiciones,'VariableNames',{'X_Sc','Y_Sc','X_St','Y_St'});
+[muHat,~,muCI,~] = normfit(Posiciones);
+
+X_Sc = {[num2str(muHat(1)) '- [' num2str(muCI(1,1)) ' -' num2str(muCI(2,1)) ']']};
+Y_Sc = {[num2str(muHat(2)) '- [' num2str(muCI(1,2)) ' -' num2str(muCI(2,2)) ']']};
+X_St = {[num2str(muHat(3)) '- [' num2str(muCI(1,3)) ' -' num2str(muCI(2,3)) ']']};
+Y_St = {[num2str(muHat(4)) '- [' num2str(muCI(1,4)) ' -' num2str(muCI(2,4)) ']']};
+
+T_MU_CI = table(X_Sc,Y_Sc,X_St,Y_St);
+T_MU_CI.Properties.VariableNames= {'X_Sc','Y_Sc','X_St','Y_St'};
+
+%% Calculo por Edad y Sexo
+
+[muHat_M,~,muCI_M,~] = normfit(Distancia(Sexo ==1,:));
+
+X_Dist_M = {[num2str(muHat_M(1)) '- [' num2str(muCI_M(1,1)) ' -' num2str(muCI_M(2,1)) ']']};
+Y_Dist_M = {[num2str(muHat_M(2)) '- [' num2str(muCI_M(1,2)) ' -' num2str(muCI_M(2,2)) ']']};
+Dist_T_M = {[num2str(muHat_M(3)) '- [' num2str(muCI_M(1,3)) ' -' num2str(muCI_M(2,3)) ']']};
+
+T_Dist_CI_M = table(X_Dist_M,Y_Dist_M,Dist_T_M);
+T_Dist_CI_M.Properties.VariableNames= {'X_Dist_M','Y_Dist_M','Dist_T_M'};
+
+[muHat_F,~,muCI_F,~] = normfit(Distancia(Sexo ==2,:));
+
+X_Dist_F = {[num2str(muHat_F(1)) '- [' num2str(muCI_F(1,1)) ' -' num2str(muCI_F(2,1)) ']']};
+Y_Dist_F = {[num2str(muHat_F(2)) '- [' num2str(muCI_F(1,2)) ' -' num2str(muCI_F(2,2)) ']']};
+Dist_T_F = {[num2str(muHat_F(3)) '- [' num2str(muCI_F(1,3)) ' -' num2str(muCI_F(2,3)) ']']};
+
+T_Dist_CI_F = table(X_Dist_F,Y_Dist_F,Dist_T_F);
+T_Dist_CI_F.Properties.VariableNames= {'X_Dist_F','Y_Dist_F','Dist_T_F'};
+
+%% Edad
+
+Edades = uniquetol(Edad);
+T_Dist_CI_Edad = table();
+
+for k=1:length(Edades)
+    
+    [muHat_M,~,muCI_M,~] = normfit(Distancia(Edad ==Edades(k),:));
+    X_Dist_M = {num2str(muHat_M(1)), [ '- [' num2str(muCI_M(1,1)) ' -' num2str(muCI_M(2,1)) ']']};
+    Y_Dist_M = {num2str(muHat_M(2)), [ '- [' num2str(muCI_M(1,2)) ' -' num2str(muCI_M(2,2)) ']']};
+    Dist_T_M = {num2str(muHat_M(3)), [ '- [' num2str(muCI_M(1,3)) ' -' num2str(muCI_M(2,3)) ']']};
+    
+    T_Dist_CI_Edad(k,:) = [X_Dist_M,Y_Dist_M,Dist_T_M];
+end
+
+
+
+%%
+[h_1,p_1] = ttest2(Posiciones(:,1),Posiciones(:,3))
+[h_2,p_2] = ttest2(Posiciones(:,2),Posiciones(:,4))
+
+[p1,tbl1,stats1,terms1] = anovan([Posiciones(:,1);Posiciones(:,3)],[ones(58,1);2*ones(58,1)]);
+[p2,tbl2,stats2,terms2] = anovan([Posiciones(:,2);Posiciones(:,4)],[ones(58,1);2*ones(58,1)]);
+
+%% Gráficos
+
+figure;
+set(gcf,'color','w')
+Pto = BD_F(1).Rodilla.info;
+imshow(sum(BD_F(1).Rodilla.mascara ==1,3),[]);
+hold on; scatter(Pto{13}(1),Pto{13}(2),'red','filled');
+hold on; scatter(Pto{8}(1),Pto{8}(2),'blue','filled');
+axis on
+
+%% Comparaciones
+
+Edad = cell2mat(t_usar.Edad);
+Hombres = strcmp(t_usar.Sexo,'M');
+Mujeres = strcmp(t_usar.Sexo,'F');
+Sexo = Hombres + Mujeres*2;
+
+%%
+
+%X
+[p_X,tbl1_X,stats1_X,terms1_X] = anovan(Distancia(:,1),{Edad,Sexo});
+[results_X,means_X] = multcompare(stats1_X)
+%Y
+[p_Y,tbl1_Y,stats_Y,terms1_Y] = anovan(Distancia(:,2),{Edad,Sexo});
+[results_Y,means_Y] = multcompare(stats_Y)
+%% Comparacion TF vs FF  (TF Columna 1 y 2 (X,Y) FF (3,X,4,Y), estos son Schottle)
+% Orden para Stephen ( TF stephen (X,Y) es (5,6)
+
+Cantidad_rodillas = 20;
+Posiciones = zeros(Cantidad_rodillas,4);
+Distancia = zeros(Cantidad_rodillas,2);
+for k=1:Cantidad_rodillas
+    
+    pto_TF = BD_T(k).Rodilla.info{13};
+    pto_TF_St = BD_T(k).Rodilla.info{8};
+    Posiciones(k,1) = pto_TF(1);
+    Posiciones(k,2) = pto_TF(2);
+    %Posiciones(k,5) = pto_TF_St(1);
+    %Posiciones(k,6) = pto_TF_St(2);
+    
+    pto_FF = BD_F(k).Rodilla.info{13};
+    Posiciones(k,3) = pto_FF(1);
+    Posiciones(k,4) = pto_FF(2);
+   
+    Distancia(k,1) = pdist([pto_TF(1);pto_FF(1)],'euclidean');
+    Distancia(k,2) = pdist([pto_TF(2);pto_FF(2)],'euclidean');
+     
+end
+
+T_2 = array2table(Posiciones,'VariableNames',{'X_ScTF','Y_ScTF','X_ScFF','Y_ScFF'});
+[muHat,~,muCI,~] = normfit(Posiciones);
+
+X_ScT = {[num2str(muHat(1)) '- [' num2str(muCI(1,1)) ' -' num2str(muCI(2,1)) ']']};
+Y_ScT = {[num2str(muHat(2)) '- [' num2str(muCI(1,2)) ' -' num2str(muCI(2,2)) ']']};
+X_ScF = {[num2str(muHat(3)) '- [' num2str(muCI(1,3)) ' -' num2str(muCI(2,3)) ']']};
+Y_ScF = {[num2str(muHat(4)) '- [' num2str(muCI(1,4)) ' -' num2str(muCI(2,4)) ']']};
+
+T_MU_CI_2 = table(X_ScT,Y_ScT,X_ScF,Y_ScF);
+T_MU_CI_2.Properties.VariableNames= {'X_ScTF','Y_ScTF','X_ScFF','Y_ScFF'};
+
+%% Graficar Datos Interclass
+
+Pto_F = BD_F(1).Rodilla.info;Pto_T = BD_T(1).Rodilla.in;
+imshow(sum(BD_F(1).Rodilla.Mascara ==1,3),[]);
+hold on; scatter(Pto_F{13}(1),Pto_F{13}(2),'red','filled');
+hold on; scatter(Pto_T{13}(1),Pto_T{13}(2),'blue','filled');
+
+figure;
+set(gcf,'color','w')
+subplot(1,2,1); boxplot([Posiciones(:,3),Posiciones(:,1)],{'Obs1 (F)','Obs2_(T)'})
+title('Comparación Eje AP');
+subplot(1,2,2); boxplot([Posiciones(:,4),Posiciones(:,2)],{'Obs1 (F)','Obs2_(T)'})
+title('Comparación Eje CC');
+
+
+
+%% Comparacion
+
+% Comparacion en X
+
+[h_1,p_1] = ttest2(Posiciones(:,1),Posiciones(:,3))
+[h_2,p_2] = ttest2(Posiciones(:,1),Posiciones(:,5))
+[h_3,p_3] = ttest2(Posiciones(:,3),Posiciones(:,5))
+
+%Comparacion en Y
+
+[h_4,p_4] = ttest2(Posiciones(:,2),Posiciones(:,4))
+[h_5,p_5] = ttest2(Posiciones(:,2),Posiciones(:,6))
+[h_6,p_6] = ttest2(Posiciones(:,4),Posiciones(:,6))
+
+% ICC
+[r, LB, UB, F, df1, df2, p] = ICC([Posiciones(:,1) Posiciones(:,3)],'C-1',0.05,0.5);
+[r, LB, UB, F, df1, df2, p] = ICC([Posiciones(:,2) Posiciones(:,4)],'C-1',0.05,0.5);
+
+%%
+
+X_TF = {[num2str(muHat(1)) '- [' num2str(muCI(1,1)) ' -' num2str(muCI(2,1)) ']']};
+Y_TF = {[num2str(muHat(2)) '- [' num2str(muCI(1,2)) ' -' num2str(muCI(2,2)) ']']};
+X_FF = {[num2str(muHat(3)) '- [' num2str(muCI(1,3)) ' -' num2str(muCI(2,3)) ']']};
+Y_FF = {[num2str(muHat(4)) '- [' num2str(muCI(1,4)) ' -' num2str(muCI(2,4)) ']']};
+X_Sch = {[num2str(muHat(5)) '- [' num2str(muCI(1,5)) ' -' num2str(muCI(2,5)) ']']};
+Y_Sch = {[num2str(muHat(6)) '- [' num2str(muCI(1,6)) ' -' num2str(muCI(2,6)) ']']};
+
+T_MU_CI_2 = table(X_TF,Y_TF,X_FF,Y_FF,X_Sch,Y_Sch);
+T_MU_CI_2.Properties.VariableNames= {'X_TF','Y_TF','X_FF','Y_FF','X_ref','Y_ref'};
+
+%% Anovas
+
+[p,tbl,stats,terms] = anovan([Posiciones(:,1);Posiciones(:,3);Posiciones(:,5)],[ones(20,1);2*ones(20,1);3*ones(20,1)]);
+
+
+
+
+
