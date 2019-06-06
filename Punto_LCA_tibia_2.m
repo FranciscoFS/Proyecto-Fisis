@@ -1,14 +1,29 @@
 function V_seg = Punto_LCA_tibia_2(V_seg)
 %Rodillas: 0 medial y terminan en lateral
 
-
-a = V_seg.mascara ==3; %hueso
-b = V_seg.mascara ==4;%fisis
+a = double(V_seg.mascara ==3); %hueso
+b = double(V_seg.mascara ==4); %fisis
 vol = a+b;
 %LM: lateral medial
 aplastado_LM = squeeze(sum(vol,3));
+
 imshow(aplastado_LM,[])
-uiwait(msgbox('Poner un punto donde comienza la tuberosidad de la tibia (de proximal a distal)'));
+uiwait(msgbox('Ingrese dos puntos sobre el platillo tibial lateral'));
+[Y1,X1] = getpts();
+
+%syms p
+m1 = (Y1(2)-Y1(1))/(X1(2)-X1(1));
+
+ang = atand(m1);
+if ang > 0
+    vol = imrotate3_fast(vol,{90-ang 'Z'});
+else
+    vol = imrotate3_fast(vol,{-(90+ang) 'Z'});
+end
+
+aplastado_LM = squeeze(sum(vol,3));
+imshow(aplastado_LM,[])
+uiwait(msgbox('Poner punto mas anterior del platillo tibial'));
 [X1,Y1] = getpts();
 close
 
@@ -23,24 +38,13 @@ vol2 = imrotate3_fast(vol2,{270 'X'});
 vol2 = imrotate3_fast(vol2,{270 'Z'});
 
 %DP: distal proximal
-
-%ANTES
-%aplastado_DP = squeeze(sum(vol2,1));
-
-%NO es necesario, solo para mostrar
 dz = V_seg.info{2,1};
 dx = V_seg.info{1,1};
 pace = (dx/dz);
 
-%     im = double(aplastado_DP);
-%     [m,k] = size(im);
-%     [Xq,Zq] = meshgrid(1:pace:k,1:m);
-%     aplastado_DP =interp2(im,Xq,Zq);
-
 vol_nuevo = [];
 m = size(vol2,1);
 k = size(vol2,2);
-n = size(vol2,3);
 [Xq,Zq] = meshgrid(1:pace:k,1:m);
 
 for i = 1:size(vol2,3)
@@ -49,9 +53,7 @@ for i = 1:size(vol2,3)
 end
 aplastado_DP = squeeze(sum(vol_nuevo,3));
 
-
 %AP=25%±2.8% ML=50.5%±4.2% AP=46.4%±3.7% ML=52.4%±2.5%
-
 
 figure, imshow(aplastado_DP,[])
 hold on
@@ -89,7 +91,7 @@ while (contador <= size(vol_nuevo,3)  && encontrado ==0)
     contador = contador+1;
 end
 
+V_seg.info{10} = [ang];
 V_seg.info{11} = [coord_3D];
-
 
 end
