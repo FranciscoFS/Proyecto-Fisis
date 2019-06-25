@@ -1,16 +1,25 @@
 function porc = Cilindro_fx_final_tibia(V_seg,alpha,beta,d,p)
-%Direccion y distancia
-
-coordenada = V_seg.info{8};
+%porc = Cilindro_fx_final_tibia(V_seg,-30,-30,4,10)
+ang = V_seg.info{10};
+coordenada = V_seg.info{11};
 
 % 3 = Tibia hueso, 4 = Tibia fisis (indices de la mascara)
 
 fisis_usar = double(V_seg.mascara == 4);
 hueso_usar = double(V_seg.mascara == 3);
-fisis_usar= imrotate3_fast(fisis_usar,{90 'X'});
-hueso_usar= imrotate3_fast(hueso_usar,{90 'X'});
-fisis_usar= imrotate3_fast(fisis_usar,{270 'Z'});
-hueso_usar= imrotate3_fast(hueso_usar,{270 'Z'});
+
+if ang > 4
+    fisis_usar= imrotate3_fast(fisis_usar,{(90-ang) 'Z'});
+    hueso_usar= imrotate3_fast(hueso_usar,{(90-ang) 'Z'});
+else
+    fisis_usar= imrotate3_fast(fisis_usar,{-(90+ang)+270 'Z'});
+    hueso_usar= imrotate3_fast(hueso_usar,{-(90+ang)+270 'Z'});
+end
+
+fisis_usar= imrotate3_fast(fisis_usar,{270 'X'});
+hueso_usar= imrotate3_fast(hueso_usar,{270 'X'});
+fisis_usar= imrotate3_fast(fisis_usar,{(270) 'Z'});
+hueso_usar= imrotate3_fast(hueso_usar,{(270) 'Z'});
 
 dz = V_seg.info{2,1};
 dx = V_seg.info{1,1};
@@ -30,26 +39,27 @@ hueso_nuevo(:,:,i) = h;
 end
 
 vol = fisis_nueva + hueso_nuevo;
-aplastado_DP = squeeze(sum(vol,3));
+%aplastado_DP = squeeze(sum(vol,3));
 
-a1 = beta;% azimut (+ hacia distal)
-a2 = alpha;% horizontal (+ hacia posterior)
-mm = p;%Profundidad
+a1 = alpha;% hacia lateral
+a2 = beta;% hacia posterior
+mm = p;% Profundidad
 diametro = d;
 
-[z,y,x] = sph2cart(deg2rad(a1),deg2rad(a2),mm);
+%x aca es medial-lateral (lateral es +) (que en [] es y)
+%y aca es anterior-posterior (posterior +)
+%z aca es distal-proximal
+
+[z,y,x] = sph2cart(deg2rad(a2),deg2rad(a1),(mm));
 
 %dif_x
-pixeles_x = x/dx;
-
+pixeles_x = Aproximar(x)/(dx/dz);
 %dif_y
-pixeles_y = y/dx;
-
+pixeles_y = Aproximar(y)/(dx/dz);
 %dif_z
-pixeles_z = z/dz;
+pixeles_z = Aproximar(z)/(dx/dz);
 
-
-% Dejar "(Y,X,Z)" si desde Stephen llega x,y,z CONFIRMADO NO CAMBIAR
+% 
 P1 = [coordenada(2),coordenada(1),coordenada(3)];
 P2 = [P1(1)+pixeles_y, P1(2) + pixeles_x, P1(3) + pixeles_z];
 P2 = Aproximar(P2);
@@ -58,9 +68,9 @@ P2 = Aproximar(P2);
 
 % Cilindro
 radio = diametro/2;
-radio_pix = Aproximar(radio/dz);
+radio_pix = Aproximar(radio/(dx/dz));
 
-pixeles_ya_sumados = zeros(size(fisis_usar));
+pixeles_ya_sumados = zeros(size(fisis_nueva));
 
 for i = 1:size(Z,2)
     x = Aproximar(X(i));
@@ -87,17 +97,22 @@ for i = 1:size(Z,2)
     end
 end
 
+fisis_nueva= imrotate3_fast(fisis_nueva,{180 'Y'});
+hueso_nuevo= imrotate3_fast(hueso_nuevo,{180 'Y'});
+pixeles_ya_sumados= imrotate3_fast(pixeles_ya_sumados,{180 'Y'});
+
 f = figure;
 hold on
-fu= smooth3(fisis_usar, 'box', 3);
-hu = smooth3(hueso_usar,'box', 3);
+fu= smooth3(fisis_nueva, 'box', 9);
+hu = smooth3(hueso_nuevo,'box', 9);
+cilindro = smooth3(pixeles_ya_sumados,'box', 9);
 p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
 p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-p3= patch(isosurface(pixeles_ya_sumados, 0.7),'FaceColor','green','EdgeColor','none');
-reducepatch(p2,0.01)
+p3= patch(isosurface(cilindro, 0.7),'FaceColor','green','EdgeColor','none');
+reducepatch(p2,0.02)
 ax = gca;
 c = ax.DataAspectRatio;
-ax.DataAspectRatio= [dz,dz,dx];
+ax.DataAspectRatio= [1,1,1];
 
 axis tight
 l = camlight('headlight');
@@ -105,8 +120,9 @@ lighting gouraud
 material dull
 title('Fisis')
 
-total_de_1s = sum(fisis_usar(:));
-delta = (fisis_usar - pixeles_ya_sumados) == 1;
+fisis_nueva = fisis_nueva>0;
+total_de_1s = sum(fisis_nueva(:));
+delta = (fisis_nueva - pixeles_ya_sumados) == 1;
 total_1s_resta = sum(delta(:));
 porc = ((total_de_1s - total_1s_resta)/total_de_1s)*100;
 

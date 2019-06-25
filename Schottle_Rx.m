@@ -1,21 +1,8 @@
-function V_seg = Schottle_final_manual(V_seg)
+function rx = Schottle_Rx(rx)
+im = rx.seg;
 
-vol_1 = V_seg.mascara ==1; %hueso femur
-vol_2 = V_seg.mascara ==2; %fisis femur
-vol = vol_1 + vol_2;
-
-%Cortar por la mitad el femur (solo 1/2 medial)
-
-[~,~,v1] = ind2sub(size(vol),find(vol > 0));
-Mid = round((max(v1)+min(v1))/2);
-
-vol = vol(1:size(vol,1),1:size(vol,1),1:Mid);
-
-% Luego se crea la rx
-rx_femur = squeeze(sum(vol,3));
-imshow(rx_femur);
+imshow(im);
 hold on
-
 %Linea 1
 uiwait(msgbox('Ponga dos puntos en la cortical posterior para crear la linea 1'));
 [x,y] = getpts();
@@ -30,7 +17,7 @@ if P1(1) == P2(1)
     P1(1) = P1(1) +1;
 end
 
-imshow(rx_femur,[]);
+imshow(im,[]);
 hold on
 
 %Plot linea 1
@@ -83,11 +70,10 @@ y(1) = q3(x(1));
 y(2) = q3(x(2));
 plot([x(1),x(2)],[y(1),y(2)],'LineWidth',2)
 
-
 %Matematica
 
-dz = V_seg.info{2,1};
-dx = V_seg.info{1,1};
+dz = rx.info{2,1};
+dx = rx.info{1,1};
 
 pix_dx1 = 1.3/dx; %anterior a L1
 pix_dx2 = 2.5/dx; %distal a L2
@@ -99,7 +85,6 @@ pix_y = (sind(alph)*pix_dx1);
 
 alph2 = atand(m1);
 
-
 if alph < 0
     pix_y2 = (cosd(alph)*pix_dx2);
     pix_x2 = (sind(alph)*pix_dx2);
@@ -110,8 +95,6 @@ end
 
 pix_x3 = (cosd(alph2)*pix_dx3);
 pix_y3 = (sind(alph2)*pix_dx3);
-
-
 
 %Punto desde linea 2
 P7 = [P4(1)-pix_x,P4(2)-pix_y];%punto anterior colineal a L2
@@ -139,28 +122,9 @@ plot([P9(1),P7(1)],[P9(2),P7(2)],'LineWidth',2)
 p_medio = [(P8(1)+P10(1))/2;(P8(2)+P10(2))/2];
 scatter(p_medio(1),p_medio(2),100,'d','filled')
 
+coord_3D = [Aproximar(p_medio(1)),Aproximar(p_medio(2))];
+rx.info{13} = [coord_3D];
 
-%Encontrar punto schottle en rodilla 3D
-encontrado = 0;
-contador = 1;
-
-while (contador <= size(vol,3) && encontrado ==0)
-    if vol(Aproximar(p_medio(2)),Aproximar(p_medio(1)),contador)>0
-        coord_3D_punto = [Aproximar(p_medio(1)),Aproximar(p_medio(2)),contador];
-        coord_3D_punto = double(coord_3D_punto);
-        uiwait(msgbox('PUNTO ENCONTRADO'));
-        encontrado =1;
-    end
-    contador = contador+1;
-end
-
-%Guardar
-% puntos_shottle = [P8(1),P8(2);P10(1),P10(2)];
-% dist_pixeles = pdist(puntos_shottle,'euclidean');
-% dist_mm = dist_pixeles*dx;
-
-V_seg.info{13} = [coord_3D_punto];%Puntos schottle
-V_seg.info{14} = [P8];
-V_seg.info{15} = [P10];
-close
+rx.info{14} = [P8];
+rx.info{15} = [P10];
 end

@@ -31,8 +31,8 @@ close
 
 vol2 = vol(1:Aproximar(Y1),1:size(vol,1),1:size(vol,3));
 aplastado_LM = squeeze(sum(vol2,3));
-imshow(aplastado_LM,[])
-uiwait(msgbox('Tibia cortada'));
+%imshow(aplastado_LM,[])
+%uiwait(msgbox('Tibia cortada'));
 
 vol2 = imrotate3_fast(vol2,{270 'X'});
 vol2 = imrotate3_fast(vol2,{270 'Z'});
@@ -55,8 +55,8 @@ aplastado_DP = squeeze(sum(vol_nuevo,3));
 
 %AP=25%±2.8% ML=50.5%±4.2% AP=46.4%±3.7% ML=52.4%±2.5%
 
-figure, imshow(aplastado_DP,[])
-hold on
+%figure, imshow(aplastado_DP,[])
+%hold on
 
 [row, col] = find(aplastado_DP);
 x_medial = min(col);
@@ -71,7 +71,7 @@ dy = y_posterior-y_anterior;
 dy_x = dy*(0.25+0.464)/2;
 y_final = y_anterior + dy_x;
 
-scatter(x_final,y_final,100,'o','filled')
+%scatter(x_final,y_final,100,'o','filled')
 
 %x aca es medial-lateral (que en [] es y)
 %y aca es anterior-posterior
