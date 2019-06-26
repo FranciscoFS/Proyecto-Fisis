@@ -5,11 +5,15 @@ load([path file])
 Base_datos_2 = Base_datos;
 %%
 
-Cantidad_rodillas = 58;
+Cantidad_rodillas = 20;
 Contador = 0;
-for k=39:Cantidad_rodillas
+for k=1:Cantidad_rodillas
     
-    Base_datos_2(k).Rodilla =  Schottle_final_manual( Base_datos(k).Rodilla);
+    k
+   % Base_datos_2(k).Rodilla =  Schottle_final_manual( Base_datos(k).Rodilla);
+    BD_F_LCA(k).Rodilla =  Punto_LCA_femur_manual( BD_F(k).Rodilla);
+    BD_F_LCA(k).Rodilla =  Punto_LCA_tibia_2( BD_F_LCA(k).Rodilla);
+    
     Contador = k;
 end
 
@@ -216,7 +220,64 @@ T_MU_CI_2.Properties.VariableNames= {'X_TF','Y_TF','X_FF','Y_FF','X_ref','Y_ref'
 
 [p,tbl,stats,terms] = anovan([Posiciones(:,1);Posiciones(:,3);Posiciones(:,5)],[ones(20,1);2*ones(20,1);3*ones(20,1)]);
 
+%% Comparacion TF vs FF LCA  (TF Columna 1 y 2 (X,Y) FF (3,X,4,Y), estos son LCA_Tibia)
+% (5,6,7,8 Femur X,Y TF y FF respectivamente)
+% Orden para Stephen ( TF stephen (X,Y) es (5,6)
 
+Cantidad_rodillas = 20;
+Posiciones = zeros(Cantidad_rodillas,8);
 
+for k=1:Cantidad_rodillas
+    
+    pto_TF_T = BD_T_LCA(k).Rodilla.info{11};
+    pto_TF_F = BD_T_LCA(k).Rodilla.info{12};
+    Posiciones(k,1) = pto_TF_T(1);
+    Posiciones(k,2) = pto_TF_T(2);
+    Posiciones(k,5) = pto_TF_F(1);
+    Posiciones(k,6) = pto_TF_F(2);
+    
+    pto_FF_T = BD_F_LCA(k).Rodilla.info{11};
+    pto_FF_F = BD_F_LCA(k).Rodilla.info{12};
+    Posiciones(k,3) = pto_FF_T(1);
+    Posiciones(k,4) = pto_FF_T(2);
+    Posiciones(k,7) = pto_FF_F(1);
+    Posiciones(k,8) = pto_FF_F(2);
+     
+end
 
+T_Tibia = array2table(Posiciones(:,1:4),'VariableNames',{'Xt_TF','Yt_TF','Xt_FF','Yt_tFF'});
+[muHat,~,muCI,~] = normfit(Posiciones(:,1:4));
 
+Xt_T = {num2str(muHat(1)), ['[' num2str(muCI(1,1)) ' -' num2str(muCI(2,1)) ']']};
+Yt_T = {num2str(muHat(2)), ['[' num2str(muCI(1,2)) ' -' num2str(muCI(2,2)) ']']};
+Xt_F = {num2str(muHat(3)), ['[' num2str(muCI(1,3)) ' -' num2str(muCI(2,3)) ']']};
+Yt_F = {num2str(muHat(4)), ['[' num2str(muCI(1,4)) ' -' num2str(muCI(2,4)) ']']};
+
+Tt_CI= table(Xt_T,Yt_T,Xt_F,Yt_F);
+Tt_CI.Properties.VariableNames= {'Xt_TF','Yt_TF','Xt_FF','Yt_tFF'};
+
+T_Femur = array2table(Posiciones(:,5:8),'VariableNames',{'Xf_TF','Yf_TF','Xf_FF','Yf_tFF'});
+[muHat,~,muCI,~] = normfit(Posiciones(:,5:8));
+
+Xf_T = {num2str(muHat(1)), ['[' num2str(muCI(1,1)) ' -' num2str(muCI(2,1)) ']']};
+Yf_T = {num2str(muHat(2)), ['[' num2str(muCI(1,2)) ' -' num2str(muCI(2,2)) ']']};
+Xf_F = {num2str(muHat(3)), ['[' num2str(muCI(1,3)) ' -' num2str(muCI(2,3)) ']']};
+Yf_F = {num2str(muHat(4)), ['[' num2str(muCI(1,4)) ' -' num2str(muCI(2,4)) ']']};
+
+Tf_CI = table(Xf_T,Yf_T,Xf_F,Yf_F);
+Tf_CI.Properties.VariableNames= {'Xf_TF','Yf_TF','Xf_FF','Yf_tFF'};
+
+%%
+[h_1,p_1] = ttest2(Posiciones(:,1),Posiciones(:,3))
+[h_2,p_2] = ttest2(Posiciones(:,1),Posiciones(:,5))
+[h_3,p_3] = ttest2(Posiciones(:,3),Posiciones(:,5))
+
+%Comparacion en Y
+
+[h_4,p_4] = ttest2(Posiciones(:,2),Posiciones(:,4))
+[h_5,p_5] = ttest2(Posiciones(:,2),Posiciones(:,6))
+[h_6,p_6] = ttest2(Posiciones(:,4),Posiciones(:,6))
+
+% ICC
+[r, LB, UB, F, df1, df2, p] = ICC([Posiciones(:,1) Posiciones(:,3)],'C-1',0.05,0.5);
+[r, LB, UB, F, df1, df2, p] = ICC([Posiciones(:,2) Posiciones(:,4)],'C-1',0.05,0.5);

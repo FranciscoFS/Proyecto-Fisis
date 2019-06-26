@@ -17,6 +17,7 @@ vol = vol(1:size(vol,1),1:size(vol,1),Mid: size(vol,3));
 aplastado_LM = squeeze(sum(vol,3));
 
 %Crear linea de Blumensaat
+figure
 imshow(aplastado_LM,[])
 hold on
 uiwait(msgbox('Poner dos puntos a lo largo de la linea de Blumensaat (poner primero el punto más anterior/distal)'));
@@ -170,6 +171,7 @@ while (contador <= size(vol,3) && encontrado ==0)
 end
 V_seg.info{12} = coord_3D;
 
+close(gcf)
 
 
 end
