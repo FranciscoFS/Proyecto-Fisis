@@ -68,7 +68,7 @@ P2 = Aproximar(P2);
 
 % Cilindro
 radio = diametro/2;
-radio_pix = Aproximar(radio/(dx/dz));
+radio_pix = Aproximar(radio/(dx));
 
 pixeles_ya_sumados = zeros(size(fisis_nueva));
 
@@ -103,9 +103,9 @@ pixeles_ya_sumados= imrotate3_fast(pixeles_ya_sumados,{180 'Y'});
 
 f = figure;
 hold on
-fu= smooth3(fisis_nueva, 'box', 9);
-hu = smooth3(hueso_nuevo,'box', 9);
-cilindro = smooth3(pixeles_ya_sumados,'box', 9);
+fu= smooth3(fisis_nueva, 'box', 3);
+hu = smooth3(hueso_nuevo,'box', 3);
+cilindro = smooth3(pixeles_ya_sumados,'box', 3);
 p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
 p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
 p3= patch(isosurface(cilindro, 0.7),'FaceColor','green','EdgeColor','none');
