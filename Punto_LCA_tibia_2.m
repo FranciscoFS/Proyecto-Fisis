@@ -64,8 +64,8 @@ aplastado_DP = squeeze(sum(vol_nuevo,3));
 %hold on
 
 [row, col] = find(aplastado_DP);
-x_medial = min(col)
-x_lateral = max(col)
+x_medial = min(col);
+x_lateral = max(col);
 dx = x_lateral-x_medial;
 dx_x = dx*(0.505+0.524)/2;
 x_final = x_medial+dx_x;
