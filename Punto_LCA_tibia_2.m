@@ -37,6 +37,10 @@ aplastado_LM = squeeze(sum(vol2,3));
 
 vol2 = imrotate3_fast(vol2,{270 'X'});
 vol2 = imrotate3_fast(vol2,{270 'Z'});
+% aplastado = squeeze(sum(vol2,3));
+% [row, col] = find(aplastado);
+% x_medial = min(col)
+% x_lateral = max(col)
 
 %DP: distal proximal
 dz = V_seg.info{2,1};
@@ -52,10 +56,10 @@ for i = 1:size(vol2,3)
     v = interp2(vol2(:,:,i),Xq,Zq);
     vol_nuevo(:,:,i) = v;
 end
+
 aplastado_DP = squeeze(sum(vol_nuevo,3));
 
 %AP=25%±2.8% ML=50.5%±4.2% AP=46.4%±3.7% ML=52.4%±2.5%
-
 
 %figure, imshow(aplastado_DP,[])
 %hold on
