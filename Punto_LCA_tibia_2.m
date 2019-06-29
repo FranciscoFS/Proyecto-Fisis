@@ -10,6 +10,7 @@ aplastado_LM = squeeze(sum(vol,3));
 imshow(aplastado_LM,[])
 uiwait(msgbox('Ingrese dos puntos sobre el platillo tibial lateral'));
 [Y1,X1] = getpts();
+close
 
 %syms p
 m1 = (Y1(2)-Y1(1))/(X1(2)-X1(1));
@@ -97,7 +98,7 @@ close(gcf)
     
 
 
-V_seg.info{10} = [ang];
-V_seg.info{11} = [coord_3D];
+V_seg.info{10} = ang;
+V_seg.info{11} = coord_3D;
 
 end

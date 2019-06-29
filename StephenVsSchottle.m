@@ -11,8 +11,8 @@ for k=1:Cantidad_rodillas
     
     k
    % Base_datos_2(k).Rodilla =  Schottle_final_manual( Base_datos(k).Rodilla);
-    BD_F_LCA(k).Rodilla =  Punto_LCA_femur_manual( BD_F(k).Rodilla);
-    BD_F_LCA(k).Rodilla =  Punto_LCA_tibia_2( BD_F_LCA(k).Rodilla);
+    %BD_F_LCA(k).Rodilla =  Punto_LCA_femur_manual( BD_F(k).Rodilla);
+    BD_F_LCA_ang(k).Rodilla =  Punto_LCA_tibia_2( BD_F_LCA(k).Rodilla);
     
     Contador = k;
 end
@@ -226,6 +226,7 @@ T_MU_CI_2.Properties.VariableNames= {'X_TF','Y_TF','X_FF','Y_FF','X_ref','Y_ref'
 
 Cantidad_rodillas = 20;
 Posiciones = zeros(Cantidad_rodillas,8);
+angulos = [];
 
 for k=1:Cantidad_rodillas
     
@@ -235,6 +236,7 @@ for k=1:Cantidad_rodillas
     Posiciones(k,2) = pto_TF_T(2);
     Posiciones(k,5) = pto_TF_F(1);
     Posiciones(k,6) = pto_TF_F(2);
+    angulos(k,1) = BD_T_LCA(k).Rodilla.info{10};
     
     pto_FF_T = BD_F_LCA(k).Rodilla.info{11};
     pto_FF_F = BD_F_LCA(k).Rodilla.info{12};
@@ -242,8 +244,17 @@ for k=1:Cantidad_rodillas
     Posiciones(k,4) = pto_FF_T(2);
     Posiciones(k,7) = pto_FF_F(1);
     Posiciones(k,8) = pto_FF_F(2);
-     
+    angulos(k,2) = BD_F_LCA(k).Rodilla.info{10};
+
 end
+
+Angulos_T = array2table(angulos,'VariableNames',{'TF','FF'});
+[muHat,~,muCI,~] = normfit(angulos);
+TF = {num2str(muHat(1)), ['[' num2str(muCI(1,1)) ' -' num2str(muCI(2,1)) ']']};
+FF = {num2str(muHat(2)), ['[' num2str(muCI(1,2)) ' -' num2str(muCI(2,2)) ']']};
+Angulos_CI = table(TF,FF);
+Angulos_CI.Properties.VariableNames= {'TF','FF'};
+
 
 T_Tibia = array2table(Posiciones(:,1:4),'VariableNames',{'Xt_TF','Yt_TF','Xt_FF','Yt_tFF'});
 [muHat,~,muCI,~] = normfit(Posiciones(:,1:4));
@@ -267,17 +278,17 @@ Yf_F = {num2str(muHat(4)), ['[' num2str(muCI(1,4)) ' -' num2str(muCI(2,4)) ']']}
 Tf_CI = table(Xf_T,Yf_T,Xf_F,Yf_F);
 Tf_CI.Properties.VariableNames= {'Xf_TF','Yf_TF','Xf_FF','Yf_tFF'};
 
-%%
+%% X
 [h_1,p_1] = ttest2(Posiciones(:,1),Posiciones(:,3))
-[h_2,p_2] = ttest2(Posiciones(:,1),Posiciones(:,5))
-[h_3,p_3] = ttest2(Posiciones(:,3),Posiciones(:,5))
-
+[h_2,p_2] = ttest2(Posiciones(:,5),Posiciones(:,7))
+[r, LB, UB, F, df1, df2, p] = ICC([Posiciones(:,1) Posiciones(:,3)],'C-1',0.05,0.5)
+[R,P,RLO,RUP]= corrcoefPosiciones(:,1) ,Posiciones(:,3), 'alpha', 0.05)
 %Comparacion en Y
 
 [h_4,p_4] = ttest2(Posiciones(:,2),Posiciones(:,4))
-[h_5,p_5] = ttest2(Posiciones(:,2),Posiciones(:,6))
-[h_6,p_6] = ttest2(Posiciones(:,4),Posiciones(:,6))
+[r, LB, UB, F, df1, df2, p] = ICC([Posiciones(:,2) Posiciones(:,4)],'C-1',0.05,0.5)
+
+[h_5,p_5] = ttest2(Posiciones(:,6),Posiciones(:,8))
 
 % ICC
-[r, LB, UB, F, df1, df2, p] = ICC([Posiciones(:,1) Posiciones(:,3)],'C-1',0.05,0.5);
-[r, LB, UB, F, df1, df2, p] = ICC([Posiciones(:,2) Posiciones(:,4)],'C-1',0.05,0.5);
+
