@@ -1,4 +1,4 @@
-function porc = Cilindro_fx_final_tibia(V_seg,alpha,beta,d,p)
+function porc = Cilindro_fx_final_tibia(V_seg,beta,delta,d,p)
 %porc = Cilindro_fx_final_tibia(V_seg,-30,-30,4,10)
 ang = V_seg.info{10};
 coordenada = V_seg.info{11};
@@ -41,8 +41,8 @@ end
 vol = fisis_nueva + hueso_nuevo;
 %aplastado_DP = squeeze(sum(vol,3));
 
-a1 = alpha;% hacia lateral
-a2 = beta;% hacia posterior
+a1 = -beta;% hacia medial
+a2 = -delta;% hacia anterior
 mm = p;% Profundidad
 diametro = d;
 
@@ -107,7 +107,7 @@ fu= smooth3(fisis_nueva, 'box', 3);
 hu = smooth3(hueso_nuevo,'box', 3);
 cilindro = smooth3(pixeles_ya_sumados,'box', 3);
 p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
-p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'Edgebeta','0.4');
 p3= patch(isosurface(cilindro, 0.7),'FaceColor','green','EdgeColor','none');
 reducepatch(p2,0.02)
 ax = gca;
