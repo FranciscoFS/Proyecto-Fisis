@@ -53,11 +53,11 @@ diametro = d;
 [z,y,x] = sph2cart(deg2rad(a2),deg2rad(a1),(mm));
 
 %dif_x
-pixeles_x = Aproximar(x)/(dx/dz);
+pixeles_x = Aproximar(x)/(dx);
 %dif_y
-pixeles_y = Aproximar(y)/(dx/dz);
+pixeles_y = Aproximar(y)/(dx);
 %dif_z
-pixeles_z = Aproximar(z)/(dx/dz);
+pixeles_z = Aproximar(z)/(dx);
 
 % 
 P1 = [coordenada(2),coordenada(1),coordenada(3)];

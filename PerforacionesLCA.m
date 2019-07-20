@@ -69,8 +69,29 @@ delta= 30:5:70;
 beta=  0:5:60;
 
 [Xx_T,Yy_T] = meshgrid(beta,delta);
-p = 60;
-Dest_8_T = zeros([size(Xx) numel(BD_F_LCA)]);
-Dest_9_T = zeros([size(Xx) numel(BD_F_LCA)]);
-Dest_10_T = zeros([size(Xx) numel(BD_F_LCA)]);
+p = 30;
+Dest_8_T = zeros([size(Xx_T) numel(BD_F_LCA)]);
+Dest_9_T = zeros([size(Xx_T) numel(BD_F_LCA)]);
+Dest_10_T = zeros([size(Xx_T) numel(BD_F_LCA)]);
 
+%%
+tic;
+for k=1:numel(BD_F_LCA)
+    
+    Rodilla = BD_F_LCA(k).Rodilla;
+    fprintf('Rodilla %d empezando \n', k);  
+
+    for i = 1:length(delta)
+        for j = 1:length(beta)
+            
+            Dest_8_T(i,j,k) = Cilindro_fx_final_tibia(Rodilla,beta(j),delta(i),8,p);
+            Dest_9_T(i,j,k) = Cilindro_fx_final_tibia(Rodilla,beta(j),delta(i),9,p);
+            Dest_10_T(i,j,k) = Cilindro_fx_final_tibia(Rodilla,beta(j),delta(i),10,p);
+            
+            fprintf(' Angulos(%d,%d) de Rodilla %d  \n',gamma(j),Alpha(i),k)
+        end
+    end
+    
+    fprintf('Rodilla %d lista \n', k);  
+end
+toc;
