@@ -66,9 +66,9 @@ function porc = Cilindro_fx_final_LCA_Femur(V_seg,gamma,alpha,d,p,view)
                 end
             end
         end
+        
     end
-    
-    if view
+        if view
 
         f = figure;
         pace = (dx/dz);
@@ -106,5 +106,6 @@ function porc = Cilindro_fx_final_LCA_Femur(V_seg,gamma,alpha,d,p,view)
     delta = (fisis_usar - pixeles_ya_sumados) == 1;
     total_1s_resta = sum(delta(:));
     porc = ((total_de_1s - total_1s_resta)/total_de_1s)*100;
-
+    
 end
+    

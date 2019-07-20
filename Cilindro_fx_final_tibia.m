@@ -1,5 +1,6 @@
 function porc = Cilindro_fx_final_tibia(V_seg,beta,delta,d,p)
 %porc = Cilindro_fx_final_tibia(V_seg,-30,-30,4,10)
+
 ang = V_seg.info{10};
 coordenada = V_seg.info{11};
 
@@ -101,6 +102,7 @@ fisis_nueva= imrotate3_fast(fisis_nueva,{180 'Y'});
 hueso_nuevo= imrotate3_fast(hueso_nuevo,{180 'Y'});
 pixeles_ya_sumados= imrotate3_fast(pixeles_ya_sumados,{180 'Y'});
 size(pixeles_ya_sumados)
+
     f = figure;
     hold on
     fu= smooth3(fisis_nueva, 'box', 3);
@@ -121,7 +123,8 @@ size(pixeles_ya_sumados)
     material dull
     title('Fisis')
 
-% 
+
+
 fisis_nueva = fisis_nueva>0;
 total_de_1s = sum(fisis_nueva(:));
 delta = (fisis_nueva - pixeles_ya_sumados) == 1;
