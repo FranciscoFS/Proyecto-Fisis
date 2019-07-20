@@ -8,12 +8,12 @@ coordenada = V_seg.info{11};
 fisis_usar = double(V_seg.mascara == 4);
 hueso_usar = double(V_seg.mascara == 3);
 
-if ang > 4
+if ang > 0
     fisis_usar= imrotate3_fast(fisis_usar,{(90-ang) 'Z'});
     hueso_usar= imrotate3_fast(hueso_usar,{(90-ang) 'Z'});
 else
-    fisis_usar= imrotate3_fast(fisis_usar,{-(90+ang)+270 'Z'});
-    hueso_usar= imrotate3_fast(hueso_usar,{-(90+ang)+270 'Z'});
+    fisis_usar= imrotate3_fast(fisis_usar,{-(90+ang) 'Z'});
+    hueso_usar= imrotate3_fast(hueso_usar,{-(90+ang) 'Z'});
 end
 
 fisis_usar= imrotate3_fast(fisis_usar,{270 'X'});
