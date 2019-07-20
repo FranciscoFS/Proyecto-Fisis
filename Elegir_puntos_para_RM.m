@@ -32,12 +32,14 @@ imshow(V_seg.mascara(:,:,n_slide_actual),[])
 
 %Asumiendo rotacion neutra
 n = 0;
+uiwait(msgbox('Desplazarse con los botones. Al encontrar la slice tocar una vez la pantalla y apretar alguna tecla'));
+uiwait(msgbox('Orden de slice a buscar: 1° TT-TG: corte con troclea y cóndilos; 2° SIC-TAC: corte con surco intercondileo y cóndilos; 3° TT-PCL: corte con inserción LCP en Tibia; 4° TT: corte con punto más anterior de la tuberosidad de la tibia')); 
 while n <4 
 k = waitforbuttonpress;
 
 %TT-TG
 if n == 0 && k ==1
-uiwait(msgbox('Dos puntos para los condiolos, un tercero en la parte más baja de la troclea'));    
+uiwait(msgbox('TT-TG: Dos puntos para los cóndilos, un tercero en la parte más baja de la troclea'));    
 [x,y] = getpts();
 slc1 = n_slide_actual;
 n = 1;
@@ -46,7 +48,7 @@ end
 
 %SIC-TAC
 if n == 1 && k ==1
-uiwait(msgbox('Dos puntos para los condiolos, un tercero en la parte más anterior del surco intercondileo'));
+uiwait(msgbox('SIC-TAC: Dos puntos para los condiolos, un tercero en la parte más anterior del surco intercondileo'));
 [x4,y4] = getpts();
 slc4 = n_slide_actual;
 n = 2;
@@ -55,7 +57,7 @@ end
 
 %TT-PCL
 if n == 2 && k ==1
-uiwait(msgbox('Dos puntos para las partes más posteriores de los platillos tibiales, un tercero en la parte media del LCP'));
+uiwait(msgbox('TT-PCL: Dos puntos para las partes más posteriores de los platillos tibiales, un tercero en la parte media del LCP'));
 [x3,y3] = getpts();
 slc3 = n_slide_actual;
 n = 3;
@@ -64,7 +66,7 @@ end
 
 %Tibia
 if n == 3 && k ==1
-uiwait(msgbox('Un punto en el punto más anterior de la tibia'));
+uiwait(msgbox('TT: Un punto en el punto más anterior de la tuberosidad de la tibia'));
 [x2,y2] = getpts();
 slc2 = n_slide_actual;
 n = 4;

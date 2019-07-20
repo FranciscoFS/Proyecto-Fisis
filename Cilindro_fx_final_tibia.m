@@ -1,5 +1,4 @@
 function porc = Cilindro_fx_final_tibia(V_seg,beta,delta,d,p)
-%porc = Cilindro_fx_final_tibia(V_seg,-30,-30,4,10)
 
 ang = V_seg.info{10};
 coordenada = V_seg.info{11};
@@ -101,29 +100,26 @@ end
 fisis_nueva= imrotate3_fast(fisis_nueva,{180 'Y'});
 hueso_nuevo= imrotate3_fast(hueso_nuevo,{180 'Y'});
 pixeles_ya_sumados= imrotate3_fast(pixeles_ya_sumados,{180 'Y'});
-size(pixeles_ya_sumados)
 
-    f = figure;
-    hold on
-    fu= smooth3(fisis_nueva, 'box', 3);
-    hu = smooth3(hueso_nuevo,'box', 3);
-    cilindro = smooth3(pixeles_ya_sumados,'box', 3);
-    p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
-    p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-    p3= patch(isosurface(cilindro, 0.7),'FaceColor','green','EdgeColor','none');
-    reducepatch(p2,0.02)
-    ax = gca;
-    c = ax.DataAspectRatio;
-    ax.DataAspectRatio= [1,1,1];
-    %scatter3(P1(1), P1(2), P1(3),'red','filled')
+f = figure;
+hold on
+fu= smooth3(fisis_nueva, 'box', 3);
+hu = smooth3(hueso_nuevo,'box', 3);
+cilindro = smooth3(pixeles_ya_sumados,'box', 3);
+p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
+%p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'Edgebeta','0.4');
+p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1);
+p3= patch(isosurface(cilindro, 0.7),'FaceColor','green','EdgeColor','none');
+reducepatch(p2,0.02)
+ax = gca;
+c = ax.DataAspectRatio;
+ax.DataAspectRatio= [1,1,1];
 
-    axis tight
-    l = camlight('headlight');
-    lighting gouraud
-    material dull
-    title('Fisis')
-
-
+axis tight
+l = camlight('headlight');
+lighting gouraud
+material dull
+title('Fisis')
 
 fisis_nueva = fisis_nueva>0;
 total_de_1s = sum(fisis_nueva(:));
