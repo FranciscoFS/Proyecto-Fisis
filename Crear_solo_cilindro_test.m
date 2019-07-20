@@ -1,6 +1,6 @@
 function pixeles_ya_sumados = Crear_solo_cilindro_test(V_seg,cortical,alpha,beta,d,p)
 
-    %Direccion y distancia
+    % Direccion y distancia
     % Este solo sirve para cuando los volumenes están interpolados
     % Permite analizar variaciones pequeñas de la profundidad.
 
