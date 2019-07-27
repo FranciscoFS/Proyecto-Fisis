@@ -42,7 +42,7 @@ y2=q2(x2);
 P5 = [x_2(1),y_2(1)];
 P6 = [eval(x2),eval(y2)]; %Interseccion 2
 
-imagen_sumada1 = ((V_seg.mascara(:,:,slc1)) + (V_seg.mascara(:,:,slc2)));
+imagen_sumada1 = ((V_seg.Vol(:,:,slc1)) + (V_seg.Vol(:,:,slc2)));
 
 fg = figure;
 imshow (imagen_sumada1,[]);
@@ -86,7 +86,7 @@ y2=q2(x2);
 P5 = [x_2(1),y_2(1)];
 P6 = [eval(x2),eval(y2)]; %Interseccion 2
 
-imagen_sumada1 = ((V_seg.mascara(:,:,slc3)) + (V_seg.mascara(:,:,slc2)));
+imagen_sumada1 = ((V_seg.Vol(:,:,slc3)) + (V_seg.Vol(:,:,slc2)));
 
 fg2 = figure;
 imshow ((imagen_sumada1),[]);

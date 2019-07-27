@@ -18,17 +18,17 @@ s.Callback = @Boton_b;
         if n_slide_actual <1
             n_slide_actual = 1;
         end
-        imshow(V_seg.mascara(:,:,n_slide_actual),[])
+        imshow(V_seg.Vol(:,:,n_slide_actual),[])
     end
     function Boton_b(~,~)
         n_slide_actual = n_slide_actual+1;
-        if n_slide_actual > size(V_seg.mascara,3)
-            n_slide_actual = size(V_seg.mascara,3);
+        if n_slide_actual > size(V_seg.Vol,3)
+            n_slide_actual = size(V_seg.Vol,3);
         end
-        imshow(V_seg.mascara(:,:,n_slide_actual),[])
+        imshow(V_seg.Vol(:,:,n_slide_actual),[])
     end
 
-imshow(V_seg.mascara(:,:,n_slide_actual),[])
+imshow(V_seg.Vol(:,:,n_slide_actual),[])
 
 %Asumiendo rotacion neutra
 n = 0;
