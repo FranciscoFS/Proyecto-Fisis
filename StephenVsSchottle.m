@@ -5,17 +5,17 @@ load([path file])
 Base_datos_2 = Base_datos;
 %%
 
-Cantidad_rodillas = 58;
+%Cantidad_rodillas = 58;
 Contador = 0;
 
-for k=39:Cantidad_rodillas
+for k=1:20
     
     
-   % Base_datos_2(k).Rodilla =  Schottle_final_manual( Base_datos(k).Rodilla);
-    BD_F_LCA(k).Rodilla =  Punto_LCA_femur_manual( BD_F(k).Rodilla);
-    BD_F_LCA(k).Rodilla =  Punto_LCA_tibia_2( BD_F_LCA(k).Rodilla);
-    
-    Contador = k;
+    BD_F_2(k).Rodilla =  Schottle_final_manual( BD_F_2(k).Rodilla);
+%     BD_F_LCA(k).Rodilla =  Punto_LCA_femur_manual( BD_F(k).Rodilla);
+%     BD_F_LCA(k).Rodilla =  Punto_LCA_tibia_2( BD_F_LCA(k).Rodilla);
+%     
+%     Contador = k;
 end
 
 %%
@@ -146,7 +146,7 @@ Distancia = zeros(Cantidad_rodillas,2);
 for k=1:Cantidad_rodillas
     
     pto_TF = BD_T(k).Rodilla.info{13};
-    pto_TF_St = BD_T(k).Rodilla.info{8};
+    %pto_TF_St = BD_T(k).Rodilla.info{8};
     Posiciones(k,1) = pto_TF(1);
     Posiciones(k,2) = pto_TF(2);
     %Posiciones(k,5) = pto_TF_St(1);

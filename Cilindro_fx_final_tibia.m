@@ -1,11 +1,11 @@
-function porc = Cilindro_fx_final_tibia(V_seg,beta,delta,d,p)
+function porc = Cilindro_fx_final_tibia(V_seg,beta,delta,d,p,view)
 
 ang = V_seg.info{10};
 coordenada = V_seg.info{11};
 
 % 3 = Tibia hueso, 4 = Tibia fisis (indices de la mascara)
 
-fisis_usar = double(V_seg.mascara == 4);
+fisis_usar = gpuArray(single(V_seg.mascara == 4));
 hueso_usar = double(V_seg.mascara == 3);
 
 if ang > 0
@@ -25,20 +25,25 @@ dz = V_seg.info{2,1};
 dx = V_seg.info{1,1};
 pace = (dx/dz);
 
-fisis_nueva = [];
-hueso_nuevo = [];
+% fisis_nueva = [];
+% hueso_nuevo = [];
 m = size(fisis_usar,1);
+n = size(fisis_usar,3);
 k =size(fisis_usar,2);
-[Xq,Zq] = meshgrid(1:pace:k,1:m);
+[Xq,Zq,Yq] = meshgrid(1:pace:k,1:m,1:n);
+%[Xq,Zq] = meshgrid(1:pace:k,1:m);
 
-for i = 1:size(fisis_usar,3)
-h = interp2(hueso_usar(:,:,i),Xq,Zq);
-f = interp2(fisis_usar(:,:,i),Xq,Zq);
-fisis_nueva(:,:,i) = f;
-hueso_nuevo(:,:,i) = h;
-end
+fisis_nueva = interp3(gather(fisis_usar), Xq,Zq,Yq);
+hueso_nuevo = interp3(hueso_usar,Xq,Zq,Yq);
 
-vol = fisis_nueva + hueso_nuevo;
+% for i = 1:size(fisis_usar,3)
+% h = interp2(hueso_usar(:,:,i),Xq,Zq);
+% f = interp2(fisis_usar(:,:,i),Xq,Zq);
+% fisis_nueva(:,:,i) = f;
+% hueso_nuevo(:,:,i) = h;
+% end
+
+%vol = fisis_nueva + hueso_nuevo;
 %aplastado_DP = squeeze(sum(vol,3));
 
 a1 = -beta;% hacia medial
@@ -97,29 +102,34 @@ for i = 1:size(Z,2)
     end
 end
 
-fisis_nueva= imrotate3_fast(fisis_nueva,{180 'Y'});
-hueso_nuevo= imrotate3_fast(hueso_nuevo,{180 'Y'});
-pixeles_ya_sumados= imrotate3_fast(pixeles_ya_sumados,{180 'Y'});
 
-f = figure;
-hold on
-fu= smooth3(fisis_nueva, 'box', 3);
-hu = smooth3(hueso_nuevo,'box', 3);
-cilindro = smooth3(pixeles_ya_sumados,'box', 3);
-p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
-%p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'Edgebeta','0.4');
-p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1);
-p3= patch(isosurface(cilindro, 0.7),'FaceColor','green','EdgeColor','none');
-reducepatch(p2,0.02)
-ax = gca;
-c = ax.DataAspectRatio;
-ax.DataAspectRatio= [1,1,1];
+if view
+    
+    fisis_nueva= imrotate3_fast(fisis_nueva,{180 'Y'});
+    hueso_nuevo= imrotate3_fast(hueso_nuevo,{180 'Y'});
+    pixeles_ya_sumados= imrotate3_fast(pixeles_ya_sumados,{180 'Y'});
 
-axis tight
-l = camlight('headlight');
-lighting gouraud
-material dull
-title('Fisis')
+    f = figure;
+    hold on
+    fu= smooth3(fisis_nueva, 'box', 3);
+    hu = smooth3(hueso_nuevo,'box', 3);
+    cilindro = smooth3(pixeles_ya_sumados,'box', 3);
+    p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
+    %p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'Edgebeta','0.4');
+    p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1);
+    p3= patch(isosurface(cilindro, 0.7),'FaceColor','green','EdgeColor','none');
+    reducepatch(p2,0.02)
+    ax = gca;
+    c = ax.DataAspectRatio;
+    ax.DataAspectRatio= [1,1,1];
+
+    axis tight
+    l = camlight('headlight');
+    lighting gouraud
+    material dull
+    title('Fisis')
+    
+end
 
 fisis_nueva = fisis_nueva>0;
 total_de_1s = sum(fisis_nueva(:));
