@@ -35,7 +35,7 @@ Datos = cell(numel(Base_datos),10);
 for k=1:numel(Base_datos)
     
     info_RM = Base_datos(k).RM.info;
-    info_TAC = Base_datos(k).TAC.info;
+    info_TAC = Base_datos(k).RM.info;
     Datos{k,1} = regexprep(Base_datos(k).TAC.info{6},' ','_');
     Datos{k,2} = str2double(info_RM{4}(2:3));
     Datos{k,3} = info_RM{5};
@@ -61,7 +61,4 @@ for k=1:numel(Base_datos)
     
 end
                  
-Tabla = cell2table(Datos);
-Variables = {'Name','Edad','Sex','Estudio_RM','Estudio_TAC','RM_TTTG',...
-    'RM_SICTAC','RM_TTPCL','TAC_TTTG','TAC_SICTAC'};
-Tabla.Properties.VariableNames = Variables;
+Tabla = cell2t
