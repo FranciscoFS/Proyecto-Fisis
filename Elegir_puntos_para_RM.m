@@ -13,6 +13,14 @@ s.String = 'Siguiente';
 s.Position = [200 10 60 20];
 s.Callback = @Boton_b;
 
+slider = uicontrol('Style','slider','Min',1,'Max',size(V_seg.Vol,3),'SliderStep',[1/(size(V_seg.Vol,3) - 1)...
+    40/(size(V_seg.Vol,3) - 1)]);
+slider.String = 'S';
+slider.Position = [150 450 500 20];
+slider.Callback = @Slider;
+slider.Value = 10;
+
+
     function Boton_a(~,~)
         n_slide_actual = n_slide_actual-1;
         if n_slide_actual <1
@@ -27,6 +35,12 @@ s.Callback = @Boton_b;
         end
         imshow(V_seg.Vol(:,:,n_slide_actual),[])
     end
+
+    function Slider(~,~)
+        slide = round(get(slider,'value'));
+        imshow(V_seg.Vol(:,:,slide),[])
+    end
+
 
 imshow(V_seg.Vol(:,:,n_slide_actual),[])
 
@@ -75,4 +89,5 @@ end
 
 end
 V_seg.info{10,1} = {x;y;x2;y2;x3;y3;x4;y4;slc1;slc2;slc3;slc4};
+close(f)
 end

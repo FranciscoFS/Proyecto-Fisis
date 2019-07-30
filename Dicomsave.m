@@ -8,7 +8,7 @@ function V = Dicomsave(direccion)
         
         if DICOMS(k).bytes > 0
             contador = contador +1;
-            Vol(:,:,contador) = dicomread([DICOMS(k).folder '\' DICOMS(k).name]);
+            Vol(:,:,contador) = single(dicomread([DICOMS(k).folder '\' DICOMS(k).name]));
             
         else
             continue
@@ -16,7 +16,7 @@ function V = Dicomsave(direccion)
     end
     
     info = dicominfo([DICOMS(k).folder '\' DICOMS(k).name]);
-    
+    %info
     
     V.info{1,1} = info.PixelSpacing(1);
     V.info{2,1} = info.SliceThickness;
@@ -27,6 +27,6 @@ function V = Dicomsave(direccion)
     V.info{6,1} = [info.PatientName.FamilyName ' ' info.PatientName.GivenName] ;
     V.info{7,1} = info.PatientID;
     V.info{8,1} = info.StudyDescription;
-    
+    %V.info{9,1} = info.StudyComments;
     V.Vol = Vol;
 end
