@@ -14,11 +14,12 @@ s.Position = [200 10 60 20];
 s.Callback = @Boton_b;
 
 slider = uicontrol('Style','slider','Min',1,'Max',size(V_seg.Vol,3),'SliderStep',[1/(size(V_seg.Vol,3) - 1)...
-    40/(size(V_seg.Vol,3) - 1)]);
-slider.String = 'S';
-slider.Position = [600 10 60 20];
+    5/(size(V_seg.Vol,3) - 1)]);
+slider.String = 'Corte';
+slider.Position = [500 10 300 20];
 slider.Callback = @Slider;
 slider.Value = 10;
+
 
     function Boton_a(~,~)
         n_slide_actual = n_slide_actual-1;
