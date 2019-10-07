@@ -1,7 +1,5 @@
 function V_seg = Elegir_puntos_para_RM(V_seg)
 
-n_slide_actual = 1;
-
 f = figure('units','normalized','outerposition',[0 0 1 1]); hold on;
 a = uicontrol;
 a.String = 'Anterior';
@@ -19,31 +17,31 @@ slider.String = 'Corte';
 slider.Position = [500 10 300 20];
 slider.Callback = @Slider;
 slider.Value = 10;
-slide = round(get(slider,'value'));
+n_slide_actual = round(get(slider,'value'));
 
     function Boton_a(~,~)
         n_slide_actual = n_slide_actual-1;
         if n_slide_actual <1
             n_slide_actual = 1;
         end
-        imshow(V_seg.Vol(:,:,slide),[])
+        imshow(V_seg.Vol(:,:,n_slide_actual),[])
     end
     function Boton_b(~,~)
         n_slide_actual = n_slide_actual+1;
         if n_slide_actual > size(V_seg.Vol,3)
             n_slide_actual = size(V_seg.Vol,3);
         end
-        imshow(V_seg.Vol(:,:,slide),[])
+        imshow(V_seg.Vol(:,:,n_slide_actual),[])
     end
 
     function Slider(~,~)
-        slide = round(get(slider,'value'));
-        imshow(V_seg.Vol(:,:,slide),[])
+        n_slide_actual = round(get(slider,'value'));
+        imshow(V_seg.Vol(:,:,n_slide_actual),[])
 
     end
 
 
-imshow(V_seg.Vol(:,:,slide),[])
+imshow(V_seg.Vol(:,:,n_slide_actual),[])
 
 %Asumiendo rotacion neutra
 n = 0;

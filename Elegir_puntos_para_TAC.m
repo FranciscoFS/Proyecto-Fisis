@@ -1,7 +1,5 @@
 function V_seg = Elegir_puntos_para_TAC(V_seg)
 
-n_slide_actual = 1;
-
 f = figure('units','normalized','outerposition',[0 0 1 1]);
 a = uicontrol;
 a.String = 'Anterior';
@@ -19,7 +17,7 @@ slider.String = 'Corte';
 slider.Position = [500 10 300 20];
 slider.Callback = @Slider;
 slider.Value = 10;
-
+n_slide_actual = round(get(slider,'value'));
 
     function Boton_a(~,~)
         n_slide_actual = n_slide_actual-1;
@@ -37,8 +35,8 @@ slider.Value = 10;
     end
 
     function Slider(~,~)
-        slide = round(get(slider,'value'));
-        imshow(V_seg.Vol(:,:,slide),[])
+        n_slide_actual = round(get(slider,'value'));
+        imshow(V_seg.Vol(:,:,n_slide_actual),[])
     end
 
 imshow(V_seg.Vol(:,:,n_slide_actual),[])

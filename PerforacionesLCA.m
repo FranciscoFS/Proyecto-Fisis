@@ -294,3 +294,38 @@ c_max = multcompare(stats_max);
 
 [p,tbl,stats_min] = anova1([Caso_1_F_min,Caso_2_F_min,Caso_3_F_min])
 c_min = multcompare(stats_min);
+
+%%
+%¿cuánto es el daño que se produce con brocas 8, 9 y 10, con ángulos alfa 20, beta 45, gama 45 y delta 70?
+% En los casos de máximo daño, ...
+%¿tienes la información de cuál es el grupo etario con mayor daño y el con menor daño relativo?
+
+% Femur
+[dummy, Pos_gamma45] = find(Xx == 45,1);
+[Pos_alfa20, dummy] = find(Yy == 20,1);
+
+[mu_8,CI_8] = Mean_CI(Dest_8(Pos_alfa20,Pos_gamma45,:))
+[mu_9,CI_9] = Mean_CI(Dest_9(Pos_alfa20,Pos_gamma45,:))
+[mu_10,CI_10] = Mean_CI(Dest_10(Pos_alfa20,Pos_gamma45,:))
+
+
+%Tibia
+[dummy, Pos_beta45] = find(Xx_T == 45,1);
+[Pos_delta70, dummy] = find(Yy_T == 30,1);
+
+[mu_8,CI_8] = Mean_CI(Dest_8_Tibias(Pos_delta70,Pos_beta45,:))
+[mu_8,CI_8] = Mean_CI(Dest_9_Tibias(Pos_delta70,Pos_beta45,:))
+[mu_8,CI_8] = Mean_CI(Dest_10_Tibias(Pos_delta70,Pos_beta45,:))
+
+Gamma_1_max = Yeq(row_1,1); Alpha_1_max = Xeq(1,col_1) ;
+Delta_1_max = Yeq_T(row_1,1); Beta_1_max = Xeq_T(1,col_1) ;
+
+%% Analisis por edad Femur y Tibia
+
+[p,tbl,stats] = anova1(Caso_1_T_Max,t_usar.Edad(t_usar.F_tibia ==1))
+[p,tbl,stats] = anova1(Caso_2_T_Max,t_usar.Edad(t_usar.F_tibia ==1))
+[p,tbl,stats] = anova1(Caso_3_T_Max,t_usar.Edad(t_usar.F_tibia ==1))
+
+[p,tbl,stats] = anova1(Caso_1_F_max,t_usar.Edad)
+[p,tbl,stats] = anova1(Caso_2_F_max,t_usar.Edad)
+[p,tbl,stats] = anova1(Caso_3_F_max,t_usar.Edad)
