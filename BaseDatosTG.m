@@ -10,8 +10,8 @@ largos_p2 = [];
 
     for k=1:numel(DIM)
         
-        pos = Lista(Seleccionados(k))+2;
-        %pos = k;
+        %pos = Lista(Seleccionados(k))+2;
+        pos = k;
         if length(DIM(pos).name) > 5 && DIM(pos).isdir
 
              p = strsplit(genpath([DIM(pos).folder '/' DIM(pos).name]),';');
@@ -23,7 +23,7 @@ largos_p2 = [];
                  try
                     contador = contador +1;
                     Base_datos(contador).RM = Dicomsave(p{3});
-                    Base_datos(contador).TAC = Dicomsave(p{5});
+                    Base_datos(contador).TAC = Dicomspave(p{5});
                     fprintf('Pacientes %d guardado \n',contador);
                  catch
                      contador2 = contador2 + 1;

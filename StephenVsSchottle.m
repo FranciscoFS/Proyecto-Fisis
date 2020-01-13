@@ -25,25 +25,28 @@ save('Rodillas_TodasIncluidas_FF_1.mat','Base_datos_2')
 %% Comparacion Schottle vs Stephen  (X_SCH,Y_SCH,X_St,Y_St) Distancia(X,Y)
 % La distancia se medirá Stephen respecto a Schottle
 
-%BD_F = Base_datos_completa;
+BD_F = Base_datos_completa;
 Cantidad_rodillas = numel(BD_F);
 Posiciones = zeros(Cantidad_rodillas,4);
 Distancia = zeros(Cantidad_rodillas,2);
+Nombres = {};
 
 for k=1:Cantidad_rodillas
     
     dx = BD_F(k).Rodilla.info{1};
+    Nombres{k} = BD_F(k).Rodilla.filename  
     pto_Schottle = BD_F(k).Rodilla.info{13};
     pto_Stephen = BD_F(k).Rodilla.info{8};
     Posiciones(k,1) = pto_Schottle(1);
     Posiciones(k,2) = pto_Schottle(2);
     Posiciones(k,3) = pto_Stephen(1);
     Posiciones(k,4) = pto_Stephen(2);
+    Dxs(k) = dx;
     
     Distancia(k,1) =  (pto_Stephen(1) - pto_Schottle(1))*dx;  
     Distancia(k,2) =  (pto_Stephen(2) - pto_Schottle(2))*dx; 
     Distancia(k,3) = pdist([pto_Schottle; pto_Stephen],'euclidean')*dx;    
-
+    
     %Distancia(k,1) = pdist([pto_Schottle; pto_Stephen],'euclidean');    
 end
 
