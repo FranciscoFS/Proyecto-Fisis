@@ -45,12 +45,12 @@ function [TAC,RM] = Pendientes(TAC,RM)
     end
     
     m_F_TAC = (y(2)-y(1))/(x(2)-x(1));
-    Angulo_F_TAC = atand(abs(m_F_RM));
+    Angulo_F_TAC = atand(abs(m_F_TAC));
     
     % TAC Tibia
     
     infoTAC = TAC.info{12,1};
-        x = infoTAC{1,1};
+    x = infoTAC{1,1};
     y = infoTAC{2,1};
     
     if x(2) == x(1)
@@ -61,7 +61,7 @@ function [TAC,RM] = Pendientes(TAC,RM)
     end
     
     m_T_TAC = (y(2)-y(1))/(x(2)-x(1));
-    Angulo_T_TAC = atand(abs(m_T_RM));
+    Angulo_T_TAC = atand(abs(m_T_TAC));
     
    
     RM.info{13} = [m_F_RM Angulo_F_RM ; m_T_RM Angulo_T_RM];

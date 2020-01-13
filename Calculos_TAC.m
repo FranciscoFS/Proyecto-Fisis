@@ -11,6 +11,15 @@ slc1 = info{7,1};
 slc2 = info{8,1};
 slc3 = info{9,1};
 
+try
+    info_2 = V_seg.info{12};
+    x_T = info_2{1,1};
+    y_T = info_2{2,1};
+catch
+    x_T = [0,0];
+    y_T = [0,0];
+end
+
 %Primero TT_TG
 %Intercondilos
 syms p q
@@ -22,9 +31,6 @@ if y(2) == y(1)
 end
 m1 = (y(2)-y(1))/(x(2)-x(1));
 q = symfun(m1*(p-x(1))+y(1),[p]);
-
-atand(m1)
-m1
 
 %Troclea
 m_perp = -1/m1;
@@ -48,11 +54,10 @@ P6 = [eval(x2),eval(y2)]; %Interseccion 2
 if graficar(1)
 
     imagen_sumada1 = ((V_seg.Vol(:,:,slc1)) + (V_seg.Vol(:,:,slc2)));
-
-    fg = figure;
     imshow (imagen_sumada1,[]);
     hold on
     plot([x(1),x(2)],[y(1),y(2)],'LineWidth',2)
+    plot([x_T(1),x_T(2)],[y_T(1),y_T(2)],'LineWidth',2)
     plot([P3(1),P4(1)],[P3(2),P4(2)],'LineWidth',2)
     plot([P5(1),P6(1)],[P5(2),P6(2)],'LineWidth',2)
     scatter(P4(1),P4(2),100,'o','filled')
