@@ -23,8 +23,6 @@ for k = 1:N
     
 end
 
-
-
 %% Graficas Diferencia
 
 k = 10; %Rodilla para ver
