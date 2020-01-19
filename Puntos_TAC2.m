@@ -1,6 +1,7 @@
 function V_seg = Puntos_TAC2(V_seg)
 
 f = figure('units','normalized','outerposition',[0 0 1 1]);
+maximize(f)
 a = uicontrol;
 a.String = 'Anterior';
 a.Position = [20 10 60 20];

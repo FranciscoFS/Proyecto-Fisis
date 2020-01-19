@@ -11,14 +11,14 @@ slc1 = info{7,1};
 slc2 = info{8,1};
 slc3 = info{9,1};
 
-try
-    info_2 = V_seg.info{12};
-    x_T = info_2{1,1};
-    y_T = info_2{2,1};
-catch
-    x_T = [0,0];
-    y_T = [0,0];
-end
+    try
+        info_2 = V_seg.info{12};
+        x_T = info_2{1,1};
+        y_T = info_2{2,1};
+    catch
+        x_T = [0,0];
+        y_T = [0,0];
+    end
 
 %Primero TT_TG
 %Intercondilos
