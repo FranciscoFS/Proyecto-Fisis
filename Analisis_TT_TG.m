@@ -40,8 +40,9 @@ Tabla.Properties.VariableNames = Variables;
 
 Dirout = 'D:\Drive\Uc\LPFM\TT-TG vs TT-PCL\Analisis TTTG';
 writetable(Tabla,[Dirout '\' 'Analisis_TTTG_primeros25.xlsx'])
-save([Dirout '\' 'Analisis_TTTG_primeros25.xlsx'],
-%% Graficas Diferencia
+save([Dirout '\' 'Puntos_primeros25.mat'],'Puntos','Pacientes') 
+%Guardar los puntos nuevos por si queremos graficar
+%% Graficas Diferencia CAca
 
 k = 10; %Rodilla para ver
 
