@@ -1,17 +1,37 @@
-function porc = Cilindro_fx_final_LCA_Femur(V_seg,gamma,alpha,d,p,view)
+function [porc,Tal] = Cilindro_fx_final_LCA_Femur(V_seg,gamma,alpha,d,p,ver)
 %Direccion y distancia
 
     coordenada = V_seg.info{12};
+    
+    dz = V_seg.info{2,1};
+    dx = V_seg.info{1,1};
+    pace = dx/dz;
+    
+    [m,n,k] = size((V_seg.mascara == 1));
+    [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
+    hueso_usar = interp3(im2double(V_seg.mascara == 1),Xq,Yq,Zq);
+    fisis_usar = interp3(im2double(V_seg.mascara == 2),Xq,Yq,Zq);
+    
+    [~,~,v1] = ind2sub(size(hueso_usar),find(hueso_usar > 0));
+    Mid = round((max(v1)+min(v1))/2);
+    vol = hueso_usar(1:size(hueso_usar,1),1:size(hueso_usar,1),Mid: size(hueso_usar,3));
+    
+    encontrado = 0;
+    contador = 1;
+    while (contador <= size(vol,3) && encontrado ==0)
+        if vol(Aproximar(coordenada(2)),Aproximar(coordenada(1)),contador)>0
+            coord_3D = [Aproximar(coordenada(1)),Aproximar(coordenada(2)),Mid + contador-pace];
+            encontrado =1;
+        end
+        contador = contador+1;
+    end
 
+    coordenada = coord_3D;
+    
     % 1 = Femur_hueso, 2 = Fisis_femur (indices de la mascara)
     % Restar 1 a la coordenada Z de los puntos LCA Femur
 
     % fisis_usar = V_seg.femur.fisis;
-    fisis_usar = V_seg.mascara == 2;
-    hueso_usar = V_seg.mascara == 1;
-
-    dz = V_seg.info{2,1};
-    dx = V_seg.info{1,1};
 
     a1 = (alpha-90);% azimut (+ hacia proximal) 
     a2 = -gamma;% horizontal (+ hacia anterior)
@@ -27,11 +47,11 @@ function porc = Cilindro_fx_final_LCA_Femur(V_seg,gamma,alpha,d,p,view)
     pixeles_y = y/dx;
 
     %dif_z
-    pixeles_z = z/dz;
+    pixeles_z = z/dx;
 
 
     % Dejar "(Y,X,Z)" si desde Stephen llega x,y,z CONFIRMADO NO CAMBIAR
-    P1 = [coordenada(2),coordenada(1),coordenada(3)-1];
+    P1 = [coordenada(2),coordenada(1),coordenada(3)-pace];
     P2 = [P1(1)+pixeles_y, P1(2) + pixeles_x, P1(3) + pixeles_z];
     P2 = Aproximar(P2);
 
@@ -41,7 +61,7 @@ function porc = Cilindro_fx_final_LCA_Femur(V_seg,gamma,alpha,d,p,view)
     radio = diametro/2;
     radio_pix = Aproximar(radio/dx);
 
-    pixeles_ya_sumados = zeros(size(fisis_usar));
+    pixeles_ya_sumados = zeros(size(hueso_usar));
 
     for i = 1:size(Z,2)
         x = Aproximar(X(i));
@@ -68,44 +88,55 @@ function porc = Cilindro_fx_final_LCA_Femur(V_seg,gamma,alpha,d,p,view)
         end
         
     end
-        if view
+    
+    if ver
 
-        f = figure;
-        pace = (dx/dz);
-        [m,n,k] = size(fisis_usar);
-        [Xq,Yq,Zq] = meshgrid(1:n,1:m,1:pace:k);
-        Box_size = 9;
+        %pace = (dx/dz);
+        %[m,n,k] = size((V_seg.mascara == 1));
+        %[Xq,Yq,Zq] = meshgrid(1:n,1:m,1:pace:k);
+        Box_size = 15;
+        
+        
         hold on
-        fu = smooth3(interp3(im2double(fisis_usar),Xq,Yq,Zq,'cubic')...
-            ,'box',Box_size);
-        %fu= smooth3(fisis_usar, 'box', 9);
-        hu = smooth3(interp3(im2double(hueso_usar),Xq,Yq,Zq,'cubic')...
-            ,'box',Box_size);
-        %hu = smooth3(hueso_usar,'box', 3);
-        p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
+        fu = imrotate3_fast(smooth3(interp3(im2double(V_seg.mascara == 2),Xq,Yq,Zq,'cubic')...
+            ,'box',Box_size),{90,'X'});
+        hu = imrotate3_fast(smooth3(interp3(im2double(V_seg.mascara == 1),Xq,Yq,Zq,'cubic')...
+            ,'box',Box_size),{90,'X'});
+        taladro = imrotate3_fast(smooth3(im2double(pixeles_ya_sumados.*(hueso_usar + fisis_usar)),...
+            'box',9),{90,'X'});
+        
+        
+        p1= patch(isosurface(fu),'FaceColor','none','EdgeColor','red');
         p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-        taladro = smooth3(interp3(im2double(pixeles_ya_sumados),Xq,Yq,Zq,'cubic')...
-            ,'box',Box_size);
-        p3= patch(isosurface(taladro, 0.7),'FaceColor','green','EdgeColor','none');
         reducepatch(p2,0.01)
-        ax = gca;
-        c = ax.DataAspectRatio;
-        ax.DataAspectRatio= [1 1 1];
-        %ax.DataAspectRatio= [dz,dz,dx];
+        p3= patch(isosurface(taladro, 0.25),'FaceColor','green','EdgeColor','none');
+        
         %scatter3(P1(2),P1(1),P1(3),'red','filled'); 
         %scatter3(P2(2),P2(1),P2(3),'yellow');
     
-        axis tight
+        axis off
         l = camlight('headlight');
+        daspect([1 1 1])
         lighting gouraud
         material dull
         title('Fisis')
+        view(0,0)
+        
+        title('Rodilla')
+
+        while true
+            camlight(l,'headlight')
+            pause(0.05);  
+        end
+
     end
     
     total_de_1s = sum(fisis_usar(:));
     delta = (fisis_usar - pixeles_ya_sumados) == 1;
     total_1s_resta = sum(delta(:));
     porc = ((total_de_1s - total_1s_resta)/total_de_1s)*100;
+    
+    Tal = im2double(pixeles_ya_sumados.*(hueso_usar + fisis_usar));
     
 end
     

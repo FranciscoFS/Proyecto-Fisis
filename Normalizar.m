@@ -1,4 +1,5 @@
-function X_norm = Normalizar(X)
+function X_norm = Normalizar(X,dx)
     
-    X_norm = (X - mean(X))./(std(X)) ;
+    X_norm = (X - median(X)).*dx ;
+
 end

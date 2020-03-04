@@ -17,10 +17,12 @@ for k = 1 : Largo
     Distribucion(k).AP = AP;
     Distribucion(k).SG = SG;
     
-    AP_norm.Columnas = Normalizar(AP.Columnas);
-    AP_norm.Filas = Normalizar(AP.Filas);
-    SG_norm.Columnas = Normalizar(SG.Columnas);
-    SG_norm.Filas = Normalizar(SG.Filas);
+    dx = Base_datos(1).Rodilla.info{1};
+    
+    AP_norm.Columnas = Normalizar(AP.Columnas,dx);
+    AP_norm.Filas = -1*Normalizar(AP.Filas,dx);
+    SG_norm.Columnas = Normalizar(SG.Columnas,dx);
+    SG_norm.Filas = -1*Normalizar(SG.Filas,dx);
     
     Distribucion(k).AP_nom = AP_norm;
     Distribucion(k).SG_norm = SG_norm;
@@ -69,6 +71,132 @@ Var_names = {'Ajuste_Proyeccion_AP_Fourier_1','Ajuste_Proyeccion_AP_Fourier_2',.
     'Ajuste_Proyeccion_SG_Pol_orden_2','Ajuste_Proyeccion_SG_Pol_orden_4'};
 Tabla = table(AP_F1,AP_F2,SG_P2,SG_P4);
 Tabla.Properties.VariableNames= Var_names;
+%% Jugando Con los plots
+coefs1 = mean(Coeficientes.Var4);
+coefs2 = mean(Coeficientes.Var3);
+figure; hold on;
+
+for k=1:numel(Distribucion)
+    plot(Distribucion(k).SG_norm.Columnas, Distribucion(k).SG_norm.Filas,'color', rand(1,3));
+end
+
+x = linspace(-35,35,1000);
+Y = (x.^4)*coefs1(1) + (x.^3)*coefs1(2) +(x.^2)*coefs1(3) +(x)*coefs1(4) + repmat(coefs1(5),1,size(x,2));
+Y2 = (x.^2)*coefs2(1) + x*coefs2(2) + repmat(coefs2(3),1,size(x,2));
+plot(x,Y,'--b','LineWidth',5)
+plot(x,Y2,'--b','LineWidth',5)
+ylim([-8 15]);
+set(gcf,'color','white')
+plot(muCol,muFilas,'--r','LineWidth',5);
+axis off
+
+
+%%
+[muCol,CI_Col]  = Mean_CI(New_SGCol);
+[muFilas,CI_Filas]  = Mean_CI(New_SGFilas);
+Filas_Iqr = muFilas + iqr(New_SGFilas);
+Filas_Iqr2 = muFilas - iqr(New_SGFilas);
+
+figure; hold on;
+plot(muCol,muFilas,'--r','LineWidth',3);
+plot(muCol,Filas_Iqr,'--b','LineWidth',3);
+plot(muCol,Filas_Iqr2,'--b','LineWidth',3);
+% plot(muCol,CI_Filas.Up,'--b','LineWidth',3);
+% plot(muCol,CI_Filas.Down,'--b','LineWidth',3);
+set(gcf,'color','white')
+axis off
+
+%% Color para Mujer y hombre
+Hombre = strcmp(t_usar.Sexo,'M');
+Mujer = not(Hombre);
+
+%%
+x = linspace(-35,35,1000);
+coefsH = mean(Coeficientes.Var3(Hombre,:));
+coefsM = mean(Coeficientes.Var3(Mujer,:));
+YH =  (x.^2)*coefsH(1) + x*coefsH(2) + repmat(coefsH(3),1,size(x,2));
+YM =  (x.^2)*coefsM(1) + x*coefsM(2) + repmat(coefsM(3),1,size(x,2));
+plot(x,YH,x,YM)
+
+%%
+
+figure; hold on;
+
+for k=1:numel(Distribucion)
+    
+    if Hombre(k)    
+        plot(Distribucion(k).SG_norm.Columnas,Distribucion(k).SG_norm.Filas,'--r');
+    else
+        plot(Distribucion(k).SG_norm.Columnas,Distribucion(k).SG_norm.Filas,'--g');
+    end
+        
+end
+
+%% Por Edad
+
+Edad = unique(t_usar.Edad);
+figure;hold on;
+
+for k=1:numel(Distribucion)
+    
+    if t_usar.Edad(k)== Edad(1)
+        plot(Distribucion(k).SG_norm.Columnas,Distribucion(k).SG_norm.Filas,'color','red');
+        
+    elseif t_usar.Edad(k) == Edad(2)
+        plot(Distribucion(k).SG_norm.Columnas,Distribucion(k).SG_norm.Filas,'color','blue');
+        
+    elseif t_usar.Edad(k) == Edad(3)
+        plot(Distribucion(k).SG_norm.Columnas,Distribucion(k).SG_norm.Filas,'color','green');
+
+    elseif t_usar.Edad(k) == Edad(4)
+        plot(Distribucion(k).SG_norm.Columnas,Distribucion(k).SG_norm.Filas,'color','yellow');
+
+    elseif t_usar.Edad(k) == Edad(5)
+        plot(Distribucion(k).SG_norm.Columnas,Distribucion(k).SG_norm.Filas,'color','black');
+
+    elseif t_usar.Edad(k)== Edad(6)
+        plot(Distribucion(k).SG_norm.Columnas,Distribucion(k).SG_norm.Filas,'color','cyan');
+
+    elseif t_usar.Edad(k) == Edad(7)
+        plot(Distribucion(k).SG_norm.Columnas,Distribucion(k).SG_norm.Filas,'color','magenta');
+
+    elseif t_usar.Edad(k) == Edad(8)
+        plot(Distribucion(k).SG_norm.Columnas,Distribucion(k).SG_norm.Filas,'color','white');
+  
+    end
+    
+end
+
+%% Pad array
+
+for k=1:numel(Distribucion)
+    LargosSG_norm(k) = length(Distribucion(k).SG_norm.Filas);
+    LargosAP_norm(k) = length(Distribucion(k).AP_nom.Filas);
+end
+
+MaxSG = max(LargosSG_norm);
+MaxAP = max(LargosAP_norm);
+
+%%
+
+New_SGFilas = zeros(numel(Distribucion),MaxSG);
+New_SGCol = zeros(numel(Distribucion),MaxSG);
+
+New_APFilas = zeros(numel(Distribucion),MaxAP);
+New_APCol = zeros(numel(Distribucion),MaxAP);
+
+for k=1:numel(Distribucion)
+    
+    New_SGFilas(k,:) = padding(Distribucion(k).SG_norm.Filas, MaxSG);
+    New_SGCol(k,:) = padding(Distribucion(k).SG_norm.Columnas, MaxSG);
+    
+    New_APFilas(k,:) = padding(Distribucion(k).AP_nom.Filas, MaxAP);
+    New_APCol(k,:) = padding(Distribucion(k).AP_nom.Columnas, MaxAP);
+    
+end
+
+%plot(mean(New_SGCol,'omitnan'),mean(New_SGFilas,'omitnan'),'--g','LineWidth',5)
+%plot(mean(New_APCol,'omitnan'),mean(New_APFilas,'omitnan'),'--g','LineWidth',5)
 
 %%
 

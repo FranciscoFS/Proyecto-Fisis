@@ -13,8 +13,8 @@ slc3 = info{9,1};
 
     try
         info_2 = V_seg.info{12};
-        x_T = info_2{1,1};
-        y_T = info_2{2,1};
+        x_T = info_2{1};
+        y_T = info_2{2};
     catch
         x_T = [0,0];
         y_T = [0,0];

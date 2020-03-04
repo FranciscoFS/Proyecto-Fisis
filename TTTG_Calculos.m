@@ -2,13 +2,13 @@
 
 fallos = [];
 contador = 0;
-tiempo = zeros(1,numel(Base_datos));
+%tiempo = zeros(1,numel(Base_datos));
 ultimo = 1;
 
 %%
 answer = 'Si';
 
-for k = pendientes %ultimo:numel(Base_datos)   %fallos
+for k = fallos %ultimo:numel(Base_datos)   %fallos
     
     
     if strcmp(answer,'Si')
@@ -88,26 +88,28 @@ Tabla.Properties.VariableNames = Variables;
 
 %%
 
-writetable(Tabla,'Segundos_50_2_todas_menos37.xlsx')
+writetable(Tabla_F,'Tabla_F.xlsx')
 
 %% Calculos ICC's
 
-ICC_s = zeros(6,5);
+ICC_s = zeros(5,6);
+Index = 6:10;
 
-for k=2:6
-[r, LB, UB, F, df1, df2, p] = ICC([Tabla_T{:,k} Tabla_F{:,k}],'A-1',0.05,0.5);
-[R,P,RL,RU] = corrcoef(Tabla_T{:,k}, Tabla_F{:,k});
+for k=1:5
+    
+    pos = Index(k);
+    [r, LB, UB, F, df1, df2, p] = ICC([Tabla_F{10:20,pos} Tabla_T{10:20,pos}],'A-1',0.05,0.5);
+    [R,P,RL,RU] = corrcoef(Tabla_F{:,pos}, Tabla_T{:,pos});
 
-ICC_s(1,k-1) = r;
-ICC_s(2,k-1) = LB;
-ICC_s(3,k-1) = UB;
-ICC_s(4,k-1) = R(1,2)^2;
-ICC_s(5,k-1) = RL(1,2)^2;
-ICC_s(6,k-1) = RU(1,2)^2;
+    ICC_s(k,1) = r;
+    ICC_s(k,2) = LB;
+    ICC_s(k,3) = UB;
+    ICC_s(k,4) = R(1,2)^2;
+    ICC_s(k,5) = RL(1,2)^2;
+    ICC_s(k,6) = RU(1,2)^2;
 end
 
-Coeficientes = array2table(ICC_s,'VariableNames',{'RM_TTG','RM_SICTAC','RM_TTPCL','TAC_TTG','TAC_SICTAC'});
-
-%     ,'RowNames',{'ICC','ICC_L','ICC_U','R2','R2_L','R2_U'});
+Coeficientes = array2table(ICC_s,'RowNames',{'RM_TTG','RM_SICTAC','RM_TTPCL','TAC_TTG','TAC_SICTAC'},...
+   'VariableNames',{'ICC','ICC_L','ICC_U','R2','R2_L','R2_U'});
 
 

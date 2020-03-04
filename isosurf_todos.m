@@ -1,5 +1,12 @@
 function isosurf_todos(V_out,check,data)
 
+    %Check tiene la siguiente forma.
+    % Check(6) es para poder centrar el eje y rote bien.
+    %Check 7 y 8 son para poner los cilindro de LCA en Tibia t¿y Femur rpte
+    %Check 5 es el Cilindro para LPFM
+    
+    %Data debe tener, dependiendo los cilindros
+
     info = V_out.info;
 
     %Proporciones RM
@@ -17,7 +24,7 @@ function isosurf_todos(V_out,check,data)
         pace = (dxdy/dz);
         [m,n,k] = size(V_out.mascara);
         [Xq,Yq,Zq] = meshgrid(1:n,1:m,1:pace:k);
-        Box_size = 9;
+        Box_size = 15;
     end
  
     figure('units','normalized','outerposition',[0 0 1 1])
@@ -50,7 +57,6 @@ function isosurf_todos(V_out,check,data)
          p3= patch(isosurface(tf),'FaceColor','red','EdgeColor','none');
         isonormals(tf,p3)
         p4= patch(isosurface(th),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-        isonormals(tf,p3)
         %isonormals(th,p4)
         reducepatch(p4,0.01)
     end
@@ -99,6 +105,39 @@ function isosurf_todos(V_out,check,data)
         isonormals(Z3,p3);
         
     end
+    
+    if check(7) && check(6)
+        
+        Z5 = Cilindro_Tibia_LCA(V_out,data.betaT,data.delta,data.dT,data.pT);
+        Z5 = smooth3(Z5,'box',Box_size);
+        Z5 = imrotate3_fast(Z5,{90 'X'});
+        p3 = patch(isosurface(Z5,0.5),'FaceColor','green','EdgeColor','none');
+        isonormals(Z3,p3);
+        
+    elseif check(7) && not(check(6))
+        Z5 = Cilindro_Tibia_LCA(V_out,data.betaT,data.delta,data.dT,data.pT);
+        Z5 = smooth3(Z5,'box',Box_size);
+        p5 = patch(isosurface(Z5,0.5),'FaceColor','green','EdgeColor','none');
+        isonormals(Z5,p5);
+        
+    end
+    
+    if check(8) && check(6)
+        
+        Z6 = Cilindro_Femur_LCA(V_out,fh,data.gamma,data.alphaF,data.dF,data.pF);
+        Z6 = smooth3(Z6,'box',Box_size);
+        Z6 = imrotate3_fast(Z6,{90 'X'});
+        p6 = patch(isosurface(Z6,0.5),'FaceColor','green','EdgeColor','none');
+        isonormals(Z6,p6);
+        
+    elseif check(8) && not(check(6))
+        Z6 = Cilindro_Femur_LCA(V_out,fh,data.gamma,data.alphaF,data.dF,data.pF);
+        Z6 = smooth3(Z6,'box',Box_size);
+        p6 = patch(isosurface(Z6,0.5),'FaceColor','green','EdgeColor','none');
+        isonormals(Z6,p6);
+        
+    end
+    
     
 
     %Vista y Luz
