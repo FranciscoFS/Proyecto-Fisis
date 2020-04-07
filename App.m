@@ -22,7 +22,7 @@ function varargout = App(varargin)
 
 % Edit the above text to modify the response to help App
 
-% Last Modified by GUIDE v2.5 09-May-2018 21:26:17
+% Last Modified by GUIDE v2.5 10-Mar-2020 22:13:53
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -271,8 +271,11 @@ function Guardar_Callback(hObject, ~, handles)
 if handles.Prefiltrado
     uiwait(msgbox('Seleccione carpeta para guardar al paciente','Guardar','modal'));
     folder_save = uigetdir();
-    V_seg = handles.V_seg;
-    save([folder_save '/' 'Rodilla_'  handles.V_seg.filename],'V_seg')
+   % V_seg = handles.V_seg;
+    Vol_guardar.Vol = handles.V_seg.vol.orig;
+    Vol_guardar.mascara = handles.V_seg.mascara;
+    Vol_guardar.info = handles.V_seg.info;
+    save([folder_save '/' 'Rodilla_'  handles.V_seg.filename],'Vol_guardar')
     guidata(hObject, handles);
 else
     msgbox('No hay nada para guardar aún')
@@ -314,13 +317,25 @@ else
     if infor.PixelSpacing(1)~= infor.PixelSpacing(2)
         uiwait(msgbox('ERROR! Avisar a Francisco y Tomas! anota que rodilla es esta','Success','modal'));
     end
+    
+    
 
     handles.info{1,1} = infor.PixelSpacing(1);
     handles.info{2,1} = infor.SliceThickness;
     handles.info{3,1} = infor.PatientBirthDate;
     handles.info{4,1} = infor.PatientWeight;
-    handles.info{5,1} = infor.PatientAge;
-    handles.info{6,1} = infor.PatientSex;
+    
+    try
+        handles.info{5,1} = infor.PatientAge;
+    catch
+        handles.info{5,1} = nan;
+    end
+        
+    try
+        handles.info{6,1} = infor.PatientSex;
+    catch
+        handles.info{6,1} = nan;
+    end
     
     handles.V_seg.check = zeros(1,size(handles.V,3));
     handles.V_seg.mascara = zeros(size(handles.V));
@@ -562,6 +577,4 @@ function Stephen_Callback(hObject, eventdata, handles)
 handles.V_seg = Stephen_final(handles.V_seg);
 
 guidata(hObject, handles);
-
-
 

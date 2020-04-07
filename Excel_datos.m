@@ -133,7 +133,7 @@ for k=1:numel(DIM)
             fprintf('Saved..... %s \n', DIM(k).name);
             contador = contador + 1;
             Base_datos(contador).Rodilla = V_out;
-            
+                
       %  else
             
 %             V_out.mascara = (V_out.mascara < 8).*(V_out.mascara);

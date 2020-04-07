@@ -18,20 +18,43 @@ AP_F1 = cell(Largo,3);
 AP_F2 = cell(Largo,3);
 SG_P2 = cell(Largo,3);
 SG_E2 = cell(Largo,3);
+Distribucion = struct();
+Datos_fit = struct();
+Coeficientes = table();
 
 %%
 for k = 1 : Largo
     
     [AP,SG] = Proyecciones_tibia(Base_datos_2(k).Rodilla);
-    Datos = Fit_fisis_tibia(AP,SG);
     
-    % Campos de Datos: sse, rsquare, dfe, adjrsquared, rmse(Serian pixeles)
-    % Datos: 1_ AP-F1, 2_AP-F2, 3_ SG_P2, 4_ SG-E2
+    Distribucion(k).AP = AP;
+    Distribucion(k).SG = SG;
     
-    AP_F1(k,:) = {Datos{1}.rsquare,Datos{1}.adjrsquare,Datos{1}.rmse};
-    AP_F2(k,:) = {Datos{2}.rsquare,Datos{2}.adjrsquare,Datos{2}.rmse};
-    SG_P2(k,:) = {Datos{3}.rsquare,Datos{3}.adjrsquare,Datos{3}.rmse};
-    SG_E2(k,:) = {Datos{4}.rsquare,Datos{4}.adjrsquare,Datos{4}.rmse};
+    dx = Base_datos(k).Rodilla.info{1};
+    
+    AP_norm.Columnas = Normalizar(AP.Columnas,dx);
+    AP_norm.Filas = -1*Normalizar(AP.Filas,dx);
+    SG_norm.Columnas = Normalizar(SG.Columnas,dx);
+    SG_norm.Filas = -1*Normalizar(SG.Filas,dx);
+    
+    Distribucion(k).AP_norm = AP_norm;
+    Distribucion(k).SG_norm = SG_norm;
+    
+%     Datos = Fit_fisis_tibia(AP_norm,SG_norm);
+%     Datos_fit(k).Datos = Datos;
+%     
+%     Coeficientes{k,1} = coeffvalues(Datos{2,1});
+%     Coeficientes{k,2} = coeffvalues(Datos{2,2});
+%     Coeficientes{k,3} = coeffvalues(Datos{2,3});
+%     Coeficientes{k,4} = coeffvalues(Datos{2,4});
+%     
+%     % Campos de Datos: sse, rsquare, dfe, adjrsquared, rmse(Serian pixeles)
+%     % Datos: 1_ AP-F1, 2_AP-F2, 3_ SG_P2, 4_ SG-E2
+%     
+%     AP_F1(k,:) = {Datos{1,1}.rsquare,Datos{1,1}.adjrsquare,Datos{1,1}.rmse};
+%     AP_F2(k,:) = {Datos{1,2}.rsquare,Datos{1,2}.adjrsquare,Datos{1,2}.rmse};
+%     SG_P2(k,:) = {Datos{1,3}.rsquare,Datos{1,3}.adjrsquare,Datos{1,3}.rmse};
+%     SG_E2(k,:) = {Datos{1,4}.rsquare,Datos{1,4}.adjrsquare,Datos{1,4}.rmse};
 end
 
 %%

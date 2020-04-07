@@ -14,4 +14,10 @@ function [Datos] = Fit_fisis_tibia(AP,SG)
     Datos{3} = GOF_SG_P2;
     Datos{4} = GOF_SG_E2;
     
+    Datos{2,1} = Fit_AP_Fourier1;
+    Datos{2,2} = Fit_AP_Fourier2;
+    Datos{2,3} = Fit_SG_Pol_2;
+    Datos{2,4} = Fit_SG_Pol_4;
+    
+    
 end

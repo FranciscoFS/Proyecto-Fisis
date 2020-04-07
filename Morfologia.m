@@ -17,23 +17,25 @@ for k = 1 : Largo
     Distribucion(k).AP = AP;
     Distribucion(k).SG = SG;
     
-    dx = Base_datos(1).Rodilla.info{1};
+    dx = Base_datos(k).Rodilla.info{1};
     
     AP_norm.Columnas = Normalizar(AP.Columnas,dx);
     AP_norm.Filas = -1*Normalizar(AP.Filas,dx);
     SG_norm.Columnas = Normalizar(SG.Columnas,dx);
     SG_norm.Filas = -1*Normalizar(SG.Filas,dx);
     
-    Distribucion(k).AP_nom = AP_norm;
+    Distribucion(k).AP_norm = AP_norm;
     Distribucion(k).SG_norm = SG_norm;
     
-    Datos = Fit_fisis(AP_norm,SG_norm);
-    Datos_fit(k).Datos = Datos;
-    
-    Coeficientes{k,1} = coeffvalues(Datos{2,1});
-    Coeficientes{k,2} = coeffvalues(Datos{2,2});
-    Coeficientes{k,3} = coeffvalues(Datos{2,3});
-    Coeficientes{k,4} = coeffvalues(Datos{2,4});
+%     
+%     Datos = Fit_fisis(AP_norm,SG_norm);
+%     Datos_fit(k).Datos = Datos;
+%     
+%     Coeficientes{k,1} = coeffvalues(Datos{2,1});
+%     Coeficientes{k,2} = coeffvalues(Datos{2,2});
+%     Coeficientes{k,3} = coeffvalues(Datos{2,3});
+%     Coeficientes{k,4} = coeffvalues(Datos{2,4});
+
     % Campos de Datos: sse, rsquare, dfe, adjrsquared, rmse(Serian pixeles)
     % Datos: 1_ AP-F1, 2_AP-F2, 3_ SG_P2, 4_ SG-P4
     
@@ -53,10 +55,10 @@ for k = 1 : Largo
 %     SG_P4_R2_adj(k,1) = Datos{4}.adjrsquare;
 %     SG_P4_RMSE(k,1) = Datos{4}.rmse;
     
-    AP_F1(k,:) = {Datos{1,1}.rsquare,Datos{1,1}.adjrsquare,Datos{1,1}.rmse};
-    AP_F2(k,:) = {Datos{1,2}.rsquare,Datos{1,2}.adjrsquare,Datos{1,2}.rmse};
-    SG_P2(k,:) = {Datos{1,3}.rsquare,Datos{1,3}.adjrsquare,Datos{1,3}.rmse};
-    SG_P4(k,:) = {Datos{1,4}.rsquare,Datos{1,4}.adjrsquare,Datos{1,4}.rmse};
+%     AP_F1(k,:) = {Datos{1,1}.rsquare,Datos{1,1}.adjrsquare,Datos{1,1}.rmse};
+%     AP_F2(k,:) = {Datos{1,2}.rsquare,Datos{1,2}.adjrsquare,Datos{1,2}.rmse};
+%     SG_P2(k,:) = {Datos{1,3}.rsquare,Datos{1,3}.adjrsquare,Datos{1,3}.rmse};
+%     SG_P4(k,:) = {Datos{1,4}.rsquare,Datos{1,4}.adjrsquare,Datos{1,4}.rmse};
     
 end
 
@@ -67,11 +69,11 @@ end
 % SG_P2 = table(SG_P2_R2, SG_P2_R2_adj, SG_P2_RMSE,'VariableNames',varNames);
 % SG_P4 = table(SG_P4_R2, SG_P4_R2_adj, SG_P4_RMSE,'VariableNames',varNames);
 
-Var_names = {'Ajuste_Proyeccion_AP_Fourier_1','Ajuste_Proyeccion_AP_Fourier_2',...
-    'Ajuste_Proyeccion_SG_Pol_orden_2','Ajuste_Proyeccion_SG_Pol_orden_4'};
-Tabla = table(AP_F1,AP_F2,SG_P2,SG_P4);
-Tabla.Properties.VariableNames= Var_names;
-%% Jugando Con los plots
+% Var_names = {'Ajuste_Proyeccion_AP_Fourier_1','Ajuste_Proyeccion_AP_Fourier_2',...
+%     'Ajuste_Proyeccion_SG_Pol_orden_2','Ajuste_Proyeccion_SG_Pol_orden_4'};
+% Tabla = table(AP_F1,AP_F2,SG_P2,SG_P4);
+% Tabla.Properties.VariableNames= Var_names;
+%% Jugando Con los plots Sagital
 coefs1 = mean(Coeficientes.Var4);
 coefs2 = mean(Coeficientes.Var3);
 figure; hold on;
@@ -90,12 +92,53 @@ set(gcf,'color','white')
 plot(muCol,muFilas,'--r','LineWidth',5);
 axis off
 
+%% AP 
+coefs1 = mean(Coeficientes.Var1);
+coefs2 = mean(Coeficientes.Var2);
+figure; hold on;
 
-%%
+for k=1:numel(Distribucion)
+    plot(Distribucion(k).AP_nom.Columnas, Distribucion(k).AP_nom.Filas,'color', rand(1,3));
+end
+
+% x = linspace(-35,35,1000);
+% Y = (x.^4)*coefs1(1) + (x.^3)*coefs1(2) +(x.^2)*coefs1(3) +(x)*coefs1(4) + repmat(coefs1(5),1,size(x,2));
+% Y2 = (x.^2)*coefs2(1) + x*coefs2(2) + repmat(coefs2(3),1,size(x,2));
+% plot(x,Y,'--b','LineWidth',5)
+% plot(x,Y2,'--b','LineWidth',5)
+% ylim([-8 15]);
+set(gcf,'color','white')
+plot(muCol,muFilas,'--r','LineWidth',5);
+plot(medCol,muFilas,'--g','LineWidth',5);
+axis off
+
+%%  Proyeccion Sagital
 [muCol,CI_Col]  = Mean_CI(New_SGCol);
 [muFilas,CI_Filas]  = Mean_CI(New_SGFilas);
 Filas_Iqr = muFilas + iqr(New_SGFilas);
 Filas_Iqr2 = muFilas - iqr(New_SGFilas);
+
+medCol = median(New_SGCol,'omitnan');
+medFilas = median(New_SGFilas, 'omitnan');
+
+figure; hold on;
+plot(medCol,medFilas,'--r','LineWidth',3);
+plot(medCol,Filas_Iqr,'--b','LineWidth',3);
+plot(medCol,Filas_Iqr2,'--b','LineWidth',3);
+% plot(muCol,CI_Filas.Up,'--b','LineWidth',3);
+% plot(muCol,CI_Filas.Down,'--b','LineWidth',3);
+set(gcf,'color','white')
+axis off
+
+%% Proyeccion AP
+
+[muCol,CI_Col]  = Mean_CI(New_APCol);
+[muFilas,CI_Filas]  = Mean_CI(New_APFilas);
+Filas_Iqr = muFilas + iqr(New_APFilas);
+Filas_Iqr2 = muFilas - iqr(New_APFilas);
+
+medCol = median(New_APCol,'omitnan');
+medFilas = median(New_APFilas, 'omitnan');
 
 figure; hold on;
 plot(muCol,muFilas,'--r','LineWidth',3);
@@ -105,6 +148,7 @@ plot(muCol,Filas_Iqr2,'--b','LineWidth',3);
 % plot(muCol,CI_Filas.Down,'--b','LineWidth',3);
 set(gcf,'color','white')
 axis off
+
 
 %% Color para Mujer y hombre
 Hombre = strcmp(t_usar.Sexo,'M');
@@ -176,8 +220,6 @@ end
 
 MaxSG = max(LargosSG_norm);
 MaxAP = max(LargosAP_norm);
-
-%%
 
 New_SGFilas = zeros(numel(Distribucion),MaxSG);
 New_SGCol = zeros(numel(Distribucion),MaxSG);
