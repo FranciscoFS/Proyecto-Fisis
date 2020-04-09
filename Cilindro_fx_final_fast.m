@@ -55,23 +55,23 @@ function porc = Cilindro_fx_final_fast(V_seg,alpha,beta)
     end
     matriz_cilindro = matriz_cilindro>0 ;
     
-%     f = figure;
-%     hold on
-%     fu= smooth3(fisis_usar, 'box', 3);
-%     hu = smooth3(hueso_usar,'box', 3);
-%     p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
-%     p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
-%     p3= patch(isosurface(matriz_cilindro, 0.7),'FaceColor','green','EdgeColor','none');
-%     reducepatch(p2,0.01)
-%     ax = gca;
-%     c = ax.DataAspectRatio;
-%     ax.DataAspectRatio= [dz,dz,dx];
-%     
-%     axis tight
-%     l = camlight('headlight');
-%     lighting gouraud
-%     material dull
-%     title('Fisis')
+    f = figure;
+    hold on
+    fu= smooth3(fisis_usar, 'box', 3);
+    hu = smooth3(hueso_usar,'box', 3);
+    p1= patch(isosurface(fu),'FaceColor','red','EdgeColor','none');
+    p2= patch(isosurface(hu),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+    p3= patch(isosurface(matriz_cilindro, 0.7),'FaceColor','green','EdgeColor','none');
+    reducepatch(p2,0.01)
+    ax = gca;
+    c = ax.DataAspectRatio;
+    ax.DataAspectRatio= [dz,dz,dx];
+    
+    axis tight
+    l = camlight('headlight');
+    lighting gouraud
+    material dull
+    title('Fisis')
     
     total_de_1s = sum(fisis_usar(:));
     delta = (fisis_usar - matriz_cilindro) == 1;

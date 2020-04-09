@@ -163,7 +163,7 @@ end
 handles.V_filt = zeros(size(handles.V));
 
 alfa = 0.8;
-beta = 1.2;
+beta = ;
     
 for k=1:size(handles.V,3)
 	handles.V_filt(:,:,k) = filtro_gabriel(handles.V_preFilt(:,:,k), not(Maskf(:,:,k)),alfa,beta);
