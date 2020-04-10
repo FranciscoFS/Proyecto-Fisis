@@ -276,17 +276,17 @@ Window = floor(MaxAP/3);
 % Filas_AjAP_3_3M = Filas_AjSG(Mujeres,2*Window+1:3*Window);
 
 
-Filas_AjAP_1_3 = Filas_AjAP(:,1:Window);
-Filas_AjAP_2_3 = Filas_AjAP(:,Window+1:2*Window);
-Filas_AjAP_3_3 = Filas_AjAP(:,2*Window+1:3*Window);
+Filas_AjAP_1_3 = Filas_AjAP(Edad < 16,1:Window);
+Filas_AjAP_2_3 = Filas_AjAP(Edad < 16,Window+1:2*Window);
+Filas_AjAP_3_3 = Filas_AjAP(Edad < 16,2*Window+1:3*Window);
 
-Edad_ex = repmat(Edad,1,Window);
+Edad_ex = repmat(Edad(Edad < 16),1,Window);
 Sexos_ex = repmat(2*Masculino + Mujeres,1,Window);
 %% Análisis Post HOC
 
-[p,tbl,stats] = anovan(Filas_AjSG_1_3(:),Edad_ex'); multcompare(stats);
-[p,tbl,stats] = anovan(Filas_AjSG_2_3(:),Edad_ex'); multcompare(stats);set(gcf,'color','white')
-[p,tbl,stats] = anovan(Filas_AjSG_3_3(:),Edad_ex'); multcompare(stats);set(gcf,'color','white')
+[p,tbl,stats] = anovan(Filas_AjAP_1_3(:),Edad_ex'); multcompare(stats);set(gcf,'color','white')
+[p,tbl,stats] = anovan(Filas_AjAP_2_3(:),Edad_ex'); multcompare(stats);set(gcf,'color','white')
+[p,tbl,stats] = anovan(Filas_AjAP_3_3(:),Edad_ex'); multcompare(stats);set(gcf,'color','white')
 
 %%
 [p,tbl,stats] = anova1(Filas_AjAP_1_3(:),Sexos_ex'); p
@@ -324,9 +324,10 @@ plot(h)
     plot(Columna_usarAP, median(Filas_AjAP(Edad == 13,:),'omitnan'),'--y','LineWidth',3)
     plot(Columna_usarAP, median(Filas_AjAP(Edad == 14,:),'omitnan'),'--k','LineWidth',3)
     plot(Columna_usarAP, median(Filas_AjAP(Edad == 15,:),'omitnan'),'--m','LineWidth',3)
-    plot(Columna_usarAP, median(Filas_AjAP(Edad == 16,:),'omitnan'),'--c','LineWidth',3)
-    plot(Columna_usarAP, median(Filas_AjAP(Edad == 17,:),'omitnan'),'--','color',[0.4940 0.1840 0.5560],'LineWidth',3)
-    legend('10','11','12','13','14','15','16','17')
+  %  plot(Columna_usarAP, median(Filas_AjAP(Edad == 16,:),'omitnan'),'--c','LineWidth',3)
+  %  plot(Columna_usarAP, median(Filas_AjAP(Edad == 17,:),'omitnan'),'--','color',[0.4940 0.1840 0.5560],'LineWidth',3)
+ %   legend('10','11','12','13','14','15','16','17')
+    legend('10','11','12','13','14','15','FontSize',14)
 
 
 %%
@@ -337,13 +338,12 @@ set(gcf,'color','white')
 axis on
 daspect([1 1 1])
 
-p1 = plot(mean(Filas_AjAP_1_3(Edad < 13,:)),'--r','LineWidth',3);
-p2 = plot(mean(Filas_AjAP_1_3((Edad >= 13)& (Edad <=15),:)),'--b','LineWidth',3);
-[h,p] = ttest2(Filas_AjAP_1_3(Edad < 13,:),Filas_AjAP_1_3((Edad >= 13)& (Edad <=15),:));
-scatter(1:length(h),5*h,'MarkerFaceColor','yellow') 
-legend([p1 p2],{'Edad [10 -14]','Edad [15-17]'},'FontSize',14);
-[mu,CI] = Mean_CI(p)
-
+p1 = plot(Columna_usarSG,mean(Filas_AjSG(Edad < 13,:)),'--r','LineWidth',3);
+p2 = plot(Columna_usarSG,mean(Filas_AjSG((Edad >= 13) & (Edad < 16),:)),'--b','LineWidth',3);
+[h,p] = ttest2(Filas_AjSG(Edad < 13,:),Filas_AjSG((Edad >= 13) & (Edad < 16),:));
+scatter(Columna_usarSG,3*h,'MarkerFaceColor','yellow') 
+legend([p1 p2],{'Edad [10 -12]','Edad [13-15]'},'FontSize',14);
+[mu,CI] = Mean_CI(p(p>0.05))
 %%
 
 figure;

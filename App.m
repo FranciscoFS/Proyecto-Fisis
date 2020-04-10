@@ -275,6 +275,8 @@ if handles.Prefiltrado
     Vol_guardar.Vol = handles.V_seg.vol.orig;
     Vol_guardar.mascara = handles.V_seg.mascara;
     Vol_guardar.info = handles.V_seg.info;
+    Vol_guardar.puntos = handles.V_seg.puntos;
+    Vol_guardar.check = handles.V_seg.check;
     save([folder_save '/' 'Rodilla_'  handles.V_seg.filename],'Vol_guardar')
     guidata(hObject, handles);
 else
@@ -503,8 +505,11 @@ if filename == 0
     return
 else
     Load = open([pathname filename]); %todo dentro
-    handles.V_seg = Load.V_seg;
-    handles.V = handles.V_seg.vol.orig;
+    handles.V_seg = Load.Vol_guardar;
+    handles.V = handles.V_seg.Vol;
+    
+    %handles.V_seg = Load.V_seg;
+    %handles.V = handles.V_seg.vol.orig;
 
     set(handles.slider1, 'Min', 1);
     set(handles.slider1, 'Max', size(handles.V,3));

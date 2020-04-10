@@ -163,7 +163,7 @@ end
 handles.V_filt = zeros(size(handles.V));
 
 alfa = 0.8;
-beta = ;
+beta = 1.2;
     
 for k=1:size(handles.V,3)
 	handles.V_filt(:,:,k) = filtro_gabriel(handles.V_preFilt(:,:,k), not(Maskf(:,:,k)),alfa,beta);
@@ -275,6 +275,7 @@ if handles.Prefiltrado
     Vol_guardar.Vol = handles.V_seg.vol.orig;
     Vol_guardar.mascara = handles.V_seg.mascara;
     Vol_guardar.info = handles.V_seg.info;
+    Vol_guardar.puntos = handles.V_seg.puntos;
     save([folder_save '/' 'Rodilla_'  handles.V_seg.filename],'Vol_guardar')
     guidata(hObject, handles);
 else
@@ -503,6 +504,9 @@ if filename == 0
     return
 else
     Load = open([pathname filename]); %todo dentro
+    handles.V_seg = Load.Vol_guardar;
+    handles.V = handles.Vol_guardar.Vol;
+    
     handles.V_seg = Load.V_seg;
     handles.V = handles.V_seg.vol.orig;
 
