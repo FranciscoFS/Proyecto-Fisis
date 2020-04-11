@@ -272,14 +272,14 @@ if handles.Prefiltrado
     uiwait(msgbox('Seleccione carpeta para guardar al paciente','Guardar','modal'));
     folder_save = uigetdir();
    % V_seg = handles.V_seg;
-    Vol_guardar.vol.orig = handles.V_seg.vol.orig;
-    Vol_guardar.mascara = handles.V_seg.mascara;
-    Vol_guardar.info = handles.V_seg.info;
-    Vol_guardar.puntos = handles.V_seg.puntos;
-    Vol_guardar.check = handles.V_seg.check;
-    Vol_guardar.vol.filt = handles.V_seg.vol.filt;
+    V_seg.vol.orig = handles.V_seg.vol.orig;
+    V_seg.mascara = handles.V_seg.mascara;
+    V_seg.info = handles.V_seg.info;
+    V_seg.puntos = handles.V_seg.puntos;
+    V_seg.check = handles.V_seg.check;
+    V_seg.vol.filt = handles.V_seg.vol.filt;
 
-    save([folder_save '/' 'Rodilla_'  handles.V_seg.filename],'Vol_guardar')
+    save([folder_save '/' 'Rodilla_'  handles.V_seg.filename],'V_seg')
     guidata(hObject, handles);
 else
     msgbox('No hay nada para guardar aún')
@@ -507,7 +507,7 @@ if filename == 0
     return
 else
     Load = open([pathname filename]); %todo dentro
-    handles.V_seg = Load.Vol_guardar;
+    handles.V_seg = Load.V_seg;
     handles.V = handles.V_seg.vol.orig;
     
     %handles.V_seg = Load.V_seg;
