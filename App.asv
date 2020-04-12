@@ -102,8 +102,9 @@ h = waitbar(0,'Trabajando...');
 
 % Prefiltrado
 
-disco = str2double(get(handles.disco,'string'));
-se = strel('disk',disco,8);
+disco = str2double(get(handles.alfa,'string'));
+i = 100;
+se = strel('disk',i,8);
 Test = handles.V(:,:,round(size(handles.V,3)/2));
 STD_inicial = std(Test(:));
 Umbral = 25;
@@ -163,7 +164,7 @@ end
 % Aplicar FiltroG
 handles.V_filt = zeros(size(handles.V));
 
-alfa = str2double(get(handles.alpha,'string'));
+alfa = 0.8;
 beta = 1.2;
     
 for k=1:size(handles.V,3)
@@ -632,7 +633,7 @@ function disco_CreateFcn(hObject, eventdata, handles)
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 
-set(hObject,'string','100')
+set(hObject,'string','8')
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
