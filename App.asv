@@ -102,9 +102,8 @@ h = waitbar(0,'Trabajando...');
 
 % Prefiltrado
 
-disco = str2double(get(handles.alfa,'string'));
-i = 100;
-se = strel('disk',i,8);
+disco = str2double(get(handles.disco,'string'));
+se = strel('disk',disco,8);
 Test = handles.V(:,:,round(size(handles.V,3)/2));
 STD_inicial = std(Test(:));
 Umbral = 25;
@@ -164,7 +163,7 @@ end
 % Aplicar FiltroG
 handles.V_filt = zeros(size(handles.V));
 
-alfa = 0.8;
+alfa = str2double(get(handles.alpha,'string'));
 beta = 1.2;
     
 for k=1:size(handles.V,3)
@@ -237,7 +236,7 @@ if handles.inicio
     if get(handles.cambiar,'Value')
         imshow(handles.V_seg.mascara(:,:,handles.v),[]);
     else
-        imshow(handles.V(:,:,handles.v));
+        imshow([handles.V(:,:,handles.v) handles.V(:,:,handles.v)]);
     end
 
     if handles.V_seg.check(handles.v)
@@ -274,14 +273,15 @@ if handles.Prefiltrado
     uiwait(msgbox('Seleccione carpeta para guardar al paciente','Guardar','modal'));
     folder_save = uigetdir();
    % V_seg = handles.V_seg;
-    Vol_guardar.vol.orig = handles.V_seg.vol.orig;
-    Vol_guardar.mascara = handles.V_seg.mascara;
-    Vol_guardar.info = handles.V_seg.info;
-    Vol_guardar.puntos = handles.V_seg.puntos;
-    Vol_guardar.check = handles.V_seg.check;
-    Vol_guardar.vol.filt = handles.V_seg.vol.filt;
+    V_seg.vol.orig = handles.V_seg.vol.orig;
+    V_seg.mascara = handles.V_seg.mascara;
+    V_seg.info = handles.V_seg.info;
+    V_seg.puntos = handles.V_seg.puntos;
+    V_seg.check = handles.V_seg.check;
+    V_seg.vol.filt = handles.V_seg.vol.filt;
+    V_seg.filename = handles.V_seg.filename;
 
-    save([folder_save '/' 'Rodilla_'  handles.V_seg.filename],'Vol_guardar')
+    save([folder_save '/' 'Rodilla_'  handles.V_seg.filename],'V_seg')
     guidata(hObject, handles);
 else
     msgbox('No hay nada para guardar aún')
@@ -509,7 +509,7 @@ if filename == 0
     return
 else
     Load = open([pathname filename]); %todo dentro
-    handles.V_seg = Load.Vol_guardar;
+    handles.V_seg = Load.V_seg;
     handles.V = handles.V_seg.vol.orig;
     
     %handles.V_seg = Load.V_seg;
@@ -633,7 +633,7 @@ function disco_CreateFcn(hObject, eventdata, handles)
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 
-set(hObject,'string','8')
+set(hObject,'string','100')
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');

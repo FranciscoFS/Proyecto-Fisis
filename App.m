@@ -188,7 +188,7 @@ handles.V_seg.tibia.bones = zeros(size(handles.V_filt));
 handles.V_seg.rotula = zeros(size(handles.V_filt));
 handles.Prefiltrado = 1;
 
-set(handles.Empezar, 'Visible', 'off');
+%set(handles.Empezar, 'Visible', 'off');
 
 guidata(hObject, handles);
 
@@ -236,7 +236,11 @@ if handles.inicio
     if get(handles.cambiar,'Value')
         imshow(handles.V_seg.mascara(:,:,handles.v),[]);
     else
-        imshow(handles.V(:,:,handles.v));
+        if handles.Prefiltrado
+            imshow([handles.V(:,:,handles.v) handles.V_filt(:,:,handles.v)]);
+        else
+            imshow(handles.V(:,:,handles.v))
+         end 
     end
 
     if handles.V_seg.check(handles.v)
