@@ -278,6 +278,7 @@ if handles.Prefiltrado
     V_seg.puntos = handles.V_seg.puntos;
     V_seg.check = handles.V_seg.check;
     V_seg.vol.filt = handles.V_seg.vol.filt;
+    V_seg.filename = handles.V_seg.filename;
 
     save([folder_save '/' 'Rodilla_'  handles.V_seg.filename],'V_seg')
     guidata(hObject, handles);
