@@ -162,7 +162,7 @@ end
 % Aplicar FiltroG
 handles.V_filt = zeros(size(handles.V));
 
-alfa = 0.8;
+alfa = 0.6;
 beta = 1.2;
     
 for k=1:size(handles.V,3)
