@@ -1,7 +1,4 @@
-function isosurf_2(V_seg)
-fisis = V_seg.femur.fisis;
-cortical = V_seg.femur.bones;
-info = V_seg.info;
+function isosurf_2(fisis,cortical,info)
 
 h = waitbar(0.5,'Modelando en 3D.....');
 
@@ -17,7 +14,7 @@ h = waitbar(0.5,'Modelando en 3D.....');
     pace = (1/(dz/dxdy));
     [m,n,k] = size(fisis);
     [Xq,Yq,Zq] = meshgrid(1:m,1:n,1:pace:k);
-    Box_size = 9;
+    Box_size = 3;
 
     fprintf('Working in Fisis ..... \n');
 
@@ -34,26 +31,19 @@ h = waitbar(0.5,'Modelando en 3D.....');
     %Vista y Luz
     
     figure()
-    hold on
 
     p1= patch(isosurface(Y),'FaceColor','green','EdgeColor','none','FaceAlpha','0.95');
-    %isonormals(Y,p1)
-    %p2= patch(isosurface(W),'FaceColor','blue','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
-    %isonormals(W,p2)
-    %reducepatch(p2,0.01)
- 
-    view(3)    
+    p2= patch(isosurface(W),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4','MarkerSize',0.5);
+    reducepatch(p2,0.01)
 
-    ax = gca;
-    c = ax.DataAspectRatio;
-    ax.DataAspectRatio= [1,1,1];
-    
-    axis off
-    axis tight
+    view(3)
+    axis equal
+    %daspect([1 1 0.8])
     l = camlight('headlight');
     lighting gouraud
     material dull
-    title('Rodilla')
+    title('Fisis')
+    
   
 
 close(h)

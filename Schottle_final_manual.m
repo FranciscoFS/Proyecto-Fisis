@@ -38,7 +38,7 @@ x(2) = x(1) + 100;
 x(1) = x(1) - 100;
 y(1) = q(x(1));
 y(2) = q(x(2));
-plot([x(1),x(2)],[y(1),y(2)],'LineWidth',2)
+plot([x(1),x(2)],[y(1),y(2)],'LineWidth',1.5,'color', 'y')
 
 %Linea 2
 uiwait(msgbox('Ponga el punto 1 para crear la linea 2'));
@@ -52,15 +52,15 @@ y2=q2(x2);
 %Puntos de la linea 2
 P3 = [x(1),y(1)];%Punto 1 de schottle
 P4 = [eval(x2),eval(y2)]; %Interseccion 1
-scatter(P3(1),P3(2),50,'o','filled')
-scatter(P4(1),P4(2),50,'o','filled')
+scatter(P3(1),P3(2),50,'o','filled','MarkerEdgeColor', 'y','MarkerFaceColor', 'w')
+%scatter(P4(1),P4(2),50,'o','filled','MarkerEdgeColor', 'w','MarkerFaceColor', 'w')
 
 %Plot linea 2
 x(2) = x(1) + 100;
 x(1) = x(1) - 100;
 y(1) = q2(x(1));
 y(2) = q2(x(2));
-plot([x(1),x(2)],[y(1),y(2)],'LineWidth',2)
+plot([x(1),x(2)],[y(1),y(2)],'LineWidth',1.5,'color', 'y')
 
 %Linea 3
 uiwait(msgbox('Ponga el punto 2 para crear la linea 3'));
@@ -73,15 +73,15 @@ y3=q3(x3);
 %Puntos de la linea 3
 P5 = [x(1),y(1)];%Punto 2 de schottle
 P6 = [eval(x3),eval(y3)];%Interseccion 2
-scatter(P5(1),P5(2),50,'o','filled')
-scatter(P6(1),P6(2),50,'o','filled')
+scatter(P5(1),P5(2),50,'o','filled','MarkerEdgeColor', 'y','MarkerFaceColor', 'w')
+%scatter(P6(1),P6(2),50,'o','filled','MarkerEdgeColor', 'w','MarkerFaceColor', 'w')
 
 %Plot linea 3
 x(2) = x(1) +100;
 x(1) = x(1) - 100;
 y(1) = q3(x(1));
 y(2) = q3(x(2));
-plot([x(1),x(2)],[y(1),y(2)],'LineWidth',2)
+plot([x(1),x(2)],[y(1),y(2)],'LineWidth',1.5,'color', 'y')
 
 
 %Matematica
@@ -120,24 +120,24 @@ if alph < 0
 else
     P8 = [P7(1)-pix_x2,P7(2)-pix_y2]; %Punto Schottle desde L2
 end
-scatter(P7(1),P7(2),100,'o','filled')
-scatter(P8(1),P8(2),100,'o','filled')
+%scatter(P7(1),P7(2),50,'o','filled','MarkerEdgeColor', 'r','MarkerFaceColor', 'r')
+%scatter(P8(1),P8(2),50,'o','filled','MarkerEdgeColor', 'r','MarkerFaceColor', 'r')
 
 %Punto desde linea 3
 P9 = [P6(1)-pix_x,P6(2)-pix_y];%punto anterior colineal a L3
-if alph < 0
+if alph < 0     
     P10 = [P9(1)-pix_x3,P9(2)-pix_y3]; %Punto Schottle desde L3
 else
     P10 = [P9(1)+pix_x3,P9(2)+pix_y3]; %Punto Schottle desde L3
 end
 
-scatter(P9(1),P9(2),150,'o','filled')
-scatter(P10(1),P10(2),100,'o','filled')
-plot([P9(1),P7(1)],[P9(2),P7(2)],'LineWidth',2)
+%scatter(P9(1),P9(2),50,'o','filled','MarkerEdgeColor', 'w','MarkerFaceColor', 'w')
+%scatter(P10(1),P10(2),50,'o','filled','MarkerEdgeColor', 'w','MarkerFaceColor', 'w')
+plot([P9(1),P7(1)],[P9(2),P7(2)],'LineWidth',1.5,'color', 'y')
 
 %Punto medio:
 p_medio = [(P8(1)+P10(1))/2;(P8(2)+P10(2))/2];
-scatter(p_medio(1),p_medio(2),100,'d','filled')
+scatter(p_medio(1),p_medio(2),100,'o','filled','MarkerEdgeColor', 'w','MarkerFaceColor', 'r')
 
 
 %Encontrar punto schottle en rodilla 3D
@@ -162,5 +162,5 @@ end
 V_seg.info{13} = [coord_3D_punto];%Puntos schottle
 V_seg.info{14} = [P8];
 V_seg.info{15} = [P10];
-close
+
 end

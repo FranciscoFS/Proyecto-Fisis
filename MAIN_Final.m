@@ -31,13 +31,15 @@ cd;
 cd(folder);
 V=[];
 
-for p = 3:size(DIM,1)
-    im = imadjust(im2single(dicomread(DIM(p).name)));
-    V(:,:,p-2) = im;
+for p = 1:size(DIM,1)
+    if length(DIM(p).name) > 15
+        im = imadjust(im2single(dicomread(DIM(p).name)));
+        V(:,:,end+1) = im;
+    end
 end
 
 %info
-infor = dicominfo(DIM(p).name);
+infor = dicominfo(DIM(p/2).name);
 info = {};
 if infor.PixelSpacing(1)~= infor.PixelSpacing(2)
     uiwait(msgbox('ERROR! Avisar a Francisco y Tomas! anota que rodilla es esta','Success','modal'));
@@ -68,9 +70,9 @@ i = 50;
 se = strel('disk',i,8);
 Test = V(:,:,round(size(V,3)/2));
 STD_inicial = std(Test(:));
-Umbral = 35;
+Umbral = 30;
 
-for m=1:.5:10
+for m=1:.5:30
     Im = Test + m.*(imtophat(Test,se) - imbothat(Test,se));
     Im = medfilt2(adapthisteq(Im),[5 5]);
     Error = ((std(Im(:)) - STD_inicial)/STD_inicial)*100;
@@ -126,7 +128,7 @@ close all
 % Aplicar FiltroG
 V_filt = zeros(size(V));
 
-alfa = 2;
+alfa = 5;
 beta = 1.5;
 
 for k=1:size(V,3)

@@ -13,11 +13,11 @@ function isosurf_fast_fisis(V_seg)
     Y = smooth3(Y,'box',9);
     
     
-    f = figure;
+
     hold on
 
     p1= patch(isosurface(Y),'FaceColor','none','EdgeColor','red','LineWidth',0.1,'EdgeAlpha','0.4');
-    reducepatch(p1,0.6)
+    reducepatch(p1,0.4)
 
     ax = gca;
     ax.DataAspectRatio= [1 1 1];
