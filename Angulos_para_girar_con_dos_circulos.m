@@ -4,8 +4,9 @@ uiwait(msgbox('Seleccione la secuencia SAGITAL del paciente','Cargar','modal'));
 [filename, pathname] = uigetfile();
 V_seg = importdata([pathname filename]);
 
-figure
+f1 = figure;
 imshow(V_seg.vol.orig(:,:,Aproximar(size(V_seg.vol.orig,3)/2)),[]);
+maximize(f1)
 
 %Dibujar "circulos"
 
