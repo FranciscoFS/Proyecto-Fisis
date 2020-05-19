@@ -1,4 +1,3 @@
-
 %Seleccionar todos los archivos en la carpeta
 
 [filename, pathname] = uigetfile( ...
@@ -49,4 +48,3 @@ answer = inputdlg(prompt,dlgtitle,dims,definput);
 uiwait(msgbox('Seleccione carpeta para guardar al paciente','Guardar','modal'));
 folder_save = uigetdir();
 save([folder_save '/' char(answer)],'V_seg')
-     

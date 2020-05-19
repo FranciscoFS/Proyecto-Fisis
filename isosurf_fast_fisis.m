@@ -1,6 +1,6 @@
 function isosurf_fast_fisis(V_seg)
 
-    fisis = double(V_seg.mascara == 2);
+    fisis = (V_seg.mascara == 2);
 
     dz = V_seg.info{2,1};
     dx = V_seg.info{1,1};
