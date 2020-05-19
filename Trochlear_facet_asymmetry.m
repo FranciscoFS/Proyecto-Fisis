@@ -68,6 +68,6 @@ scatter(x(4),y(4),50,'o','filled','MarkerEdgeColor', 'w','MarkerFaceColor', 'w')
 scatter(x(5),y(5),50,'o','filled','MarkerEdgeColor', 'w','MarkerFaceColor', 'w')
 
 %Guardar
-V_seg.info{26,1} = [faceta_lateral;faceta_medial;trochlear_facet_ratio];
+V_seg.info{27,1} = [faceta_lateral;faceta_medial;trochlear_facet_ratio];
 
 end

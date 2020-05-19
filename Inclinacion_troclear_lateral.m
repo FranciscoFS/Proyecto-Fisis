@@ -45,6 +45,6 @@ scatter(x(2),y(2),50,'o','filled','MarkerEdgeColor', 'w','MarkerFaceColor', 'w')
 scatter(x(3),y(3),50,'o','filled','MarkerEdgeColor', 'w','MarkerFaceColor', 'w')
 scatter(x(5),y(5),50,'o','filled','MarkerEdgeColor', 'w','MarkerFaceColor', 'w')
 
-V_seg.info{25,1} = [angulo];
+V_seg.info{26,1} = [angulo];
 
 end
