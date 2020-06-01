@@ -129,44 +129,66 @@ Masculino = not(Mujeres);
 
 % FEMUR SG
 
+    
     medFilas = median(Filas_AjSG,'omitnan');
     %medCol = median(NewAp.Col,'omitnan');
     Filas_Iqr = medFilas + iqr(Filas_AjSG);
     Filas_Iqr2 = medFilas - iqr(Filas_AjSG);
+    col_usar = Distribucion(MaxSG_pos).SG.Columnas;
+    dx = Base_datos(MaxSG_pos).Rodilla.info{1};
+    Med = median(Distribucion(MaxSG_pos).SG.Filas);
+    
+    Femur = Base_datos(MaxSG_pos).Rodilla.mascara == 1;
+    Fisis = Base_datos(MaxSG_pos).Rodilla.mascara == 2;
     
     figure;    
+    imshow(sum(Femur +Fisis,3),[]);
     %subplot(2,2,1);
     hold on;
 
-    for k=1:numel(Distribucion)
-        plot(Columna_usarSG,Filas_AjSG(k,:),'color', rand(1,3));
-    end
+%     for k=1:numel(Distribucion)
+%         plot(Columna_usarSG,Filas_AjSG(k,:),'color', rand(1,3));
+%     end
     
-    plot(Columna_usarSG,medFilas,'--r','LineWidth',3)
-    plot(Columna_usarSG,Filas_Iqr,'--b','LineWidth',3)
-    plot(Columna_usarSG,Filas_Iqr2,'--b','LineWidth',3)
+    plot(col_usar,-1*medFilas./dx + Med,'--r','LineWidth',3)
+    plot(col_usar,-1*Filas_Iqr./dx + Med,'--b','LineWidth',3)
+    plot(col_usar,-1*Filas_Iqr2./dx + Med,'--b','LineWidth',3)
     axis off
     set(gcf,'color','white')
     daspect([1 1 1])
-    
-% Femur AP
+  %  legend({'Promedio','Iqr'},'FontSize',12,'FontWeight','bold')
+%% Femur AP
 
     medFilas = median(Filas_AjAP,'omitnan');
     %medCol = median(NewSG.Col,'omitnan');
     Filas_Iqr = medFilas + iqr(Filas_AjAP);
     Filas_Iqr2 = medFilas - iqr(Filas_AjAP);
+    col_usar = Distribucion(MaxAP_pos).AP.Columnas;
+    
+    dx = Base_datos(MaxAP_pos).Rodilla.info{1};
+    dz = Base_datos(MaxAP_pos).Rodilla.info{2};
+    Med = median(Distribucion(MaxAP_pos).AP.Filas);
+    
+    Femur = Base_datos(MaxAP_pos).Rodilla.mascara == 1;
+    Fisis = Base_datos(MaxAP_pos).Rodilla.mascara == 2;
+    Imagen = squeeze(sum(Femur+Fisis,2));
+    [n,m] = size(Imagen);
+    [Xq,Yq] = meshgrid(1:dx/dz:m,1:n);
+    
+    Imagen_interp = interp2(Imagen,Xq,Yq);
     
     figure;      
+    imshow(Imagen_interp,[]);
     %subplot(2,2,2);
     hold on;
 
-    for k=1:numel(Distribucion)
-        plot(Columna_usarAP, Filas_AjAP(k,:),'color', rand(1,3));
-    end
+%     for k=1:numel(Distribucion)
+%         plot(Columna_usarAP, Filas_AjAP(k,:),'color', rand(1,3));
+%     end
     
-    plot(Columna_usarAP,medFilas,'--r','LineWidth',3)
-    plot(Columna_usarAP,Filas_Iqr,'--b','LineWidth',3)
-    plot(Columna_usarAP,Filas_Iqr2,'--b','LineWidth',3)
+    plot(col_usar,-1*medFilas./(dx) + Med,'--r','LineWidth',3)
+    plot(col_usar,-1*Filas_Iqr./(dx) + Med,'--b','LineWidth',3)
+    plot(col_usar,-1*Filas_Iqr2./(dx) + Med,'--b','LineWidth',3)
     axis off
     set(gcf,'color','white')
     daspect([1 1 1])

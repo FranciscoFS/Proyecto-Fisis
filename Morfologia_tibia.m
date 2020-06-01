@@ -16,7 +16,7 @@ Largo = numel(Base_datos_2);
 
 AP_F1 = cell(Largo,3);
 AP_F2 = cell(Largo,3);
-SG_P2 = cell(Largo,3);
+SG_P2 = cell(Largo,3);  
 SG_E2 = cell(Largo,3);
 Distribucion = struct();
 Datos_fit = struct();

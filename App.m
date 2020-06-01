@@ -237,7 +237,7 @@ if handles.inicio
         imshow(handles.V_seg.mascara(:,:,handles.v),[]);
     else
         if handles.Prefiltrado
-            imshow([handles.V(:,:,handles.v) handles.V_filt(:,:,handles.v)]);
+            imshow([handles.V(:,:,handles.v) handles.V_seg.vol.filt(:,:,handles.v)]);
         else
             imshow(handles.V(:,:,handles.v))
          end 

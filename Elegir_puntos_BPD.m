@@ -60,6 +60,7 @@ end
 
 end
 
+close(f)
 
 %V_seg_1.info{14,1} = {x;y;slc_con_LCA};
 V_seg.info{14,1} = {x;y;slc_con_LCA};

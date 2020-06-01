@@ -5,5 +5,5 @@ for i = 1:porte
     nueva_im = flip(V_seg.vol.orig(:,:,i),2);
     V_seg.vol.orig(:,:,i) = nueva_im;
 end
-plot_MRI(V_seg.vol.orig)
+%plot_MRI(V_seg.vol.orig)
 end

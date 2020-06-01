@@ -1,3 +1,4 @@
+
 %Seleccionar todos los archivos en la carpeta
 
 [filename, pathname] = uigetfile( ...
@@ -29,15 +30,17 @@ V_seg.info{4,1} = info.PatientWeight;
 %V_seg.info{6,1} = info.PatientSex;
 V_seg.info{7,1} = info.SpacingBetweenSlices;
 
-%% Si es que se cargan cortes AXIALES
-figure
+% Si es que se cargan cortes AXIALES
+f = figure;
 plot_MRI(V_seg.vol.orig)
 message = sprintf('El perone esta a la IZQUIERDA DE LA IMAGEN (en otras palabras es una rodilla DERECHA)?');
 reply = questdlg(message, 'Physis', 'Yes', 'No','No');
-close all
+close(f)
+
 if strcmpi(reply, 'No')
     V_seg = Mirror(V_seg);
 end
+
 
 prompt = {'Nombre a ponerle al archivo'};
 dlgtitle = 'Input';
@@ -48,3 +51,4 @@ answer = inputdlg(prompt,dlgtitle,dims,definput);
 uiwait(msgbox('Seleccione carpeta para guardar al paciente','Guardar','modal'));
 folder_save = uigetdir();
 save([folder_save '/' char(answer)],'V_seg')
+     
