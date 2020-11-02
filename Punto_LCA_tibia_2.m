@@ -1,13 +1,14 @@
 function V_seg = Punto_LCA_tibia_2(V_seg)
 %Rodillas: 0 medial y terminan en lateral
 
-a = double(V_seg.mascara ==3); %hueso
-b = double(V_seg.mascara ==4); %fisis
-vol = a+b;
+a = single(V_seg.mascara ==3); %hueso
+b = single(V_seg.mascara ==4); %fisis
+vol = single(a+b);
 %LM: lateral medial
 aplastado_LM = squeeze(sum(vol,3));
 
 imshow(aplastado_LM,[])
+maximize
 uiwait(msgbox('Ingrese dos puntos sobre el platillo tibial lateral'));
 [Y1,X1] = getpts();
 close
@@ -24,6 +25,7 @@ end
 
 aplastado_LM = squeeze(sum(vol,3));
 imshow(aplastado_LM,[])
+maximize
 uiwait(msgbox('Poner punto mas anterior del platillo tibial'));
 [X1,Y1] = getpts();
 close

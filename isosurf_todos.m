@@ -17,14 +17,14 @@ function isosurf_todos(V_out,check,data)
         pace = (dxdy/dz);
         [m,n,k] = size(V_out.mascara);
         [Xq,Yq,Zq] = meshgrid(1:n,1:pace:m,1:k);
-        Box_size = [25 25 25];
+        Box_size = 9;
     else
         dxdy = info{1};
         dz = info{2};
         pace = (dxdy/dz);
         [m,n,k] = size(V_out.mascara);
         [Xq,Yq,Zq] = meshgrid(1:n,1:m,1:pace:k);
-        Box_size = 15;
+        Box_size = 9;
     end
  
     figure('units','normalized','outerposition',[0 0 1 1])
@@ -32,16 +32,16 @@ function isosurf_todos(V_out,check,data)
     %Patch femur fisis
     %ff =interp3(im2double(V_out.mascara==2),Xq,Yq,Zq,'cubic');
     if check(1)
-        ff = smooth3(interp3(im2double(V_out.mascara==2),Xq,Yq,Zq,'cubic')...
+        ff = smooth3(interp3(single(V_out.mascara==2),Xq,Yq,Zq,'linear')...
             ,'box',Box_size);
-        %Patch femur hueso
+%        Patch femur hueso
         %fh =interp3(im2double(V_out.mascara==1),Xq,Yq,Zq,'cubic');
-        fh = smooth3(interp3(im2double(V_out.mascara==1),Xq,Yq,Zq,'cubic')...
+        fh = smooth3(interp3(single(V_out.mascara==1),Xq,Yq,Zq,'linear')...
             ,'box',Box_size);
         p1= patch(isosurface(ff,0.3),'FaceColor','red','EdgeColor','none');
         isonormals(ff,p1)
         p2= patch(isosurface(fh,0.2),'FaceColor','none','EdgeColor','blue','LineWidth',...
-        0.1,'EdgeAlpha','0.4');
+        0.05,'EdgeAlpha','0.2');
         reducepatch(p2,0.01)
     end
     
@@ -77,10 +77,12 @@ function isosurf_todos(V_out,check,data)
         %r =interp3(im2double(V_out.mascara==7),Xq,Yq,Zq,'cubic');
     end
     
+    % Rotula
+    
     if check(4) 
-         r = smooth3(interp3(im2double(V_out.mascara==7),Xq,Yq,Zq,'cubic')...
+         r = smooth3(interp3(im2double(V_out.mascara==7),Xq,Yq,Zq,'linear')...
         ,'box',Box_size);
-        p7= patch(isosurface(r),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.4');
+        p7= patch(isosurface(r),'FaceColor','none','EdgeColor','blue','LineWidth',0.1,'EdgeAlpha','0.2');
          reducepatch(p7,0.01)
     end
     
@@ -152,10 +154,10 @@ function isosurf_todos(V_out,check,data)
     
     title('Rodilla')
 
-    while true
-        camlight(l,'headlight')
-        pause(0.05);  
-    end
+%     while true
+%         camlight(l,'headlight')
+%         pause(0.05);  
+%     end
 
 end
 

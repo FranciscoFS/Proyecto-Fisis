@@ -102,5 +102,5 @@ if ax=='X'
 end
 newdim=[find(~ismember('YXZ',ax)) find(ismember('YXZ',ax))]; %this is the permutation wrt original
 usedim=[find(olddim==newdim(1)) find(olddim==newdim(2)) find(olddim==newdim(3))];  %this is permutation wrt current
-%rotvol=imrotate(permute(vol,usedim),ang,method,'crop');
-rotvol=imrotate(permute(vol,usedim),ang,method);
+rotvol=imrotate(permute(vol,usedim),ang,method,'crop');
+%rotvol=imrotate(permute(vol,usedim),ang,method);

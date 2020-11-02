@@ -1,15 +1,4 @@
-function [AP, SG] = Proyecciones(V_seg)
-
-    dx = V_seg.info{1}; 
-    dz = V_seg.info{2};
-    pace = dx/dz;
-
-    Fisis = V_seg.mascara == 2;
-    
-    [m,n,z] = size(Fisis);
-    [Xeq,Yeq,Zeq] = mesgrid(1:m,1:n,1:pace:z);
-    Fisis3 = interp3(Fisis,Xeq,Yeq,Zeq,'nearest');
-    Fisis3 = Fisis3 >0.2;
+function [Distribucion] = ProyeccionesFisis(Fisis3,dx)
     
     Proyeccion_SG = sum(Fisis3, 3);
     Proyeccion_AP = squeeze(sum(Fisis3,2));
@@ -22,8 +11,8 @@ function [AP, SG] = Proyecciones(V_seg)
 
     Fisis_AP_mean = zeros(size(Columnas_AP));
     Fisis_SG_mean = zeros(size(Columnas_SG));
-    Fisis_AP = zeros(size(Columnas_AP));
-    Fisis_SG = zeros(size(Columnas_SG));
+%     Fisis_AP = zeros(size(Columnas_AP));
+%     Fisis_SG = zeros(size(Columnas_SG));
 
     for k=1:length(Columnas_AP)
 
@@ -38,7 +27,7 @@ function [AP, SG] = Proyecciones(V_seg)
 
         end
 
-        Fisis_AP(k) = mean(row_AP(col_AP == Columnas_AP(k)));
+    %    Fisis_AP(k) = mean(row_AP(col_AP == Columnas_AP(k)));
         Fisis_AP_mean(k) = sum(aux)/contador;
 
     end
@@ -57,10 +46,25 @@ function [AP, SG] = Proyecciones(V_seg)
 
         end
 
-        Fisis_SG(k) = mean(row_SG(col_SG == Columnas_SG(k)));
+   %     Fisis_SG(k) = mean(row_SG(col_SG == Columnas_SG(k)));
         Fisis_SG_mean(k) = sum(aux)/contador;
 
     end
-   
+    
+    AP.Columnas = Columnas_AP;
+    AP.Filas = Fisis_AP_mean;
+    SG.Columnas = Columnas_SG;
+    SG.Filas = Fisis_SG_mean;
+
+    Distribucion.AP = AP;
+    Distribucion.SG = SG;
+        
+    AP_norm.Columnas = Normalizar(AP.Columnas,dx);
+    AP_norm.Filas = -1*Normalizar(AP.Filas,dx);
+    SG_norm.Columnas = Normalizar(SG.Columnas,dx);
+    SG_norm.Filas = -1*Normalizar(SG.Filas,dx);
+    
+    Distribucion.AP_norm = AP_norm;
+    Distribucion.SG_norm = SG_norm;
     
 end

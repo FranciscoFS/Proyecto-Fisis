@@ -10,34 +10,104 @@
 %   delta: 30-70
 %   diámetros: 8, 9, 10mm
 
-gamma = 0:5:70;
-Alpha = 20:5:90;
+% gamma = 0:5:70;
+% Alpha = 0:5:70;
 
-[Xx,Yy] = meshgrid(gamma,Alpha);
+delta = 10:5:60;
+beta = 10:5:60;
+
+[Xx,Yy] = meshgrid(beta,delta);
 p = 50;
-Dest_8 = zeros([size(Xx) numel(BD_F_LCA)]);
-Dest_9 = zeros([size(Xx) numel(BD_F_LCA)]);
-Dest_10 = zeros([size(Xx) numel(BD_F_LCA)]);
+
+Dest_7_new = zeros([size(Xx) numel(BD_T)]);
+Dest_8_new = zeros([size(Xx) numel(BD_T)]);
+Dest_9_new = zeros([size(Xx) numel(BD_T)]);
+Dest_10_new = zeros([size(Xx) numel(BD_T)]);
 
 %%
 tic;
-for k=1:numel(BD_F_LCA)
-    
-    Rodilla = BD_F_LCA(k).Rodilla;
-    fprintf('Rodilla %d empezando \n', k);  
+pendientes = [];
+aux = 0;
 
-    for i = 1:length(Alpha)
-        for j = 1:length(gamma)
-            
-            Dest_8(i,j,k) = Cilindro_fx_final_LCA_Femur(Rodilla,gamma(j),Alpha(i),8,p,0);
-            Dest_9(i,j,k) = Cilindro_fx_final_LCA_Femur(Rodilla,gamma(j),Alpha(i),9,p,0);
-            Dest_10(i,j,k) = Cilindro_fx_final_LCA_Femur(Rodilla,gamma(j),Alpha(i),10,p,0);
-            
-            fprintf(' Angulos(%d,%d) de Rodilla %d  \n',gamma(j),Alpha(i),k)
-        end
+for k=32:numel(BD_T)
+    
+    Rodilla = BD_T(k).Rodilla;   
+    fprintf('Rodilla %d empezando \n', k);
+    
+    ang = Rodilla.info{10};
+
+    % 3 = Tibia hueso, 4 = Tibia fisis (indices de la mascara)
+
+    if ang > 0
+        fisis_usar= imrotate3_fast(single(Rodilla.mascara == 4),{(90-ang) 'Z'});
+        hueso_usar= imrotate3_fast(single(Rodilla.mascara == 3),{(90-ang) 'Z'});
+ 
+    else
+        fisis_usar= imrotate3_fast(single(Rodilla.mascara == 4),{-(90+ang) 'Z'});
+        hueso_usar= imrotate3_fast(single(Rodilla.mascara == 3),{-(90+ang) 'Z'});
     end
     
-    fprintf('Rodilla %d lista \n', k);  
+    fisis_usar= imrotate3_fast(fisis_usar,{270 'X'});
+    hueso_usar= imrotate3_fast(hueso_usar,{270 'X'});
+    fisis_usar= imrotate3_fast(fisis_usar,{(270) 'Z'});
+    hueso_usar= imrotate3_fast(hueso_usar,{(270) 'Z'});
+
+    dz = Rodilla.info{2,1};
+    dx = Rodilla.info{1,1};
+    pace = dx/dz;
+    
+    [m,z,n] = size(hueso_usar);
+    [Xq,Zq,Yq] = meshgrid(single(1:pace:z),single(1:m),single(1:n));
+    %[Xq,Zq] = meshgrid(1:pace:k,1:m);
+
+    Fisis = interp3(fisis_usar, Xq,Zq,Yq,'nearest');
+    Hueso = interp3(hueso_usar,Xq,Zq,Yq,'nearest');
+    
+%     [m,n,z] = size((Rodilla.mascara == 1));
+%     [Xq,Yq,Zq] = meshgrid(single(1:m),single(1:n),single(1:pace:z));
+%     hueso = interp3(hueso_usar,Xq,Yq,Zq,'nearest');
+%     fisis = interp3(fisis_usar,Xq,Yq,Zq,'nearest');
+%     
+%     Opciones{1} = Xq;
+%     Opciones{2} = Yq;
+%     Opciones{3} = Zq;
+%     Opciones{4} = 0; %Ver
+%     Opciones{5} = 0; %Medio
+%     Opciones{6} = Rodilla.info; %info
+
+%     [m,n,z] = size((Rodilla.mascara == 1));
+%     [Xq,Yq,Zq] = meshgrid(single(1:m),single(1:n),single(1:pace:z));
+%     hueso = interp3(single(Rodilla.mascara == 1),Xq,Yq,Zq,'cubic');
+%     fisis = interp3(single(Rodilla.mascara == 2),Xq,Yq,Zq,'cubic');
+
+    
+%     try 
+        for i = 1:length(delta)    
+            for j = 1:2
+                
+                   tic;
+                   [Destrucciones,~] = Crear_cilindro_3D_fx_Tibia(Hueso,Fisis,Rodilla,delta(i),beta(j),[7 8 9 10],p);
+                   Dest_7_new(i,j,k) = Destrucciones(1);
+                   Dest_8_new(i,j,k) = Destrucciones(2);
+                   Dest_9_new(i,j,k) = Destrucciones(3);
+                   Dest_10_new(i,j,k) = Destrucciones(4);
+                   toc;
+   
+
+                fprintf(' Angulos(%d,%d) de Rodilla %d  \n',beta(j),delta(i),k)
+            end
+        end
+
+        %save([direction '\' 'Femur_78910_medio'],'Dest_7_medio','Dest_8_medio','Dest_9_medio','Dest_10_medio','k','-v7.3')
+       %save([direction '\' 'Femur_7_3D2'],'Dest_7D_2','k','-v7.3')
+        fprintf('Rodilla %d lista \n', k);  
+        
+%     catch
+%         aux = aux +1;
+%         pendientes(aux) = k;
+%         fprintf('Rodilla %d pendiente \n', k);  
+%     end
+    
 end
 toc;
 
@@ -52,25 +122,37 @@ tic;
 toc;
 %%
 
-[Xeq,Yeq] = meshgrid(0:70,20:90);
-Dest_8_interp = interp2(Xx,Yy,mean(Dest_8,3),Xeq,Yeq);
-Dest_9_interp = interp2(Xx,Yy,mean(Dest_9,3),Xeq,Yeq);
-Dest_10_interp = interp2(Xx,Yy,mean(Dest_10,3),Xeq,Yeq);
+[Xeq,Yeq] = meshgrid(0:70,0:90);
+
+Dest_7_interp = interp2(Xx,Yy,mean(Dest_7_medio,3),Xeq,Yeq);
+Dest_8_interp = interp2(Xx,Yy,mean(Dest_8_medio,3),Xeq,Yeq);
+Dest_9_interp = interp2(Xx,Yy,mean(Dest_9_medio,3),Xeq,Yeq);sur
+Dest_10_interp = interp2(Xx,Yy,mean(Dest_10_medio,3),Xeq,Yeq);
 
 %%
-[Xx3F,Yy3F,Zz3F] = meshgrid(0:70,20:90,1:size(Dest_8,3));
-[Xx3_Or,Yy3_Or,Zz3_Or] = meshgrid(0:5:70,20:5:90,1:size(Dest_8,3));
-Dest_8_interp_F3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_8,Xx3F,Yy3F,Zz3F);
-Dest_9_interp_F3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_9,Xx3F,Yy3F,Zz3F);
-Dest_10_interp_F3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or, Dest_10,Xx3F,Yy3F,Zz3F);
+[Xx3F,Yy3F,Zz3F] = meshgrid(0:70,0:70,1:size(Dest_73D,3));
+[Xx3_Or,Yy3_Or,Zz3_Or] = meshgrid(0:5:70,0:5:70,1:size(Dest_73D,3));
+
+Dest_7_interp_F3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_7_new,Xx3F,Yy3F,Zz3F);
+Dest_8_interp_F3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_8_new,Xx3F,Yy3F,Zz3F);
+Dest_9_interp_F3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_9_new,Xx3F,Yy3F,Zz3F);
+Dest_10_interp_F3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or, Dest_10_new,Xx3F,Yy3F,Zz3F);
+
+% Dest_7_interp_F3 = interp3(Dest_73D,Xx3F,Yy3F,Zz3F);
+% Dest_8_interp_F3 = interp3(Dest_83D,Xx3F,Yy3F,Zz3F);
+% Dest_9_interp_F3 = interp3(Dest_93D,Xx3F,Yy3F,Zz3F);
+% Dest_10_interp_F3 = interp3(Dest_103D,Xx3F,Yy3F,Zz3F);
 
 %%
 
 ax = figure;
 ax.Color = 'white';
-subplot(1,3,1);surf(Xeq,Yeq,Dest_8_interp); title('Diametro 8 mm'); colorbar; view(0,-90);
-subplot(1,3,2);surf(Xeq,Yeq,Dest_9_interp); title('Diametro 9 mm'); colorbar; view(0,-90);
-subplot(1,3,3);surf(Xeq,Yeq,Dest_10_interp);title('Diametro 10 mm'); colorbar; view(0,-90);
+
+subplot(2,2,1);surf(Xeq_T,Yeq_T,mean(Dest_7_interp_T_3,3)); title('Diametro 7 mm'); colorbar; view(0,90); axis equal tight
+subplot(2,2,2);surf(Xeq_T,Yeq_T,mean(Dest_8_interp_T_3,3)); title('Diametro 8 mm'); colorbar; view(0,90);axis equal tight
+subplot(2,2,3);surf(Xeq_T,Yeq_T,mean(Dest_9_interp_T_3,3)); title('Diametro 9 mm'); colorbar; view(0,90);axis equal tight
+subplot(2,2,4);surf(Xeq_T,Yeq_T,mean(Dest_10_interp_T_3,3));title('Diametro 10 mm'); colorbar; view(0,90);axis equal tight
+colormap jet
 
 %% Tibia
 
@@ -83,17 +165,20 @@ Dest_8_T = zeros([size(Xx_T) numel(BD_F_LCA)]);
 Dest_9_T = zeros([size(Xx_T) numel(BD_F_LCA)]);
 Dest_10_T = zeros([size(Xx_T) numel(BD_F_LCA)]);
 
+
 Dest_8_Tibias = zeros([size(Xx_T) numel(BD_F_LCA)]);
 Dest_9_Tibias = zeros([size(Xx_T) numel(BD_F_LCA)]);
 Dest_10_Tibias = zeros([size(Xx_T) numel(BD_F_LCA)]);
 %% Fecha 21/07 paciente 7 y 32 pendiente, se deja corriendo desde el 8 llegue hasta el 28. Patir del 29 (18:24 21.07).
 % 22/07, pc se reinció asi que se hará denuevo, pero si harán guardando las
 % variables
-
+Dest_7_Tibias = zeros([size(Xx_T) numel(BD_T_LCA)]);
+%%
 tic;
-%pendientes = 7;
+pendientes = [];
+p = 45;
 
-for k=7
+for k=8:numel(BD_T_LCA)
     
     fprintf('Rodilla %d empezando \n', k);  
     try   
@@ -106,39 +191,43 @@ for k=7
 %                 Dest_10_T(i,j,k) = Cilindro_fx_final_tibia(Rodilla,beta(j),delta(i),10,p,0);
 %                 
      
-                    Dest_8_Tibias(i,j,k) = Cilindro_fx_final_tibia(BD_T_LCA(k).Rodilla,beta(j),delta(i),8,p,0);
-                    Dest_9_Tibias(i,j,k) = Cilindro_fx_final_tibia(BD_T_LCA(k).Rodilla,beta(j),delta(i),9,p,0);
-                    Dest_10_Tibias(i,j,k) = Cilindro_fx_final_tibia(BD_T_LCA(k).Rodilla,beta(j),delta(i),10,p,0);
+%                     Dest_8_Tibias(i,j,k) = Cilindro_fx_final_tibia(BD_T_LCA(k).Rodilla,beta(j),delta(i),8,p,0);
+%                     Dest_9_Tibias(i,j,k) = Cilindro_fx_final_tibia(BD_T_LCA(k).Rodilla,beta(j),delta(i),9,p,0);
+%                     Dest_10_Tibias(i,j,k) = Cilindro_fx_final_tibia(BD_T_LCA(k).Rodilla,beta(j),delta(i),10,p,0);
+                    Dest_7_Tibias(i,j,k) = Cilindro_fx_final_tibia(BD_T_LCA(k).Rodilla,beta(j),delta(i),7,p,0,0);
 
-                    fprintf(' Angulos(%d,%d) de Rodilla %d  \n',beta(j),delta(i),k)
+                    fprintf(' Angulos(%d,%d) de Rodilla %d Destruccion %d  \n',beta(j),delta(i),k,Dest_7_Tibias(i,j,k))
                 
             end
         end
         
-        filename = ['Tibias'];
-        save(filename,'-v7.3')
+        filename = 'Tibias_7';
+        save([path '\' filename],'Dest_7_Tibias','k','-v7.3')
         fprintf('Rodilla %d lista y guardada \n', k);  
+        
     catch
         pendientes(end +1 ) = k;
         fprintf('Rodilla %d pendiente \n', k);  
-    end
+   end
         
     
 end
 toc;
 %%
-[Xeq_T,Yeq_T] = meshgrid(0:60,30:70);
-Dest_8_interp_T = interp2(Xx_T,Yy_T,mean(Dest_8_Tibias(:,:,1:42),3),Xeq_T,Yeq_T);
-Dest_9_interp_T = interp2(Xx_T,Yy_T,mean(Dest_9_Tibias(:,:,1:42),3),Xeq_T,Yeq_T);
-Dest_10_interp_T = interp2(Xx_T,Yy_T,mean(Dest_10_Tibias(:,:,1:42),3),Xeq_T,Yeq_T);
+[Xeq_T,Yeq_T] = meshgrid(10:60,10:60);
+Dest_8_interp_T = interp2(Xx_T,Yy_T,mean(Dest_8_Tibias(:,:,1:47),3),Xeq_T,Yeq_T);
+Dest_9_interp_T = interp2(Xx_T,Yy_T,mean(Dest_9_Tibias(:,:,1:47),3),Xeq_T,Yeq_T);
+Dest_10_interp_T = interp2(Xx_T,Yy_T,mean(Dest_10_Tibias(:,:,1:47),3),Xeq_T,Yeq_T);
 
 %%
 
-[Xx3_Or,Yy3_Or,Zz3_Or] = meshgrid(0:5:60,30:5:70,1:size(Dest_8_Tibias,3));
-[Xx3,Yy3,Zz3] = meshgrid(0:60,30:70,1:size(Dest_8_Tibias,3));
-Dest_8_interp_T_3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_8_Tibias,Xx3,Yy3,Zz3);
-Dest_9_interp_T_3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_9_Tibias,Xx3,Yy3,Zz3);
-Dest_10_interp_T_3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_10_Tibias,Xx3,Yy3,Zz3);
+[Xx3_Or,Yy3_Or,Zz3_Or] = meshgrid(10:5:60,10:5:60,1:size(Dest_7_new,3));
+[Xx3,Yy3,Zz3] = meshgrid(10:60,10:60,1:size(Dest_7_new,3));
+
+Dest_7_interp_T_3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_7_new,Xx3,Yy3,Zz3);
+Dest_8_interp_T_3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_8_new,Xx3,Yy3,Zz3);
+Dest_9_interp_T_3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_9_new,Xx3,Yy3,Zz3);
+Dest_10_interp_T_3 = interp3(Xx3_Or,Yy3_Or,Zz3_Or,Dest_10_new,Xx3,Yy3,Zz3);
 
 
 %%
@@ -329,3 +418,73 @@ Delta_1_max = Yeq_T(row_1,1); Beta_1_max = Xeq_T(1,col_1) ;
 [p,tbl,stats] = anova1(Caso_1_F_max,t_usar.Edad)
 [p,tbl,stats] = anova1(Caso_2_F_max,t_usar.Edad)
 [p,tbl,stats] = anova1(Caso_3_F_max,t_usar.Edad)
+
+%% Creaciones excels Tomas Angulos Femur
+
+Pares_F = cell(size(Xeq(:)));
+Xeq_lineal = Xeq(:);
+Yeq_lineal = Yeq(:);
+
+for k=1:length(Pares)
+    
+    Pares{k} = ['Gamma' num2str(Xeq_lineal(k)) 'y' 'Alpha' num2str(Yeq_lineal(k))];
+end
+
+Dest_10_L = array2table(reshape(Dest_10_interp_F3,5041,56)');
+Dest_10_L.Id = t_usar.Nombre;
+Dest_10_L.Edad = t_usar.Edad;
+Dest_10_L.Sexo = t_usar.Sexo;
+Dest_10_L.Properties.VariableNames = [Pares' 'Id' 'Edad' 'Sex'];
+
+Dest_9_L = array2table(reshape(Dest_9_interp_F3,5041,56)');
+Dest_9_L.Id = t_usar.Nombre;
+Dest_9_L.Edad = t_usar.Edad;
+Dest_9_L.Sexo = t_usar.Sexo;
+Dest_9_L.Properties.VariableNames = [Pares' 'Id' 'Edad' 'Sex'];
+
+Dest_8_L = array2table(reshape(Dest_8_interp_F3,5041,56)');
+Dest_8_L.Id = t_usar.Nombre;
+Dest_8_L.Edad = t_usar.Edad;
+Dest_8_L.Sexo = t_usar.Sexo;
+Dest_8_L.Properties.VariableNames = [Pares' 'Id' 'Edad' 'Sex'];
+
+writetable(Dest_10_L,'Dest_10_F.xlsx')
+writetable(Dest_9_L,'Dest_9_F.xlsx')
+writetable(Dest_8_L,'Dest_8_F.xlsx')
+
+%% Creaciones excels Tomas Angulos Tibia
+
+Pares_F = cell(size(Xeq_T(:)));
+Xeq_lineal = Xeq_T(:);
+Yeq_lineal = Yeq_T(:);
+aux = length(Pares_F);
+
+
+for k=1:length(Pares_F)
+    
+    Pares_F{k} = ['Beta' num2str(Xeq_lineal(k)) 'y' 'Delta' num2str(Yeq_lineal(k))];
+end
+
+Dest_10_L = array2table(reshape(Dest_10_interp_T_3,aux,47)');
+Dest_10_L.Id = t_T.Nombre;
+Dest_10_L.Edad = t_T.Edad;
+Dest_10_L.Sexo = t_T.Sexo;
+Dest_10_L.Properties.VariableNames = [Pares_F' 'Id' 'Edad' 'Sex'];
+
+Dest_9_L = array2table(reshape(Dest_9_interp_T_3,aux,47)');
+Dest_9_L.Id = t_T.Nombre;
+Dest_9_L.Edad = t_T.Edad;
+Dest_9_L.Sexo = t_T.Sexo;
+Dest_9_L.Properties.VariableNames = [Pares_F' 'Id' 'Edad' 'Sex'];
+
+Dest_8_L = array2table(reshape(Dest_8_interp_T_3,aux,47)');
+Dest_8_L.Id = t_T.Nombre;
+Dest_8_L.Edad = t_T.Edad;
+Dest_8_L.Sexo = t_T.Sexo;
+Dest_8_L.Properties.VariableNames = [Pares_F' 'Id' 'Edad' 'Sex'];
+
+writetable(Dest_10_L,'Dest_10_T.xlsx')
+writetable(Dest_9_L,'Dest_9_T.xlsx')
+writetable(Dest_8_L,'Dest_8_T.xlsx')
+
+

@@ -38,23 +38,25 @@ h = waitbar(0.5,'Modelando en 3D.....');
 
     view(3)
     axis equal
-    %daspect([1 1 0.8])
+    daspect([1 1 1])
     l = camlight('headlight');
     lighting gouraud
     material dull
     title('Fisis')
+    
+    while true
+    camlight(l,'headlight')
+    pause(0.05);
+    end
     
   
 
 close(h)
 
 
-%Para que la luz siempre apunte del frente al girarlo
-%
-% while true
-% camlight(l,'headlight')
-% pause(0.05);
-% end
+Para que la luz siempre apunte del frente al girarlo
+
+
 
 end
 

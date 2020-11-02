@@ -1,12 +1,12 @@
-function [porc,out] = Cilindro_fx_final_tibia(V_seg,beta,delta,d,p,ver,Tal2)
-
+function [porc] = Cilindro_fx_final_tibia(V_seg,beta,delta,d,p,ver,Tal2)
+    % [porc,out]
     ang = V_seg.info{10};
     coordenada = V_seg.info{11};
 
     % 3 = Tibia hueso, 4 = Tibia fisis (indices de la mascara)
 
-    fisis_usar = gpuArray(single(V_seg.mascara == 4));
-    hueso_usar = double(V_seg.mascara == 3);
+    fisis_usar = single(V_seg.mascara == 4);
+    hueso_usar = single(V_seg.mascara == 3);
 
     if ang > 0
         fisis_usar= imrotate3_fast(fisis_usar,{(90-ang) 'Z'});
@@ -31,11 +31,11 @@ function [porc,out] = Cilindro_fx_final_tibia(V_seg,beta,delta,d,p,ver,Tal2)
     m = size(fisis_usar,1);
     n = size(fisis_usar,3);
     k =size(fisis_usar,2);
-    [Xq,Zq,Yq] = meshgrid(1:pace:k,1:m,1:n);
+    [Xq,Zq,Yq] = meshgrid(single(1:pace:k),single(1:m),single(1:n));
     %[Xq,Zq] = meshgrid(1:pace:k,1:m);
 
-    fisis_nueva = interp3(gather(fisis_usar), Xq,Zq,Yq);
-    hueso_nuevo = interp3(hueso_usar,Xq,Zq,Yq);
+    fisis_nueva = interp3(fisis_usar, Xq,Zq,Yq,'nearest');
+    hueso_nuevo = interp3(hueso_usar,Xq,Zq,Yq,'nearest');
 
     % for i = 1:size(fisis_usar,3)
     % h = interp2(hueso_usar(:,:,i),Xq,Zq);
@@ -77,7 +77,7 @@ function [porc,out] = Cilindro_fx_final_tibia(V_seg,beta,delta,d,p,ver,Tal2)
     radio_pix = Aproximar(radio/(dx));
 
     pixeles_ya_sumados = zeros(size(fisis_nueva));
-
+    size(Z,2)
     for i = 1:size(Z,2)
         x = Aproximar(X(i));
         y = Aproximar(Y(i));
@@ -151,16 +151,16 @@ function [porc,out] = Cilindro_fx_final_tibia(V_seg,beta,delta,d,p,ver,Tal2)
     %         camlight(l,'headlight')
     %         pause(0.05);  
     %     end
+    
+        out.fu = fu;
+        out.hu = hu;
+        out.Fh = Fh;
+        out.Ff = Ff;
+        out.cilindroT = cilindro;
+        out.cilindroF = Tal2;
 
 
     end
-
-    out.fu = fu;
-    out.hu = hu;
-    out.Fh = Fh;
-    out.Ff = Ff;
-    out.cilindroT = cilindro;
-    out.cilindroF = Tal2;
     
     fisis_nueva = fisis_nueva>0;
     total_de_1s = sum(fisis_nueva(:));

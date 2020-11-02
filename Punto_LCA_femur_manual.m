@@ -1,9 +1,9 @@
 function V_seg = Punto_LCA_femur_manual(V_seg)
 %Rodillas: 0 medial y terminan en lateral
 
-vol_1 = V_seg.mascara ==1; %hueso femur
-vol_2 = V_seg.mascara ==2; %fisis femur
-vol = vol_1 + vol_2;
+vol_1 = single(V_seg.mascara ==1); %hueso femur
+vol_2 = single(V_seg.mascara ==2); %fisis femur
+vol = single(vol_1 + vol_2);
 
 %Cortar por la mitad el femur (solo 1/2 lateral)
 
@@ -19,6 +19,7 @@ aplastado_LM = squeeze(sum(vol,3));
 %Crear linea de Blumensaat
 figure
 imshow(aplastado_LM,[])
+maximize
 hold on
 uiwait(msgbox('Poner dos puntos a lo largo de la linea de Blumensaat (poner primero el punto más anterior/distal)'));
 [x,y] = getpts();

@@ -113,10 +113,16 @@ Masculino = not(Mujeres);
 
 Masculino = zeros(1,numel(Base_datos));
 Edad = zeros(1,numel(Base_datos));
+
 for k=1:numel(Base_datos)
     
     Edad_aux = Base_datos(k).Rodilla.info{5};
-    Edad(k) = str2double(Edad_aux(2:3));
+    
+    try
+        Edad(k) = str2double(Edad_aux(2:3));
+    catch
+        Edad(k) = Edad_aux;
+    end
     
     if strcmp(Base_datos(k).Rodilla.info{6},'M')
         Masculino(k) = 1;
